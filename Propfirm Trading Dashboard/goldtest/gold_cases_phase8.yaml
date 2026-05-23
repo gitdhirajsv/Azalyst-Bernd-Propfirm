@@ -1,0 +1,2389 @@
+- call_date: '2024-01-02'
+  symbol: NQ=F
+  display_name: Nasdaq 100
+  asset_class: equity_indices
+  bias: long
+  strategy: monthly
+  reasoning: NASDAQ rally with mega-cap tech undervalued long-term.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: NASDAQ is going to rally as well. ... if before we because focus is
+    clearly NASDAQ
+  _origin: baseline
+- call_date: '2024-01-02'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Apple long-term and short-term undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: And I hope now the rational why also we want to buy Apple makes even
+    more sense.
+  _origin: baseline
+- call_date: '2024-01-02'
+  symbol: AMZN
+  display_name: Amazon
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Amazon close to undervalued long-term and short-term.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: You see, we are close to being undervalued long term and short term.
+  _origin: baseline
+- call_date: '2024-01-02'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Google long-term and short-term undervalued, as important as Apple.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Google valuation. ... long term undervalued and short term
+  _origin: baseline
+- call_date: '2024-01-02'
+  symbol: NFLX
+  display_name: Netflix
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Netflix coming from undervalued, going long-term undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are coming from undervalued Netflix below the mean and is going
+    to go undervalued as well long term.
+  _origin: baseline
+- call_date: '2024-01-02'
+  symbol: META
+  display_name: Meta
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Meta below the mean, long-term undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: And media also below the mean long term undervalued.
+  _origin: baseline
+- call_date: '2024-01-02'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: neutral
+  strategy: monthly
+  reasoning: S&P generally weak; focus on NASDAQ instead.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we anyway don't want to buy because they are generally rather weak
+    we focus on the NASDAQ
+  _origin: baseline
+- call_date: '2024-02-03'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: short
+  strategy: monthly
+  reasoning: Commercials reducing longs while retail extreme bullish; mid-March drop
+    expected.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: reducing their lungs. And we see the retail traders getting really
+    bullish. ... indicative to something bigger happening made of March.
+  _origin: baseline
+- call_date: '2024-02-03'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: short
+  strategy: monthly
+  reasoning: Same setup as Dow; one analysis translates.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we did a whole analysis based on Dow, and then we would just translate
+    it into the S&P
+  _origin: baseline
+- call_date: '2024-02-03'
+  symbol: MSFT
+  display_name: Microsoft
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Microsoft coming from overvalued, now at mean — still room to run.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Microsoft is coming from overvalued, but now I also around the mean
+    ... still most probably go further
+  _origin: baseline
+- call_date: '2024-02-03'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Google not yet overvalued; tech leaders still have room.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Google, you see also not close to overvalued ... stocks that drive
+    the market are not yet overvalued
+  _origin: baseline
+- call_date: '2024-02-03'
+  symbol: META
+  display_name: Meta
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Meta not yet overvalued among market-leading tech.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: stocks that drive the market are not yet overvalued ... still most
+    probably go further
+  _origin: baseline
+- call_date: '2024-02-03'
+  symbol: NVDA
+  display_name: Nvidia
+  asset_class: equities
+  bias: long
+  strategy: monthly
+  reasoning: Nvidia not overvalued long-term.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: even it looks like Nvidia has still some ... not the short term.
+  _origin: baseline
+- call_date: '2024-03-03'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: monthly
+  reasoning: New demand created on Dow; retailers getting bullish, retracement is
+    for buying.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: now we created a new demands on the Dow ... Eventually, there is a
+    retracement coming. And this is for us, to buy that retracement
+  _origin: baseline
+- call_date: '2024-03-03'
+  symbol: NQ=F
+  display_name: Nasdaq 100
+  asset_class: equity_indices
+  bias: neutral
+  strategy: monthly
+  reasoning: Bonds rallying alongside equities — valuation not turning overvalued;
+    no short setup.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: right now, I just don't see the short coming. ... we need the help
+    of other Treasury bonds
+  _origin: baseline
+- call_date: '2024-03-03'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: neutral
+  strategy: monthly
+  reasoning: Indices tricky; bonds rallying with equities means no clear short or
+    long.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Stocks indices, unfortunately, is tricky. ... it's really, really
+    difficult to buy, to short or to buy.
+  _origin: baseline
+- call_date: '2023-01-01'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Long-term undervalued, sitting at demand zone.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Now it's definitely my plan back in Apple. Anyway, I like Apple and
+    Google here.
+  _origin: baseline
+- call_date: '2023-01-01'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Setting up from demand zone with trendline break confirmation.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Google now I consider for myself as well going long above. Anyway,
+    I like Apple and Google here.
+  _origin: baseline
+- call_date: '2023-01-01'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Expecting a monster rally soon from this demand cluster area.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Yes Gold and silver expecting a monster really soon
+  _origin: baseline
+- call_date: '2023-01-08'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Undervalued long-term and short-term, seasonality supportive.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are undervalued long term, short term, seasonality... this is the
+    zone that I traded, basically. This is the zone and I have two trades running.
+  _origin: baseline
+- call_date: '2023-01-08'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Weekly bullish engulfing, undervalued long-term and short-term, strong
+    January.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the down the weekly, it's even a weekly bullish engulfing... a undervalued
+    as hell, as well, long term, short term
+  _origin: baseline
+- call_date: '2023-01-08'
+  symbol: MSFT
+  display_name: Microsoft
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Tapped into nice demand zone, hammer candle, undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we kept into that nice, really nice demand zone. And we created that
+    hammer candle. So we are undervalued.
+  _origin: baseline
+- call_date: '2023-01-08'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Long above with stop below the level, nice risk reward.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: stop below, play on Google... really nice risk free water ratio. But
+    that's the play.
+  _origin: baseline
+- call_date: '2023-01-08'
+  symbol: NFLX
+  display_name: Netflix
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Coming from undervaluation, daily bullish engulfing.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Netflix and Microsoft and media coming from that demand zone here
+    close to undervalued daily bullish
+  _origin: baseline
+- call_date: '2023-01-15'
+  symbol: TSLA
+  display_name: Tesla
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Demand zone holding; this could create the bottom on Tesla.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: this could be the bottom here on Tesla. The market should show strength,
+    and this could now create the bottom here. This demand's own holding.
+  _origin: baseline
+- call_date: '2023-01-29'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Bull market resumed; Nasdaq strongest with weekly demand at 11759.
+  zone_level: 11759.0
+  entry: null
+  stop: null
+  target: null
+  source_quote: welcome, bull market, we can welcome the bull market back, right?...
+    11759, so this would be the next, next by 1159.
+  _origin: baseline
+- call_date: '2023-01-29'
+  symbol: NG=F
+  display_name: Natural Gas
+  asset_class: energies
+  bias: long
+  strategy: weekly
+  reasoning: Weekly level Bernd wants to play; rising-formation setup.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: natural gas... because it's really a level that I want to play desperately...
+    here on the weekly prize.
+  _origin: baseline
+- call_date: '2023-01-29'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Strong February seasonality for palladium expecting big bounce off weekly
+    level.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we have a very strong February is inality for palladium. Like expect
+    here also really a big bounce
+  _origin: baseline
+- call_date: '2023-02-18'
+  symbol: NG=F
+  display_name: Natural Gas
+  asset_class: energies
+  bias: long
+  strategy: weekly
+  reasoning: Monthly + weekly demand coverage; technically and fundamentally strong
+    setup.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: buy natural gas and monthly weekly cover so technically fundamentally
+    it's definitely a very good setup with a lot of profit potential
+  _origin: baseline
+- call_date: '2023-02-18'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Hammer on silver/gold filling monthly gap, seasonality near top.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I think silver and gold would be a long above scenario for early next
+    week
+  _origin: baseline
+- call_date: '2023-03-05'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: 60-minute level on top of level on adjusted chart, simple buy setup.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we have basically a nice level on top of level here... it's just a
+    buy right and now this is on the dow.
+  _origin: baseline
+- call_date: '2023-03-05'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Apple hit demand zone, made 4% the day discussed, weekly almost bullish.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: you see what we discussed apples hit that demand... 4% on that day
+    this was if you played that worked amazingly
+  _origin: baseline
+- call_date: '2023-03-18'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: NASDAQ not close to overvalued, level-on-level demand on daily/240.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: for a set and forget perspective here did this one so long long long
+    long long the NASDAQ
+  _origin: baseline
+- call_date: '2023-03-18'
+  symbol: RTY=F
+  display_name: Russell 2000
+  asset_class: equity_indices
+  bias: long
+  strategy: monthly
+  reasoning: High-quality monthly demand and undervalued — picture-perfect level into
+    a strong April.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: still high quality monthly demand and we are undervalued is there
+    any picture picture picture perfect lever
+  _origin: baseline
+- call_date: '2023-04-02'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: April most bullish month, monthly bullish candles confirmed, weekly demand
+    at 32,994.
+  zone_level: 32994.0
+  entry: null
+  stop: null
+  target: null
+  source_quote: April most bullish months and the month decandals... on the weekly
+    we have that 32 994
+  _origin: baseline
+- call_date: '2023-04-02'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Weekly demand touched, very bullish, 960-minute level last chance for
+    longs.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: NASDAQ is going wild as well you see the weekly it touched that weekly
+    that we discussed long time ago very bullish
+  _origin: baseline
+- call_date: '2023-04-02'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Streaming up from weekly demand; trade once price hits weekly wider version
+    4073.
+  zone_level: 4073.0
+  entry: null
+  stop: null
+  target: null
+  source_quote: I would start getting into trades once it hits the weekly wide a version
+    for 073.
+  _origin: baseline
+- call_date: '2023-04-02'
+  symbol: RTY=F
+  display_name: Russell 2000
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Russell relatively low with daily demand sitting; rallying with other
+    indices.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: but now we look at the rustle as well I was also rallying just to
+    make sure because they're still relatively low
+  _origin: baseline
+- call_date: '2023-04-09'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Nice flip level — only trade idea remaining for these stocks.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Google is also nice flip level, a really good level here on Google...
+    the only trade idea that we have for these stocks.
+  _origin: baseline
+- call_date: '2023-04-16'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: daily
+  reasoning: Nasdaq still not overvalued, daily demand levels intact.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I'm looking to go long the NASDAQ, right? Again, go long in these
+    dot D levels... I would focus on NASDAQ.
+  _origin: baseline
+- call_date: '2023-04-16'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: neutral
+  strategy: weekly
+  reasoning: Dow overvalued — not healthy for longs; rather focus on Nasdaq.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I want to just see here on the valuation, we are overvalued, this
+    is of course not healthy on the Dow
+  _origin: baseline
+- call_date: '2023-04-16'
+  symbol: MSFT
+  display_name: Microsoft
+  asset_class: equities
+  bias: long
+  strategy: daily
+  reasoning: Microsoft inside demand level, not yet overvalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Microsoft, it's in the level, it's already out from the level, we
+    are not overvalued yet, so, still inside here, you can still go, do it long
+  _origin: baseline
+- call_date: '2023-04-30'
+  symbol: 6E=F
+  display_name: Euro / EURUSD
+  asset_class: forex
+  bias: long
+  strategy: weekly
+  reasoning: EURUSD long is the only currency trade Bernd is in.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: use the Frank the currency pair long the only trade that I'm in right
+    now
+  _origin: baseline
+- call_date: '2023-04-30'
+  symbol: RTY=F
+  display_name: Russell 2000
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Russell strongest in May seasonally; not yet overvalued with daily demand
+    levels.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: and now rustler right because this is the strongest in May.
+  _origin: baseline
+- call_date: '2023-04-30'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Nasdaq strongest from a seasonality perspective; long until overvalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: If I look at the charts definitely I mean NASDAQ right because of
+    the seasonal and because it's on the side let's also the strongest.
+  _origin: baseline
+- call_date: '2023-05-13'
+  symbol: USDCHF=X
+  display_name: USD/CHF
+  asset_class: forex
+  bias: long
+  strategy: weekly
+  reasoning: 240-minute supply zone target on shorts of CHF (long USD/CHF setup).
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I was going long use these Swiss Frank... that beautiful supply zone
+    here this is the target
+  _origin: baseline
+- call_date: '2023-05-20'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: neutral
+  strategy: daily
+  reasoning: Already 960-min supply hit and expecting it to hold; not chasing.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: stack it's already 960 look here supply I'm expecting this to hold...
+    it's really too difficult to really pinpoint imbalance.
+  _origin: baseline
+- call_date: '2023-05-20'
+  symbol: NVDA
+  display_name: Nvidia
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Not overvalued, very nice demand zone (also weekly) — ready to go long.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: and video also not overvalued yet we are moving higher you see now
+    this is really nice demand zone here definitely ready to go long
+  _origin: baseline
+- call_date: '2023-06-03'
+  symbol: RTY=F
+  display_name: Russell 2000
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Russell super strong; potential to run all the way up to dot D level.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: now even the Russell is super strong... Russell I think the Russell
+    has now also potential to go all the way up here
+  _origin: baseline
+- call_date: '2023-06-17'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: neutral
+  strategy: weekly
+  reasoning: Dow overvalued — not shorting indices, waiting for retracement.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Dow. So maybe that and we are overvalued... I'm not, I'm not going
+    to short the indices.
+  _origin: baseline
+- call_date: '2023-08-26'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Already long from weekly demand; valuation great, expecting price higher.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the valuation that's why I entered the straight because the valuation
+    is really great and I expect this to go higher alright so this is the Dow
+  _origin: baseline
+- call_date: '2023-08-26'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Commercials getting more bullish, retailers getting bearish — perfect
+    setup.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: commercials are smart money is getting more bullish and even the retailers
+    are getting bearish this is like the perfect setup
+  _origin: baseline
+- call_date: '2023-09-03'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: short
+  strategy: weekly
+  reasoning: Apple is overvalued (only mega-cap that is), an alarm bell signaling
+    weakness.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: alarm bells overvalued we don't want to short now but this is a good
+    sign... but I think Apple is the only one that is strongly that is overvalued
+  _origin: baseline
+- call_date: '2023-09-03'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Behaves similar to last August — level on top of level scenario.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: level on top of level scenario here I'm even tempted I'm even tempted
+    to see
+  _origin: baseline
+- call_date: '2023-09-09'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Roll-over gap likely to fill, Dow leading indicator for other indices.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: We have that roll over gap that is likely to get filled. Maybe just
+    maybe next week. We get a nice move to the upside
+  _origin: baseline
+- call_date: '2023-09-09'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Nice area to go long on adjusted chart; gold long but not a forever long.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: this is kind of a nice area to go long... That's the level on gold
+    that we can play mid of next week
+  _origin: baseline
+- call_date: '2023-09-09'
+  symbol: SI=F
+  display_name: Silver
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Already in undervalued territory, retailers short (great), $1 from 23.12
+    weekly level.
+  zone_level: 23.12
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are already in undervalued territory... here the retailers are
+    also short. This is great
+  _origin: baseline
+- call_date: '2023-09-16'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Weekly red hammer at zone, expecting upside; conviction for new ATH by
+    year-end.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I have no doubt that this will make new all time highs by end of the
+    year or by beginning of next year. I have no doubts whatsoever.
+  _origin: baseline
+- call_date: '2023-09-16'
+  symbol: SI=F
+  display_name: Silver
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Similar to gold — undervalued, expecting break to new highs by mid/end
+    October.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: What do we expect for silver similar to gold... I have no doubt that
+    this will break to new highs
+  _origin: baseline
+- call_date: '2023-09-16'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: neutral
+  strategy: weekly
+  reasoning: 'Daily bearish engulfing on S&P but valuation not yet overvalued — rule
+    one: valuation.'
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we have on the SMP a crazy daily... rule number one, valuation and
+    then we can see and then I want to engage.
+  _origin: baseline
+- call_date: '2023-09-23'
+  symbol: PL=F
+  display_name: Platinum
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Pre-election cycle bullish in October, weekly chart at level on top of
+    level.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: platinum has beginning of October... So this is the trade that I'm
+    looking somehow the most forward to.
+  _origin: baseline
+- call_date: '2023-09-23'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: neutral
+  strategy: weekly
+  reasoning: Valuation not aligned for short — rule one is valuation.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: if valuation is seen not in line, I'm just not allowed to go short.
+    Me personally
+  _origin: baseline
+- call_date: '2023-10-01'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Weekly demand on unadjusted chart, COT commercials bullish, hammer candle.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we got this really nice hammer candle... we have to jump in on Monday.
+  _origin: baseline
+- call_date: '2023-10-01'
+  symbol: PL=F
+  display_name: Platinum
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Statistically better than gold; COT super bullish, hedge funds and commercials
+    aligned.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: platinum unattractive that's as I said statistically actually better...
+    super bullish so that's all good hedge funds and the commercials are on our side.
+  _origin: baseline
+- call_date: '2023-10-01'
+  symbol: SI=F
+  display_name: Silver
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Weekly demand zone on unadjusted chart, best window starts end of month.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: for silver by the way the best window of opportunity starts only end
+    of the month
+  _origin: baseline
+- call_date: '2023-10-07'
+  symbol: PL=F
+  display_name: Platinum
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: In the trade, hit anticipated daily level, fundamentals super stable.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we will start with platinum because that's the trade that I am in...
+    yeah this looks just as bullish as it gets to me.
+  _origin: baseline
+- call_date: '2023-10-07'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Hit weekly demand zone, fundamentals look crazy bullish, divergence gone.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: fundamentally they look like crazy bullish right so that's going to
+    be fun
+  _origin: baseline
+- call_date: '2023-10-14'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Commercials getting even more bullish; super bullish midterm.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: look at this commercial here, the smart money is getting even more
+    bullish... we remain super bullish in the midterm on gold
+  _origin: baseline
+- call_date: '2023-10-14'
+  symbol: SI=F
+  display_name: Silver
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Positive divergence on hedge funds, getting more bullish; tracks gold.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Silver, silver, silver, silver, still positive diversions here...
+    when gold rises and silver is also rising.
+  _origin: baseline
+- call_date: '2023-10-15'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: neutral
+  strategy: weekly
+  reasoning: Apple is in overvalued territory; staying put until undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Microsoft and apple action the most important ones you see they are
+    basically in overvalued stage... we are staying put until we see undervaluation.
+  _origin: baseline
+- call_date: '2023-10-15'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Daily demand still in place on Dow with deeper demand below.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we have a lot of demand even below this if we get some mayhem and
+    one more last drop
+  _origin: baseline
+- call_date: '2023-10-21'
+  symbol: ZB=F
+  display_name: 30Y Treasury Bonds
+  asset_class: interest_rates
+  bias: long
+  strategy: weekly
+  reasoning: Monthly + weekly drop-base-rally demand zone with strong fundamentals.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are here in a really strong, drop base, really monthly demand...
+    So I expect here a strong rally on the US Treasury bond
+  _origin: baseline
+- call_date: '2023-10-21'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Retailers extremely bearish — historic confluence; weekly demand setting
+    up for blind buy.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: weekly, love to see price in that weekly, and then just buy... do
+    a very tight stop here
+  _origin: baseline
+- call_date: '2023-10-22'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Trend-follow once price comes back into a level — expecting new ATH.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: once this goes higher then we discussed the new all time highs basically
+  _origin: baseline
+- call_date: '2023-10-22'
+  symbol: PL=F
+  display_name: Platinum
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Smart money divergence still strong; question is just when it pops.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: here it's still a divergence still a strong divergence... at the question
+    is just when it pops
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Dow undervalued; retailers extreme bearish (contrarian bullish); primary
+    index focus.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: The Dow is now undervalued across the board... split them across the
+    indices stocks.
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: S&P undervalued with super-strong monthly demand zone holding.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are now under value to see on the SMP... super nice, strong, monthly
+    chart, monthly chart in demand.
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Nasdaq undervalued; constituents undervalued, supporting upside.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: stocks are undervalued, I would say that it's about time for also
+    them to move higher, so the indices are especially the NASDAQ going to go higher.
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Apple in weekly + monthly demand; perfect setup confluence with Nasdaq
+    bullish bias.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: We are also in weekly, monthly demand perfect
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Google in perfect monthly demand AND weekly demand; undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Google also really important and look at this. We are in perfect monthly
+    demand.
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: META
+  display_name: Meta
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Meta now undervalued; tradable confluence with Nasdaq basket.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: what about meta, you see now we are undervalued as well.
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: TSLA
+  display_name: Tesla
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Tesla undervalued with daily demand zone.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Tesla, we are undervalued... although there is daily demand.
+  _origin: baseline
+- call_date: '2023-10-29'
+  symbol: NVDA
+  display_name: Nvidia
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Nvidia dropping into a setup; one stock setup outside indices basket.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I could place except Nvidia is really nice. So that's the trade idea
+    on Nvidia.
+  _origin: baseline
+- call_date: '2023-11-03'
+  symbol: NQ=F
+  display_name: Nasdaq
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Undervalued long-term, 10/30-period seasonal low, weekly demand 180 points
+    away.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are undervalued long term 10 and 30 period seasonal low
+  _origin: baseline
+- call_date: '2023-11-05'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Not yet fully undervalued; if more weakness develops keep buy level lower.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Apple is still not, it's still not fully undervalued.
+  _origin: baseline
+- call_date: '2023-11-05'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Slowly getting undervalued again, perfect time to buy on pullback.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are getting slowly again undervalued, perfect time to buy.
+  _origin: baseline
+- call_date: '2023-11-06'
+  symbol: BABA
+  display_name: Alibaba
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Massive bull flag, strong seasonality, undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: massive massive wolf flag here seasonality wise... it's like almost
+    a monster monster bull flag
+  _origin: baseline
+- call_date: '2023-11-18'
+  symbol: RTY=F
+  display_name: Russell 2000
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Small caps strongest in December seasonality, COT supportive.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the data is also supportive COT data, at least... nice long on the
+    Russell.
+  _origin: baseline
+- call_date: '2023-11-18'
+  symbol: CT=F
+  display_name: Cotton
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Retailers very bearish, seasonality very bullish into year-end.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: see the retailer how bearish they are on cotton and cotton also is
+    seasonality wise very bullish
+  _origin: baseline
+- call_date: '2023-11-25'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: End-of-year rally — wait for retracement back into demand to go long.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: If we get a retracement back down in here on gold... we're going to
+    go long
+  _origin: baseline
+- call_date: '2023-12-02'
+  symbol: RTY=F
+  display_name: Russell 2000
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Small caps tend to outperform large caps mid-month per pre-election seasonality.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: small caps tend to start to outperform larger caps near the middle
+    of the month
+  _origin: baseline
+- call_date: '2023-12-02'
+  symbol: BABA
+  display_name: Alibaba
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Weekly demand and undervalued — every time undervalued nice moves on
+    Baba.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Weekly demand and you see we are undervalued. And every time we are
+    undervalued
+  _origin: baseline
+- call_date: '2023-12-02'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: First-time COT extreme bullish plus seasonal low; level on top of level.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: still bullish because here the CUTs is... very bullish seasonal undervalued
+  _origin: baseline
+- call_date: '2023-12-02'
+  symbol: NG=F
+  display_name: Natural Gas
+  asset_class: energies
+  bias: long
+  strategy: weekly
+  reasoning: First time extreme COT plus seasonal low — slowly approaching bottom.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: first time you see here in an extreme plus seasonal law
+  _origin: baseline
+- call_date: '2023-12-03'
+  symbol: CT=F
+  display_name: Cotton
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: COT setting up nicely — smart money commercials getting bullish.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: COT in particular on cotton is really setting up... the commercials
+    here you also see what happens they're getting [bullish].
+  _origin: baseline
+- call_date: '2023-12-03'
+  symbol: ZC=F
+  display_name: Corn
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Strong weekly level around 460 on unadjusted chart, COT setting up.
+  zone_level: 460.0
+  entry: null
+  stop: null
+  target: null
+  source_quote: the level that I would like to place starting at 460 I am starting
+    at 460 this is where I [buy].
+  _origin: baseline
+- call_date: '2023-12-03'
+  symbol: CL=F
+  display_name: Crude Oil
+  asset_class: energies
+  bias: long
+  strategy: weekly
+  reasoning: 960-minute weekly demand around $70 area, getting undervalued mid-December.
+  zone_level: 70.0
+  entry: null
+  stop: null
+  target: null
+  source_quote: crude oil 960 is usually quite neat so you see it's basically around
+    70
+  _origin: baseline
+- call_date: '2023-12-03'
+  symbol: PL=F
+  display_name: Platinum
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Smart money still bullish, retailers neutral, weekly demand setup.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: platinum looks all better fundamentally... here the fundamentals are
+    in our favor.
+  _origin: baseline
+- call_date: '2023-12-03'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Getting undervalued, seasonal sweet spot end of month.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: palladium we are also getting undervalued... commercials is next level
+    stuff
+  _origin: baseline
+- call_date: '2023-12-10'
+  symbol: BABA
+  display_name: Alibaba
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Combined whole weekly demand zone for stock trade idea.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I placed a whole weekly here I combined because. On stocks in general
+    I like to have bigger levels because of the gap risk.
+  _origin: baseline
+- call_date: '2023-12-10'
+  symbol: PL=F
+  display_name: Platinum
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: More bullish than gold/silver fundamentally, undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: It's more bullish than from a also price action behavior then gold
+    and silver
+  _origin: baseline
+- call_date: '2023-12-10'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Continue to drop into seasonal low around 900 just before Christmas.
+  zone_level: 900.0
+  entry: null
+  stop: null
+  target: null
+  source_quote: down here around 900... taking into account seasonality CUT valuation
+  _origin: baseline
+- call_date: '2023-12-10'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: neutral
+  strategy: weekly
+  reasoning: Fundamentals horrible — retailers bullish, commercials bearish; no buy.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: based on these fundamentals I would not buy.
+  _origin: baseline
+- call_date: '2023-12-16'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: neutral
+  strategy: weekly
+  reasoning: Retailers super bullish, smart money bearish — no trade despite undervalued.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the fundamentals are really, really bad... there's no trade for me.
+  _origin: baseline
+- call_date: '2023-12-16'
+  symbol: SI=F
+  display_name: Silver
+  asset_class: precious_metals
+  bias: neutral
+  strategy: weekly
+  reasoning: Same retailer-bullish problem as gold — no trade.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the same is applicable here on silver, the retailers. They're just
+    screaming long.
+  _origin: baseline
+- call_date: '2023-12-16'
+  symbol: CT=F
+  display_name: Cotton
+  asset_class: commodities
+  bias: short
+  strategy: weekly
+  reasoning: Cotton may come down — bearish trade idea in agricultural markets.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: cotton might come down.
+  _origin: baseline
+- call_date: '2023-12-24'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: daily
+  reasoning: Beginning-of-January trade idea — Apple is the long pick.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I like to look at Apple, and Apple is compared to some other stocks
+    and also to NASDAQ
+  _origin: baseline
+- call_date: '2023-12-31'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Apple flagged as 'first trade' candidate for the new year.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Now Apple, that might be our first trade, not might be pretty convinced...
+    level on top of level here on the daily.
+  _origin: baseline
+- call_date: '2024-03-02'
+  symbol: ZS=F
+  display_name: Soybeans
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Re-entry on soybeans daily; commercials extremely long signaling explosive
+    upside.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the commercials, the users and producers, they are getting crazy.
+  _origin: baseline
+- call_date: '2024-03-02'
+  symbol: ZC=F
+  display_name: Corn
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Weekly bullish engulfing with rollover gap; flip supply already breaking.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: He already supply it's a flip supply level once you are here I would
+    put my stop loss to break even.
+  _origin: baseline
+- call_date: '2024-03-02'
+  symbol: KC=F
+  display_name: Coffee
+  asset_class: commodities
+  bias: short
+  strategy: weekly
+  reasoning: Commercials super bearish, valuation overvalued; waiting for higher supply
+    zone.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the bearish sentiment is given so I would also like to short it
+  _origin: baseline
+- call_date: '2024-03-02'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Bull flag setup confirmed; retailers getting bearish (contrarian bullish
+    for PMs).
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the full flag looks super nice on goal... retailers are getting more
+    bearish perfect perfect
+  _origin: baseline
+- call_date: '2024-03-02'
+  symbol: USDCAD=X
+  display_name: USDCAD
+  asset_class: forex
+  bias: short
+  strategy: weekly
+  reasoning: Reacting from weekly demand; retailers bullish, getting undervalued —
+    expecting downside.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are reacting from that weekly zone retailers now getting bullish
+    we would expect a move to the downside.
+  _origin: baseline
+- call_date: '2024-03-02'
+  symbol: USDCHF=X
+  display_name: USDCHF
+  asset_class: forex
+  bias: short
+  strategy: weekly
+  reasoning: Weekly + daily supply level-on-top-of-level; price overvalued; retailers
+    bearish.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are overvalued retailers are bearish that would be the short ladies
+    and gentleman another really good trade idea
+  _origin: baseline
+- call_date: '2024-03-02'
+  symbol: SI=F
+  display_name: Silver
+  asset_class: precious_metals
+  bias: neutral
+  strategy: weekly
+  reasoning: Silver getting undervalued but contradictive formation; not yet tradeable.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: silver actually doesn't look good... silver we would not trade yet.
+  _origin: baseline
+- call_date: '2023-04-04'
+  symbol: GOOG
+  display_name: Alphabet Inc Cl C Cap Stock
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: So if you want to check the new trade opportunities on our future, on
+    our equities and commodities, you can just do this here within the grid. Or today
+    I'm just going to cover our list that is sepa...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: This looks quite bullish at the moment.
+  _phase8_id: FT-2023-04-04-c002
+  _origin: phase8
+- call_date: '2023-04-11'
+  symbol: 6S=F
+  display_name: Swiss Franc Continuous Contract
+  asset_class: forex
+  bias: short
+  strategy: weekly
+  reasoning: short as then price may be doing a gap fill that being said because there's
+    so much supply to the short as then price may be doing a gap fill that being said
+    because there's so much supply to the u...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: in my books we can now look to take a short on the lower time frame
+    and I would here just take the
+  _phase8_id: FT-2023-04-11-c001
+  _origin: phase8
+- call_date: '2023-04-11'
+  symbol: 6E=F
+  display_name: Euro FX Continuous Contract
+  asset_class: forex
+  bias: short
+  strategy: weekly
+  reasoning: upside there's always a risk of price going slightly higher before we
+    then may turn however in my books we can now look to take a short on the lower
+    time frame and I would here just take the first ...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: up nicely for a decline what I also want to do of course I want to
+    check the euro just to get a sense of where the euro is at and on the euro as
+    well as we look at the monthly were were pretty high
+  _phase8_id: FT-2023-04-11-c003
+  _origin: phase8
+- call_date: '2023-04-11'
+  symbol: 6E=F
+  display_name: Euro FX Custom Continuous Contract
+  asset_class: forex
+  bias: long
+  strategy: weekly
+  reasoning: in my books we can now look to take a short on the lower time frame and
+    I would here just take the first level that comes to mind here or that we see
+    and here we see a drop-based drop and if you up...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: they were bullish was here we got a decline here as well decline and
+    now decline and so whenever
+  _phase8_id: FT-2023-04-11-c004
+  _origin: phase8
+- call_date: '2023-03-14'
+  symbol: ES=F
+  display_name: S&P 500 Custom Continuous Contract
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: exchange time. Okay, so and then what you see in my view here, right,
+    you can see the T dom, exchange time. Okay, so and then what you see in my view
+    here, right, you can see the T dom, exchange ti...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: looking to be undervalued against the treasuries. On the 10, we're
+    long undervalued. We're at
+  _phase8_id: FT-2023-03-14-c001
+  _origin: phase8
+- call_date: '2023-03-14'
+  symbol: ES=F
+  display_name: S&P 500
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: exchange time. Okay, so and then what you see in my view here, right,
+    you can see the T dom, exchange time. Okay, so and then what you see in my view
+    here, right, you can see the T dom, well, we co...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I'm in S&P. We could look to enter Dow if you're not in the Dow yet.
+  _phase8_id: FT-2023-03-14-c002
+  _origin: phase8
+- call_date: '2023-05-16'
+  symbol: NQ=F
+  display_name: Nasdaq E-mini Futures
+  asset_class: equity_indices
+  bias: short
+  strategy: weekly
+  reasoning: quite came into this and for last week we also had a shorting opportunity
+    on the S&P and price quite came into this and for last week we also had a shorting
+    opportunity on the S&P and price never q...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: as maybe a short still for this week and the next week we should really
+    be we should really be
+  _phase8_id: FT-2023-05-16-c001
+  _origin: phase8
+- call_date: '2023-05-16'
+  symbol: NQ=F
+  display_name: Nasdaq 100
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: never quite gotten into this upper area either and you know we we are
+    still stepping right in as maybe a short still for this week and the next week
+    we should really be we should really be as maybe...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: the more bullish again the Nasdaq is approaching some high quality
+    supply as well
+  _phase8_id: FT-2023-05-16-c002
+  _origin: phase8
+- call_date: '2024-01-18'
+  symbol: KC=F
+  display_name: Coffee C Custom Continuous Contract
+  asset_class: commodities
+  bias: short
+  strategy: weekly
+  reasoning: 759. 759. So palladium our dear friend palladium while we did stop out
+    I cannot I will not come and say okay you know even if it's few ticks yet we got
+    stopped out I think fundamentally both burn d...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: products of course if I get a setup like I am short coffee huh I am
+    short coffee since quite a long time since the
+  _phase8_id: FT-2024-01-18-c001
+  _origin: phase8
+- call_date: '2024-01-18'
+  symbol: ZC=F
+  display_name: Corn Custom Continuous Contract
+  asset_class: commodities
+  bias: short
+  strategy: weekly
+  reasoning: So palladium our dear friend palladium while we did stop out I cannot
+    I will not come and say okay you know even if it's few ticks yet we got stopped
+    out I think fundamentally both burn down I were...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: right so did I and I asked a co-owner we're only an analyst's phone
+    or even corn we did not
+  _phase8_id: FT-2024-01-18-c002
+  _origin: phase8
+- call_date: '2024-01-18'
+  symbol: ZC=F
+  display_name: Corn
+  asset_class: commodities
+  bias: short
+  strategy: weekly
+  reasoning: okay it one more minutes moving into the agricultural which used to be
+    my favorites I mean there's still but I now trade I'm getting trade ideas on other
+    products products of course if I get a setu...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: like this when you see a product I think another learning let's see
+    how respectful was this
+  _phase8_id: FT-2024-01-18-c003
+  _origin: phase8
+- call_date: '2023-04-18'
+  symbol: GC=F
+  display_name: Gold Custom Continuous Contract
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Well let's talk about precious metals first before we move into equity
+    indices and then we talk about stocks we've got lots to cover still so precious
+    metals we stayed on the sidelines we said well...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Arbying so what we can do is we can buy for sure right we cannot buy
+    up here it's impossible we're inside months is supply just don't have the set
+    of rules here to buy maybe if you get a major majo...
+  _phase8_id: FT-2023-04-18-c001
+  _origin: phase8
+- call_date: '2023-04-18'
+  symbol: SI=F
+  display_name: Silver Futures
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Well let's talk about precious metals first before we move into equity
+    indices and then we talk about stocks we've got lots to cover still so precious
+    metals we stayed on the sidelines we said well...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: They're only below the red and combined with that up trend it's a
+    bit it's a bit tricky to to do that though that that that would be the only way
+    I would approach this but again just talking you th...
+  _phase8_id: FT-2023-04-18-c002
+  _origin: phase8
+- call_date: '2023-04-18'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: The commercials are selling and the retailers. Arbying so what we can
+    do is we can buy for sure right we cannot buy up here it's impossible we're inside
+    months is supply just don't have the set of ...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: And so let's just you know we have palladium and palladium is doing
+    super well and so no no need to be trading anything else at the moment on the
+    precious metal front I would say let's just stay on...
+  _phase8_id: FT-2023-04-18-c003
+  _origin: phase8
+- call_date: '2023-01-01'
+  symbol: AAPL
+  display_name: Apple Inc
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: then we started that huge, really higher from here demand. Something
+    similar you see here being overvalued now for a while, it's just now a matter
+    of time Something similar you see here being overv...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: year long term, we are short term overvalued anyway, but also now
+    long term overvalued and it's just as you saw the matter of time and long term
+    over valuation can cause these
+  _phase8_id: FT-2023-01-01-c001
+  _origin: phase8
+- call_date: '2023-01-01'
+  symbol: AAPL
+  display_name: Apple Inc
+  asset_class: equities
+  bias: short
+  strategy: weekly
+  reasoning: I position myself now for this being the law of the law and is to go
+    higher, right? year long term, we are short term overvalued anyway, but also now
+    long term overvalued and it's just as you saw t...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: When everybody thinks the world is going down, it's never goes back
+    up again, right?
+  _phase8_id: FT-2023-01-01-c002
+  _origin: phase8
+- call_date: '2023-01-01'
+  symbol: META
+  display_name: Meta Platforms
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Amazon again still in the level so you could still play the level because
+    it's still playing confirmation entry once it goes out of the level. Amazon again
+    still in the level so you could still pla...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: But we have to wait matter. A trend line break it's it's working out
+    but I never really said that it's a trade idea but I never considered it for myself
+    Google now I consider for myself as well goi...
+  _phase8_id: FT-2023-01-01-c003
+  _origin: phase8
+- call_date: '2023-10-07'
+  symbol: NQ=F
+  display_name: E-mini Nasdaq 100 Futures Weekly
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: we're going to go hit in hit that hit that daily supply zone and then
+    we might be even at whole thing here as I said that whole weekly we might be overvalue
+    and then I'm still calendar week 40 I wa...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: this is my long week for the equities for now it's basically just
+    to continue to observe
+  _phase8_id: FT-2023-10-07-c001
+  _origin: phase8
+- call_date: '2023-01-08'
+  symbol: AAPL
+  display_name: Apple Inc
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: same. So we can always look at the levels that we highlighted, etc. So
+    all good short term valuation. Right? So the level here held. So again, this is
+    the whole level. Right? So if you If you trade...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: trading Apple instead of NASDAQ for instance. Now since I'm long NASDAQ
+    with two positions,
+  _phase8_id: FT-2023-01-08-c001
+  _origin: phase8
+- call_date: '2023-01-08'
+  symbol: AAPL
+  display_name: Apple Inc
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: trading Apple instead of NASDAQ for instance. Now since I'm long NASDAQ
+    with two positions, trading Apple instead of NASDAQ for instance. Now since I'm
+    long NASDAQ with two positions, trading Apple...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: all right? So that's the zone on Apple. Amazon, daily bullish and
+    go thing weekly,
+  _phase8_id: FT-2023-01-08-c002
+  _origin: phase8
+- call_date: '2023-01-08'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: definitely nothing I want to buy. Now Google, let's focus quickly on
+    Google because some of you are definitely nothing I want to buy. Now Google, let's
+    focus quickly on Google because some of you a...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: overshot the area, but we discussed this area as well, right? That
+    it's kind of a tricky, tricky, tricky
+  _phase8_id: FT-2023-01-08-c004
+  _origin: phase8
+- call_date: '2023-01-08'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: definitely nothing I want to buy. Now Google, let's focus quickly on
+    Google because some of you are long, who, gal, right? So I think this was long
+    term overvalued, close to, right? It's at least l...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: stop below, play on Google. However, I would be a little bit more
+    cautious here. And
+  _phase8_id: FT-2023-01-08-c005
+  _origin: phase8
+- call_date: '2023-01-08'
+  symbol: MSFT
+  display_name: Microsoft
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: really nice risk free water ratio. But that's the play. That's the play
+    on Google, right? So far, really nice risk free water ratio. But that's the play.
+    That's the play on Google, right? So far, r...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Look at that. Look at this, right? This is what I want to buy. This
+    is what I want to buy into all
+  _phase8_id: FT-2023-01-08-c006
+  _origin: phase8
+- call_date: '2023-01-08'
+  symbol: MSFT
+  display_name: Microsoft Corp
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Look at that. Look at this, right? This is what I want to buy. This is
+    what I want to buy into all Look at that. Look at this, right? This is what I
+    want to buy. This is what I want to buy into all...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: But from a from a from a structural point of view, how this kind of
+    reacted here,
+  _phase8_id: FT-2023-01-08-c007
+  _origin: phase8
+- call_date: '2023-06-11'
+  symbol: BABA
+  display_name: Alibaba Group Holding Ltd
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: a week or so even maybe two weeks and even three weeks but just keep
+    this on your radar alright now the stocks the stocks the stocks the stocks our
+    friend Baba continue to work out quite nicely is ...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: it's like almost a monster monster bull flag it looks super bullish
+    to me I hope this is going to play out it's going to be a massive trade I'm long
+    since down here and this is also we call this tr...
+  _phase8_id: FT-2023-06-11-c001
+  _origin: phase8
+- call_date: '2023-02-12'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: aggressive because all of that here going to be wiped out in like a couple
+    of days going to be really aggressive right so we see that now kind of that channel
+    here this probe already here it looks ...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I'm going long now the also palladium is really I'm not doing the
+    moves that as expected right now
+  _phase8_id: FT-2023-02-12-c001
+  _origin: phase8
+- call_date: '2023-02-12'
+  symbol: PA=F
+  display_name: Palladium Futures
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: here it looks even a little bit here here it looks more bullish than
+    on the futures here here with natural gas I'm not trying I tried once didn't work
+    so I'm now still waiting here natural I'm goin...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: but the problem is clearly as we also discussed the risk now let me
+    go to gold and silver
+  _phase8_id: FT-2023-02-12-c002
+  _origin: phase8
+- call_date: '2023-05-13'
+  symbol: 6S=F
+  display_name: Swiss Franc Continuous Contract
+  asset_class: forex
+  bias: long
+  strategy: weekly
+  reasoning: a setup for you guys so as i said i was trading this with frang and this
+    basically was i was you're interested you can watch them to the end if not them
+    basically it for the session but you're inte...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: long use these Swiss Frank now if I do this quickly on the use these
+    Swiss Frank I think there's still something there's more choose left here who
+    I'm analyzing currencies I know this should be
+  _phase8_id: FT-2023-05-13-c001
+  _origin: phase8
+- call_date: '2023-05-13'
+  symbol: CHFUSD=X
+  display_name: USD/CHF US Dollar Swiss Franc
+  asset_class: forex
+  bias: short
+  strategy: weekly
+  reasoning: you're interested you can watch them to the end if not them basically
+    it for the session but zero sum game trading right so now that's why I was shorting
+    it or in other words I was going long use t...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: trade my targets now is oh don't do this to me 240 minute jobs this
+    is supply zone and I open
+  _phase8_id: FT-2023-05-13-c002
+  _origin: phase8
+- call_date: '2023-04-16'
+  symbol: GOOG
+  display_name: Google
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: then we can talk about going long right now. No go, this is shifting
+    higher, it's coming from, then we can talk about going long right now. No go,
+    this is shifting higher, it's coming from, working...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: right? Google as well, look at this, our demand zone, how it worked
+    here on Google, picture
+  _phase8_id: FT-2023-04-16-c005
+  _origin: phase8
+- call_date: '2023-09-16'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: If I again open here daily so we can so how I play the target setting
+    here. If I again open here daily so we can so how I play the target setting here.
+    If I again open here daily so we can so how I...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: However, ultimately it could be potentially here on gold for the long
+    run.
+  _phase8_id: FT-2023-09-16-c001
+  _origin: phase8
+- call_date: '2023-09-16'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: right this strong season. After that, now I go back here. for gold will
+    only come. So I have no doubt that this will make new all time highs by end of
+    the year or by beginning of next year. I have ...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: And we're going to get into a long here as well.
+  _phase8_id: FT-2023-09-16-c003
+  _origin: phase8
+- call_date: '2023-09-16'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: for gold will only come. So I have no doubt that this will make new all
+    time highs by end of the year or by beginning of next year. I have no doubts whatsoever.
+    And we're going to get into a long h...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: But yes, this is if you're already in profit, I'm not going to just
+    take profits before
+  _phase8_id: FT-2023-09-16-c004
+  _origin: phase8
+- call_date: '2023-09-16'
+  symbol: GC=F
+  display_name: Gold Custom Continuous Contract
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: of next year. I have no doubts whatsoever. And we're going to get into
+    a long here as well. And we're going to get into a long here as well. I mean,
+    only if price makes just a moon short, then it's...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: But yes, this is if you're already in profit, I'm not going to just
+    take profits before
+  _phase8_id: FT-2023-09-16-c005
+  _origin: phase8
+- call_date: '2023-09-16'
+  symbol: SI=F
+  display_name: Silver Custom Continuous Contract
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: They are getting more bullish, which is not good for us because ultimately
+    we want to trade They are getting more bullish, which is not good for us because
+    ultimately we want to trade Oops. What th...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: But it's like a channel and ultimately I also don't have, I have no
+    doubt that this will
+  _phase8_id: FT-2023-09-16-c006
+  _origin: phase8
+- call_date: '2023-02-18'
+  symbol: NQ=F
+  display_name: E-Mini NASDAQ-100 Continuous Contract
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: it makes more sense. Now, we haven't got now here as well, just of all,
+    held again, but I'm still like very stubborn here, and but I think it's being
+    stubborn in a good way and wait for the demand ...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: I would like to buy again, same strategy as last week, we discussed
+    everything last week very
+  _phase8_id: FT-2023-02-18-c001
+  _origin: phase8
+- call_date: '2023-02-18'
+  symbol: NQ=F
+  display_name: Nasdaq 100
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: you see also when we just look pure seasonality, when we look pure seasonality,
+    I would like to buy again, same strategy as last week, we discussed everything
+    last week very refined, 140 minute ent...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: dot-d charts, you see also here on the NASDAQ, again, everything remains
+    the same, if you haven't
+  _phase8_id: FT-2023-02-18-c002
+  _origin: phase8
+- call_date: '2023-02-18'
+  symbol: NQ=F
+  display_name: Nasdaq 100
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: I would like to buy again, same strategy as last week, we discussed everything
+    last week very refined, 140 minute entry, it's basically the same, nothing really
+    changed here, but look at the refine...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: said everything remains the same, if I go to the Dow itself, because
+    it's 14 out of 14, so very
+  _phase8_id: FT-2023-02-18-c003
+  _origin: phase8
+- call_date: '2023-11-18'
+  symbol: CT=F
+  display_name: Cotton
+  asset_class: commodities
+  bias: short
+  strategy: weekly
+  reasoning: week before because the retailers are getting super bullish and this
+    is where you saw that big drop when you think it cannot get even lower well and
+    this copper anything has changed it seems like t...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: levels down here oh yeah so the trade idea that higher for the agricultural
+    markets is cotton I'm waiting for cotton again also I mean I can trade cotton
+    with
+  _phase8_id: FT-2023-11-18-c001
+  _origin: phase8
+- call_date: '2023-10-21'
+  symbol: AAPL
+  display_name: Apple Inc
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: So I expect here a strong rally on the US Treasury bond, so it will,
+    to cut a long story short, So I expect here a strong rally on the US Treasury
+    bond, so it will, to cut a long story short, if th...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: let's quickly do the following exercise, well, we, how far can this
+    go? Well, we don't know yet,
+  _phase8_id: FT-2023-10-21-c003
+  _origin: phase8
+- call_date: '2024-01-06'
+  symbol: BABA
+  display_name: Alibaba Group Holding Ltd
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: so I expected a retracement back lower, but we are sitting in that trade
+    from all the way down here, but if we see higher prices, we can easily digest
+    the swaps, and when it comes to Baba, right, t...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: because we are long from down here, so the seasonality on Baba is
+    super, super strong,
+  _phase8_id: FT-2024-01-06-c001
+  _origin: phase8
+- call_date: '2024-01-06'
+  symbol: WMT
+  display_name: Walmart Inc
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: but if we see higher prices, we can easily digest the swaps, and when
+    it comes to Baba, right, this is getting kind of a hit, we are still here positive,
+    Baba, right, this is getting kind of a hit,...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Good question, let me go back to Walmart, I tell you, so in general,
+    I would adjust my stop losses
+  _phase8_id: FT-2024-01-06-c002
+  _origin: phase8
+- call_date: '2024-02-10'
+  symbol: ZC=F
+  display_name: Corn Custom Continuous Contract
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: So what you see is basically already short term valuation, let me remove
+    the lines, once we eventually get, what I wanted to do, drawings, remove the drawing
+    objects, we get a eventually we eventua...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Now if you check the length, 30, so long term valuation, let's check
+    once we are long
+  _phase8_id: FT-2024-02-10-c001
+  _origin: phase8
+- call_date: '2024-02-10'
+  symbol: ZC=F
+  display_name: Corn Continuous Contract
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: we eventually get, what I wanted to do, drawings, remove the drawing
+    objects, we get a eventually Now if you check the length, 30, so long term valuation,
+    let's check once we are long term underval...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: sentiment, so draw, draw, draw, draw, draw, draw, draw, draw, draw,
+    so now we can summarize
+  _phase8_id: FT-2024-02-10-c002
+  _origin: phase8
+- call_date: '2024-01-29'
+  symbol: ZS=F
+  display_name: Soybeans Continuous Contract
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: And now we looked at valuation and valuation, we can, we can change between
+    long term valuation And now we looked at valuation and valuation, we can, we can
+    change between long term valuation And n...
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: to the upside, basically. So we are long term undervalued, which is
+    great.
+  _phase8_id: FT-2024-01-29-c001
+  _origin: phase8

@@ -1,0 +1,50 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+.deps_installed
+*.egg-info/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Local secrets / env ---
+.env
+.env.*
+!.env.example
+*.local
+Propfirm Trading Dashboard/.secrets.bat
+.secrets.bat
+
+# --- Large source assets (not part of code) ---
+Blueprint_Trading_System_COMPLETE_TEXTBOOK_v6.docx
+ALL_FILES_FOR_DEEPSEEK.txt
+gt_out.txt
+
+# --- Runtime / scanner state (regenerated on every run) ---
+Propfirm Trading Dashboard/scan_results.json
+Propfirm Trading Dashboard/scan_history.json
+Propfirm Trading Dashboard/paper_trader_state.json
+Propfirm Trading Dashboard/discord_state.json
+Propfirm Trading Dashboard/*.log
+Propfirm Trading Dashboard/**/*.log
+Propfirm Trading Dashboard/*.lock
+
+# --- Test / audit byproducts ---
+_audit/
+_phase8_rebuild/phase1_rule_ledger/raw/
+_corpus/
+Propfirm Trading Dashboard/goldtest/results/
+Propfirm Trading Dashboard/goldtest/snapshots/
+Propfirm Trading Dashboard/goldtest/__pycache__/
+
+# --- Claude / agent caches ---
+.claude/
+.claude-cache/

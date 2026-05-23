@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gold-Standard Test -- Bernd vs System</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #0e1116; color: #e6edf3; margin: 0; padding: 24px; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .meta { color: #8b949e; font-size: 12px; margin-bottom: 18px; }
+  .summary { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; display: flex; gap: 32px; flex-wrap: wrap; }
+  .summary div { font-size: 13px; }
+  .summary b { color: #58a6ff; font-size: 16px; display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #30363d; vertical-align: top; }
+  th { background: #161b22; position: sticky; top: 0; color: #8b949e; font-weight: 600; }
+  tr.diverge   td.verdict { background: #5a1d1d; color: #ffb4b4; font-weight: 600; }
+  tr.match     td.verdict { background: #1d4d2c; color: #b4ffb4; font-weight: 600; }
+  tr.error     td.verdict { background: #5a4a1d; color: #ffe9b4; font-weight: 600; }
+  tr.no-system td.verdict { background: #2d2d2d; color: #b0b0b0; }
+  .quote { color: #8b949e; font-style: italic; max-width: 380px; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .pill.long  { background: #1d4d2c; color: #b4ffb4; }
+  .pill.short { background: #5a1d1d; color: #ffb4b4; }
+  .pill.neutral { background: #30363d; color: #c9d1d9; }
+  .field-pill { font-family: monospace; font-size: 11px; padding: 1px 6px; border-radius: 3px; margin-right: 4px; }
+  .field-pill.ok   { background: #1d4d2c; color: #b4ffb4; }
+  .field-pill.fail { background: #5a1d1d; color: #ffb4b4; }
+  .field-pill.na   { background: #30363d; color: #8b949e; }
+  .num { font-family: monospace; }
+  .reload { float: right; padding: 6px 14px; background: #238636; color: white; border: none; border-radius: 6px; cursor: pointer; }
+  .reload:hover { background: #2ea043; }
+  details { margin-top: 4px; }
+  details summary { color: #58a6ff; cursor: pointer; font-size: 11px; }
+  details pre { white-space: pre-wrap; font-size: 11px; color: #c9d1d9; background: #0d1117; padding: 8px; border-radius: 4px; margin: 4px 0; }
+</style>
+</head>
+<body>
+<button class="reload" onclick="location.reload()">Reload</button>
+<h1>Gold-Standard Test &mdash; Bernd Skorupinski vs System</h1>
+<div class="meta" id="meta">Loading...</div>
+
+<div class="summary" id="summary"></div>
+
+<table id="results">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Symbol</th>
+      <th>Date</th>
+      <th>Bernd</th>
+      <th>System</th>
+      <th class="verdict">Verdict</th>
+      <th>Source</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<script>
+function pill(bias) {
+  if (!bias) return '<span class="pill neutral">?</span>';
+  return `<span class="pill ${bias}">${bias.toUpperCase()}</span>`;
+}
+
+function fieldPill(label, ok) {
+  if (ok === null || ok === undefined) return `<span class="field-pill na">${label}: n/a</span>`;
+  return `<span class="field-pill ${ok ? 'ok' : 'fail'}">${label}: ${ok ? '✓' : '✗'}</span>`;
+}
+
+function num(v) {
+  if (v === null || v === undefined || v === '') return '&mdash;';
+  if (typeof v === 'number') return v.toFixed(2);
+  return v;
+}
+
+fetch('gold_results.json')
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('meta').textContent = 'Last run: ' + (data.generated_at || 'unknown');
+    const results = data.results || [];
+
+    let fullMatch = 0, biasMatch = 0, errors = 0, noSig = 0, fpFull = 0, fpBias = 0;
+    for (const r of results) {
+      if (r.error) { errors++; continue; }
+      if ((r.verdict || {}).bias_match)      fullMatch++;
+      if ((r.verdict || {}).bias_only_match) biasMatch++;
+      if (r.system && r.system.direction === 'neutral') noSig++;
+      const bb = (r.bernd || {}).bias;
+      const sd = (r.system || {}).direction;
+      const bo = (r.system || {}).bias_only;
+      if (bb === 'neutral' && sd && sd !== 'neutral') fpFull++;
+      if (bb === 'neutral' && bo && bo !== 'neutral') fpBias++;
+    }
+    const pct = (n) => results.length ? Math.round(100 * n / results.length) + '%' : '';
+    const summary = `
+      <div><b>${results.length}</b>Total cases</div>
+      <div><b>${fullMatch}</b>Full-signal match (${pct(fullMatch)})</div>
+      <div><b>${biasMatch}</b>Bias-only match (${pct(biasMatch)})</div>
+      <div><b style="color: ${fpFull ? '#ff7b72' : '#7ee787'}">${fpFull}</b>Full-signal false positives</div>
+      <div><b>${fpBias}</b>Bias-only false positives</div>
+      <div><b>${errors}</b>Errors</div>
+    `;
+    document.getElementById('summary').innerHTML = summary;
+
+    const tbody = document.getElementById('tbody');
+    tbody.innerHTML = '';
+    for (const r of results) {
+      const v = r.verdict || {};
+      const cls = r.error ? 'error'
+                : !r.system || r.system.direction === 'neutral' ? 'no-system'
+                : v.bias_match ? 'match' : 'diverge';
+
+      const bernd = r.bernd || {};
+      const sys   = r.system || {};
+
+      let verdictCell;
+      if (r.error) {
+        verdictCell = `<b>ERROR</b><br><small>${r.error}</small>`;
+      } else if (!r.system) {
+        verdictCell = '<b>NO RESULT</b>';
+      } else {
+        verdictCell = `
+          ${fieldPill('bias', v.bias_match)}
+          ${fieldPill('zone', v.zone_match)}
+          ${fieldPill('entry', v.entry_close)}
+          ${fieldPill('stop', v.stop_close)}
+          ${fieldPill('target', v.target_close)}
+        `;
+      }
+
+      const tr = document.createElement('tr');
+      tr.className = cls;
+      tr.innerHTML = `
+        <td>${r.case_index}</td>
+        <td><b>${r.display_name || r.symbol}</b><br><small>${r.symbol} (${r.asset_class})</small></td>
+        <td>${r.call_date}<br><small>${r.strategy}: ${r.htf}/${r.ltf}</small></td>
+        <td>
+          ${pill(bernd.bias)}
+          <div class="num">
+            ${bernd.zone_level   != null ? 'zone:'   + num(bernd.zone_level)   + '<br>' : ''}
+            ${bernd.entry        != null ? 'entry:'  + num(bernd.entry)        + '<br>' : ''}
+            ${bernd.stop         != null ? 'stop:'   + num(bernd.stop)         + '<br>' : ''}
+            ${bernd.target       != null ? 'target:' + num(bernd.target)              : ''}
+          </div>
+        </td>
+        <td>
+          ${pill(sys.direction)}
+          ${sys.composite != null ? `<small>score ${sys.composite.toFixed(1)}</small><br>` : ''}
+          <div class="num">
+            ${sys.zone_proximal != null ? 'prox:'  + num(sys.zone_proximal) + '<br>' : ''}
+            ${sys.zone_distal   != null ? 'dist:'  + num(sys.zone_distal)   + '<br>' : ''}
+            ${sys.entry_price   != null ? 'entry:' + num(sys.entry_price)   + '<br>' : ''}
+            ${sys.stop_price    != null ? 'stop:'  + num(sys.stop_price)    + '<br>' : ''}
+            ${sys.targets       != null && sys.targets.length ? 'T1:'  + num(sys.targets[0]) : ''}
+          </div>
+          ${sys.no_signal_reason ? `<small style="color:#8b949e">${sys.no_signal_reason}</small>` : ''}
+        </td>
+        <td class="verdict">${verdictCell}</td>
+        <td class="quote">
+          ${bernd.reasoning || ''}
+          ${bernd.source_quote ? `<details><summary>quote</summary><pre>${bernd.source_quote.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</pre></details>` : ''}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+  })
+  .catch(err => {
+    document.getElementById('meta').textContent = 'Error loading gold_results.json: ' + err.message;
+    document.getElementById('meta').style.color = '#ff7b72';
+  });
+</script>
+</body>
+</html>

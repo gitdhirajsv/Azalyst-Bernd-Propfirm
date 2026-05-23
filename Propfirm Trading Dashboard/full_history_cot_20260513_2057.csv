@@ -1,0 +1,17 @@
+symbol,asset_class,years_of_data,total_weeks,comm_percentile,sspec_percentile,lspec_percentile,alltime_comm_index,alltime_sspec_index,alltime_lspec_index,rolling_52w_bias,rolling_52w_strength,comm_156w_ext,signal,detail
+GC=F,precious_metals,40.3,1915,27.2,80.3,71.6,34.8,79.6,59.7,bullish,normal,59.06008552700199,NEUTRAL,"No all-time extremes - Comm: 34.8 (27th pct), Retail: 79.6 (80th pct) over 40-year history"
+SI=F,precious_metals,40.3,1915,55.1,46.6,46.0,61.3,39.8,35.0,bullish,strong,81.42652032416565,NEUTRAL,"No all-time extremes - Comm: 61.3 (55th pct), Retail: 39.8 (47th pct) over 40-year history"
+CL=F,energies,40.3,1914,33.9,85.3,64.8,71.0,73.6,23.3,neutral,none,55.2896693077182,NEUTRAL,"No all-time extremes - Comm: 71.0 (34th pct), Retail: 73.6 (85th pct) over 40-year history"
+NG=F,nat_gas,36.1,1812,91.6,19.5,12.4,86.8,22.0,20.1,neutral,none,91.0444002650762,BULLISH,"Commercials at all-time extreme LONG (86.8, 92th pct of 36 yrs); retailers not yet at opposite extreme (22.0)"
+ES=F,equity_indices,28.6,1490,75.6,64.6,24.4,57.3,55.4,35.7,neutral,none,32.24439260721335,NEUTRAL,"No all-time extremes - Comm: 57.3 (76th pct), Retail: 55.4 (65th pct) over 29-year history"
+NQ=F,equity_indices,26.9,1403,62.4,55.5,31.2,55.1,47.0,48.1,bearish,strong,85.02656100322216,NEUTRAL,"No all-time extremes - Comm: 55.1 (62th pct), Retail: 47.0 (55th pct) over 27-year history"
+ZC=F,commodities,28.3,1479,5.1,37.7,94.9,4.2,31.8,100.3,bearish,strong,-18.211967708589114,BEARISH,"Commercials at all-time extreme SHORT (4.2, 5th pct of 28 yrs)"
+ZS=F,commodities,28.3,1479,4.3,38.6,96.4,1.6,59.4,105.4,bearish,strong,-11.885854149510477,BEARISH,"Commercials at all-time extreme SHORT (1.6, 4th pct of 28 yrs)"
+ZB=F,interest_rates,40.3,1916,86.9,96.0,2.2,65.8,71.6,13.3,bullish,normal,77.90135738717072,NEUTRAL,"No all-time extremes - Comm: 65.8 (87th pct), Retail: 71.6 (96th pct) over 40-year history"
+HG=F,commodities,36.8,1830,1.4,86.1,98.5,-6.0,85.0,102.7,bearish,strong,-8.290680830516658,STRONG SELL,Commercials all-time extreme SHORT (-6.0) + Retailers all-time extreme LONG (85.0) - producers distributing into retail euphoria
+PA=F,precious_metals,40.3,1841,86.6,46.5,10.5,81.2,25.4,19.6,bearish,strong,11.37650583990705,BULLISH,"Commercials at all-time extreme LONG (81.2, 87th pct of 40 yrs); retailers not yet at opposite extreme (25.4)"
+PL=F,precious_metals,40.3,1915,29.1,75.1,69.5,71.5,54.2,32.3,neutral,none,47.33868904467073,NEUTRAL,"No all-time extremes - Comm: 71.5 (29th pct), Retail: 54.2 (75th pct) over 40-year history"
+CT=F,commodities,40.3,1914,2.2,98.3,97.0,-3.7,90.6,101.1,bearish,strong,-20.0,STRONG SELL,Commercials all-time extreme SHORT (-3.7) + Retailers all-time extreme LONG (90.6) - producers distributing into retail euphoria
+KC=F,soft_commodities,40.3,1913,25.5,7.7,76.8,24.0,17.2,80.9,neutral,none,51.44383057090239,BULLISH,Retailers at all-time extreme SHORT (17.2) - contrarian buy signal over 40-year history
+6E=F,forex,40.3,1437,24.7,89.6,68.3,30.2,84.1,62.7,bearish,normal,58.69755015386083,BEARISH,Retailers at all-time extreme LONG (84.1) - contrarian sell signal
+6J=F,forex,40.3,1916,73.0,69.4,19.8,72.4,81.0,28.2,bearish,normal,72.36301905448968,BEARISH,Retailers at all-time extreme LONG (81.0) - contrarian sell signal

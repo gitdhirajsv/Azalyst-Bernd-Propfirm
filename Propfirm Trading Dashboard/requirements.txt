@@ -1,0 +1,28 @@
+# Blueprint Trading System — Python dependencies
+# Install with:  uv pip install -r requirements.txt
+# Or plain pip:  pip install -r requirements.txt
+
+# Data & finance
+yfinance>=0.2.54
+pandas>=2.2.0
+numpy>=2.0.0
+requests>=2.32.0
+scipy>=1.13.0
+
+# HTTP / scraping
+curl-cffi>=0.7.0
+beautifulsoup4>=4.12.0
+
+# Config & serialisation
+pyyaml>=6.0.1
+
+# ORM (used by peewee-based storage)
+peewee>=3.17.0
+
+# Terminal output
+rich>=13.7.0
+psutil>=6.0.0
+
+# Markdown rendering
+markdown-it-py>=3.0.0
+pygments>=2.18.0

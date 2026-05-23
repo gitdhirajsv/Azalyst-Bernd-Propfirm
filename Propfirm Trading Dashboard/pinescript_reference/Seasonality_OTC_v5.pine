@@ -1,0 +1,66 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+
+//@version=5
+indicator("Seasonality_OTC", shorttitle = "Seasonality", overlay = true, max_lines_count = 500, precision = 0)
+
+// Bernd Skorupinski's Seasonality indicator (Seasonality_OTC source).
+// User-shared Pine Script source -- this is the CANONICAL reference our
+// Python `BP_indicators.Seasonality` class must mirror.
+//
+// Algorithm (faithful summary):
+//   Daily timeframe : 252 bins (or 366 variable) -> trading day of year
+//   Weekly timeframe: 52 bins -> trading week of year
+//   Monthly timeframe: 12 bins -> month
+//   For each bar in lookback (default 15 years):
+//     chg = close - close[1]
+//     bin[slot].sum += chg
+//     bin[slot].count += 1
+//   bin_avg[i] = bin[i].sum / bin[i].count
+//   line[i] = line[i-1] + bin_avg[i]    (cumulative seasonal path)
+//   line[i] -= step * i                  (linear de-trend)
+//   (optional smoothing)
+//   Plot last `_future` bars projected forward onto the chart for the
+//   trader to read visually -- there is NO automatic bias rule;
+//   the trader judges the slope of the projected line.
+
+_stdays   = input.string(group = "Daily timeframe", title = "Trading days on daily timeframe", options = ["fixed (252)","variable"], defval = "fixed (252)", display = display.none)
+_utdays   = input.string(group = "Daily timeframe", title = "Use ... number of trading days in a year of the lookback period", options = ["maximum","minimum","average"], defval = "minimum", display = display.none)
+_lookback = input.int   (group = "All timeframes" , title = "Lookback period in years", minval = 1, maxval =  30, defval = 15)
+_future   = input.int   (group = "All timeframes" , title = "Plot seasonality ... bars into the future", minval = 0, maxval = 252, defval = 30, display = display.none)
+_color    = input.color (group = "All timeframes" , title = "Color", defval = #cfcfcf)
+_width    = input.int   (group = "All timeframes" , title = "Line width", minval = 1, defval = 3, display = display.none)
+_malen    = input.int   (group = "All timeframes" , title = "Smoothing: Moving Average Length (1 = no)", minval = 1, defval = 1, display = display.none)
+_offset   = input.int   (group = "All timeframes" , title = "Offset", defval = 0, display = display.none)
+
+// Trading day of month, trading day of year
+var int _tdom = na
+var int _tdoy = na
+
+if bool(ta.change(year(time_close)))  and timeframe.isdaily and timeframe.multiplier == 1
+    _tdoy := 0
+if bool(ta.change(month(time_close))) and timeframe.isdaily and timeframe.multiplier == 1
+    _tdom := 0
+if not na(_tdoy)
+    _tdoy := _tdoy + 1
+if not na(_tdom)
+    _tdom := _tdom + 1
+
+int _twoy = weekofyear(time_close)
+
+int _nof_bins = na
+int _slot     = na
+
+if timeframe.multiplier == 1
+    if      timeframe.isdaily
+        _nof_bins := _stdays == "fixed (252)" ? 252 : 366
+        _slot   := _tdoy
+    else if timeframe.isweekly
+        _nof_bins := 52
+        _slot   := _twoy
+    else if timeframe.ismonthly
+        _nof_bins := 12
+        _slot   := month(time_close)
+
+// (... full plotting/projection code abbreviated for the .pine reference -- see
+// in-script comments at top of file for the algorithm summary. Full source is
+// preserved in the project conversation transcript.)

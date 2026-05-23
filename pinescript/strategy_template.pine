@@ -1,0 +1,413 @@
+// Blueprint Supply/Demand Zone Strategy — Template
+// Based on Bernd Skorupinski Blueprint Trading System
+// See CLAUDE.md and methodology/ folder for full rules
+//
+// INSTRUCTIONS FOR AGENTS:
+// 1. This is a STARTING TEMPLATE — customize per asset class
+// 2. Read pinescript_v6_reference.md for v6 compliance rules
+// 3. Read methodology/07_asset_class_cheatsheet.md for settings
+// 4. Zone detection, qualifier scoring, and trade management all included
+// 5. Combine with COT/Valuation/Seasonality indicators for full system
+
+//@version=6
+strategy("Blueprint SD Zones", overlay=true,
+         default_qty_type=strategy.percent_of_equity,
+         default_qty_value=1,
+         initial_capital=100000,
+         commission_type=strategy.commission.percent,
+         commission_value=0.01,
+         slippage=1,
+         calc_on_every_tick=false)
+
+// ============================================================
+// INPUTS
+// ============================================================
+
+// Zone Detection
+i_legInMin      = input.int(3, "Leg-In Minimum Candles", minval=2, maxval=10)
+i_baseMax       = input.int(6, "Base Maximum Candles", minval=1, maxval=10)
+i_indecisive    = input.float(0.50, "Indecisive Threshold (body/range)", step=0.05)
+i_explosive     = input.float(0.70, "Explosive Threshold (body/range)", step=0.05)
+i_legOutSizeMul = input.float(2.0, "Leg-Out Size Multiplier (vs avg)", step=0.5)
+i_avgLookback   = input.int(20, "Average Body Lookback", minval=5)
+
+// Qualifier Weights
+i_wDeparture    = input.float(0.30, "W: Departure", step=0.05, group="Qualifier Weights")
+i_wBase         = input.float(0.10, "W: Base Duration", step=0.05, group="Qualifier Weights")
+i_wFreshness    = input.float(0.15, "W: Freshness", step=0.05, group="Qualifier Weights")
+i_wOriginality  = input.float(0.15, "W: Originality", step=0.05, group="Qualifier Weights")
+i_wProfitMargin = input.float(0.10, "W: Profit Margin", step=0.05, group="Qualifier Weights")
+i_wArrival      = input.float(0.10, "W: Arrival", step=0.05, group="Qualifier Weights")
+i_wLOL          = input.float(0.10, "W: LOL Bonus", step=0.05, group="Qualifier Weights")
+i_minScore      = input.float(4.0, "Minimum Composite Score", step=0.5, group="Qualifier Weights")
+
+// Trade Management
+i_riskPct         = input.float(1.0, "Risk % per Trade (standard)", step=0.5, group="Trade Management")
+i_riskPctReduced  = input.float(0.5, "Risk % for counter-trend/anticipatory/calendar", step=0.25, group="Trade Management")
+i_minRR           = input.float(2.0, "Minimum R:R Ratio", step=0.5, group="Trade Management")
+i_stopMode        = input.string("ltf_pattern", "Stop Mode", options=["ltf_pattern", "htf_weekly"],
+                                  tooltip="ltf_pattern: -33% Fib below distal (standard). htf_weekly: distal line only (weekly income trades, achieves 4:1 R:R)",
+                                  group="Trade Management")
+i_fibStop         = input.float(0.33, "Fib Stop Extension (ltf_pattern mode only)", step=0.01, group="Trade Management")
+i_partialPct      = input.float(50.0, "Partial Profit % at T2", step=10, group="Trade Management")
+i_counterTrendFull = input.bool(true, "Counter-trend: close FULL position at T2 (hard ceiling)", group="Trade Management")
+i_maxPositions    = input.int(3, "Max Concurrent Positions", minval=1, maxval=5, group="Trade Management")
+i_beAtHalf        = input.bool(true, "Move stop to BE at half-T1 distance (preferred) — else wait for T1", group="Trade Management")
+
+// Display
+i_showZones     = input.bool(true, "Show Zone Boxes", group="Display")
+i_showScores    = input.bool(true, "Show Qualifier Scores", group="Display")
+i_maxZones      = input.int(20, "Max Zones Displayed", minval=5, maxval=50, group="Display")
+
+// ============================================================
+// CANDLE CLASSIFICATION
+// ============================================================
+
+body = math.abs(close - open)
+range_ = high - low
+body_pct = range_ > 0 ? body / range_ : 0.0
+
+is_indecisive = body_pct <= i_indecisive
+is_decisive = body_pct > i_indecisive and body_pct < i_explosive
+is_explosive = body_pct >= i_explosive
+is_bullish = close > open
+is_bearish = close < open
+
+// Average body size for leg-out comparison
+avg_body = ta.sma(body, i_avgLookback)
+
+// ============================================================
+// ZONE DETECTION — Simplified for Pine Script
+// ============================================================
+// Full algorithm requires scanning leg-in + base + leg-out.
+// Pine Script processes bar-by-bar, so we use a state machine.
+
+// State tracking
+var int state = 0          // 0=scanning, 1=in_leg_in, 2=in_base, 3=leg_out_found
+var int legInCount = 0
+var int legInDir = 0       // 1=bullish, -1=bearish
+var int baseCount = 0
+var int legInStart = 0
+var int baseStart = 0
+var float baseHigh = na
+var float baseLow = na
+var float baseBodyHigh = na  // Highest body extreme in base
+var float baseBodyLow = na   // Lowest body extreme in base
+
+// Zone storage arrays
+var box[] zoneBoxes = array.new_box(0)
+var float[] zoneProximals = array.new_float(0)
+var float[] zoneDistals = array.new_float(0)
+var int[] zoneTypes = array.new_int(0)        // 1=demand, -1=supply
+var int[] zoneFormations = array.new_int(0)    // 1=original, 0=non-original
+var int[] zoneRetests = array.new_int(0)
+var float[] zoneScores = array.new_float(0)
+var float[] zoneDepartures = array.new_float(0)
+
+// Current bar classification
+int barDir = is_bullish ? 1 : (is_bearish ? -1 : 0)
+
+// State machine for zone detection
+if state == 0
+    // Looking for leg-in start
+    if is_decisive or is_explosive
+        state := 1
+        legInCount := 1
+        legInDir := barDir
+        legInStart := bar_index
+
+else if state == 1
+    // Counting leg-in candles
+    if (is_decisive or is_explosive) and barDir == legInDir
+        legInCount += 1
+    else if is_indecisive and legInCount >= i_legInMin
+        // Leg-in complete, entering base
+        state := 2
+        baseCount := 1
+        baseStart := bar_index
+        baseHigh := high
+        baseLow := low
+        baseBodyHigh := math.max(open, close)
+        baseBodyLow := math.min(open, close)
+    else
+        // Reset
+        state := 0
+        legInCount := 0
+
+else if state == 2
+    // Counting base candles
+    if is_indecisive and baseCount < i_baseMax
+        baseCount += 1
+        baseHigh := math.max(baseHigh, high)
+        baseLow := math.min(baseLow, low)
+        baseBodyHigh := math.max(baseBodyHigh, math.max(open, close))
+        baseBodyLow := math.min(baseBodyLow, math.min(open, close))
+    else if is_explosive and body > avg_body * i_legOutSizeMul
+        // VALID LEG-OUT — Zone detected!
+        int legOutDir = barDir
+
+        // Determine formation
+        string formation = ""
+        int zoneType = 0
+        int isOriginal = 0
+
+        if legInDir == -1 and legOutDir == 1
+            formation := "DBR"
+            zoneType := 1   // demand
+            isOriginal := 0
+        else if legInDir == 1 and legOutDir == 1
+            formation := "RBR"
+            zoneType := 1   // demand
+            isOriginal := 1
+        else if legInDir == 1 and legOutDir == -1
+            formation := "RBD"
+            zoneType := -1  // supply
+            isOriginal := 0
+        else if legInDir == -1 and legOutDir == -1
+            formation := "DBD"
+            zoneType := -1  // supply
+            isOriginal := 1
+
+        if zoneType != 0
+            // Calculate zone boundaries
+            float proximal = na
+            float distal = na
+
+            if zoneType == 1  // Demand
+                proximal := baseBodyHigh           // Highest body of base
+                distal := math.min(baseLow, low)   // Lowest wick including leg-out
+            else              // Supply
+                proximal := baseBodyLow            // Lowest body of base
+                distal := math.max(baseHigh, high) // Highest wick including leg-out
+
+            // Score Departure (Q1)
+            float deptScore = body_pct >= 0.70 ? 10.0 : (body_pct >= 0.60 ? 7.0 : 5.0)
+
+            // Score Base Duration (Q2)
+            float baseScore = baseCount <= 2 ? 10.0 : (baseCount <= 4 ? 7.0 : 4.0)
+
+            // Score Freshness (Q3) — starts fresh
+            float freshScore = 10.0
+
+            // Score Originality (Q4)
+            float origScore = isOriginal == 1 ? 10.0 : 5.0
+
+            // Score Profit Margin (Q5) — calculate after price moves away
+            float profitMargin = 7.0  // Default, update dynamically
+
+            // Score Arrival (Q6) — simplified
+            float arrivalScore = 7.0  // Default
+
+            // LOL Bonus — simplified (check HTF alignment separately)
+            float lolScore = 0.0
+
+            // Composite
+            float composite = (deptScore * i_wDeparture) + (baseScore * i_wBase) +
+                              (freshScore * i_wFreshness) + (origScore * i_wOriginality) +
+                              (profitMargin * i_wProfitMargin) + (arrivalScore * i_wArrival) +
+                              (lolScore * i_wLOL)
+
+            if composite >= i_minScore
+                // Store zone
+                zoneProximals.push(proximal)
+                zoneDistals.push(distal)
+                zoneTypes.push(zoneType)
+                zoneFormations.push(isOriginal)
+                zoneRetests.push(0)
+                zoneScores.push(composite)
+                zoneDepartures.push(deptScore)
+
+                // Draw zone box
+                if i_showZones
+                    color zoneColor = zoneType == 1 ? color.green : color.red
+                    box zb = box.new(baseStart, proximal, bar_index, distal,
+                                     bgcolor=color.new(zoneColor, 85),
+                                     border_color=zoneColor, border_width=1,
+                                     extend=extend.right)
+                    zoneBoxes.push(zb)
+
+                    if i_showScores
+                        string scoreText = (zoneType == 1 ? "D" : "S") + " " +
+                                          str.tostring(composite, "#.#")
+                        label.new(bar_index, zoneType == 1 ? distal : proximal, scoreText,
+                                  color=zoneColor, textcolor=color.white,
+                                  style=zoneType == 1 ? label.style_label_up : label.style_label_down,
+                                  size=size.tiny)
+
+                    // Limit displayed zones
+                    if zoneBoxes.size() > i_maxZones
+                        box.delete(zoneBoxes.shift())
+
+        // Reset state
+        state := 0
+        legInCount := 0
+        baseCount := 0
+    else
+        // Base broken or too long — reset
+        state := 0
+        legInCount := 0
+        baseCount := 0
+
+// ============================================================
+// STOP CALCULATION HELPER (two-mode: LTF -33% Fib OR HTF distal only)
+// ============================================================
+
+f_stop_long(prox, dist) =>
+    // Mode selection from i_stopMode input
+    i_stopMode == "htf_weekly" ? dist : dist - i_fibStop * (prox - dist)
+
+f_stop_short(prox, dist) =>
+    i_stopMode == "htf_weekly" ? dist : dist + i_fibStop * (dist - prox)
+
+// ============================================================
+// ZONE APPROACH DETECTION + ENTRY LOGIC
+// ============================================================
+
+var bool inLong = false
+var bool inShort = false
+var bool isCounterTrend = false     // Track if current trade is counter-trend
+var float entryPrice = na
+var float stopPrice = na
+var float t1Price = na
+var float halfT1Price = na          // Half-T1 for early BE (preferred mode)
+var float t2Price = na
+var float t3Price = na
+var bool beTriggered = false
+var bool partialTaken = false
+
+// Check if price approaches any active zone
+if not inLong and not inShort
+    for i = 0 to zoneProximals.size() - 1
+        if i >= zoneProximals.size()
+            break
+
+        float prox = zoneProximals.get(i)
+        float dist = zoneDistals.get(i)
+        int zt = zoneTypes.get(i)
+        float sc = zoneScores.get(i)
+        int retests = zoneRetests.get(i)
+
+        if sc < i_minScore
+            continue
+
+        float zoneHeight = math.abs(prox - dist)
+
+        if zt == 1  // Demand zone — look for long
+            if low <= prox and low >= dist  // Price touching zone
+                // Calculate stop using selected mode
+                float stop = f_stop_long(prox, dist)
+                float risk = prox - stop
+                float target2 = prox + 2 * risk
+
+                if risk > 0 and (target2 - prox) / risk >= i_minRR
+                    entryPrice := prox
+                    stopPrice := stop
+                    t1Price := prox + risk
+                    halfT1Price := prox + risk * 0.5   // Half-T1 for early BE
+                    t2Price := prox + 2 * risk
+                    t3Price := prox + 3 * risk
+                    beTriggered := false
+                    partialTaken := false
+                    inLong := true
+                    // isCounterTrend would be set based on trend detection (not implemented here)
+
+                    strategy.entry("Long", strategy.long, limit=prox)
+                    strategy.exit("SL", "Long", stop=stop)
+
+                    // Update retest count
+                    zoneRetests.set(i, retests + 1)
+                    float newFresh = 10.0 / (retests + 2)
+                    // Recalculate score with reduced freshness
+                    float newScore = sc - (10.0 / (retests + 1) - newFresh) * i_wFreshness
+                    zoneScores.set(i, newScore)
+                    break
+
+        else if zt == -1  // Supply zone — look for short
+            if high >= prox and high <= dist
+                float stop = f_stop_short(prox, dist)
+                float risk = stop - prox
+                float target2 = prox - 2 * risk
+
+                if risk > 0 and (prox - target2) / risk >= i_minRR
+                    entryPrice := prox
+                    stopPrice := stop
+                    t1Price := prox - risk
+                    halfT1Price := prox - risk * 0.5   // Half-T1 for early BE
+                    t2Price := prox - 2 * risk
+                    t3Price := prox - 3 * risk
+                    beTriggered := false
+                    partialTaken := false
+                    inShort := true
+
+                    strategy.entry("Short", strategy.short, limit=prox)
+                    strategy.exit("SL", "Short", stop=stop)
+
+                    zoneRetests.set(i, retests + 1)
+                    break
+
+// ============================================================
+// TRADE MANAGEMENT — Breakeven + Partials
+// ============================================================
+
+// Long position management
+if inLong and strategy.position_size > 0
+    // Breakeven trigger: half-T1 (preferred) or T1 (conservative)
+    float beTriggerLevel = i_beAtHalf ? halfT1Price : t1Price
+    if not beTriggered and high >= beTriggerLevel
+        strategy.exit("BE", "Long", stop=entryPrice, limit=t3Price)
+        beTriggered := true
+
+    // T2 hit — partial or full close (counter-trend = full close, hard ceiling)
+    if not partialTaken and high >= t2Price
+        float closeQty = (isCounterTrend and i_counterTrendFull) ? 100.0 : i_partialPct
+        strategy.close("Long", qty_percent=closeQty,
+                        comment=isCounterTrend ? "CT Full Close T2" : "Partial T2")
+        partialTaken := true
+        if not isCounterTrend
+            // Only trail if this is NOT a counter-trend trade
+            strategy.exit("Trail", "Long", stop=t1Price, limit=t3Price)
+
+if inLong and strategy.position_size == 0
+    inLong := false
+
+// Short position management
+if inShort and strategy.position_size < 0
+    float beTriggerLevel = i_beAtHalf ? halfT1Price : t1Price
+    if not beTriggered and low <= beTriggerLevel
+        strategy.exit("BE", "Short", stop=entryPrice, limit=t3Price)
+        beTriggered := true
+
+    if not partialTaken and low <= t2Price
+        float closeQty = (isCounterTrend and i_counterTrendFull) ? 100.0 : i_partialPct
+        strategy.close("Short", qty_percent=closeQty,
+                        comment=isCounterTrend ? "CT Full Close T2" : "Partial T2")
+        partialTaken := true
+        if not isCounterTrend
+            strategy.exit("Trail", "Short", stop=t1Price, limit=t3Price)
+
+if inShort and strategy.position_size == 0
+    inShort := false
+
+// ============================================================
+// VISUAL OVERLAYS
+// ============================================================
+
+// Plot current candle classification
+bgcolor(is_explosive ? color.new(color.orange, 90) : na)
+bgcolor(is_indecisive ? color.new(color.blue, 95) : na)
+
+// Plot entry/target levels when in position
+plot(inLong or inShort ? entryPrice : na, "Entry", color.white, style=plot.style_linebr)
+plot(inLong or inShort ? stopPrice : na, "Stop", color.red, style=plot.style_linebr)
+plot(inLong or inShort ? t1Price : na, "T1 (BE)", color.yellow, style=plot.style_linebr)
+plot(inLong or inShort ? t2Price : na, "T2 (Partial)", color.orange, style=plot.style_linebr)
+plot(inLong or inShort ? t3Price : na, "T3 (Full)", color.green, style=plot.style_linebr)
+
+// ============================================================
+// ALERTS
+// ============================================================
+
+alertcondition(inLong and strategy.position_size > 0, "Long Entry", "Blueprint: Long entry at {{close}}")
+alertcondition(inShort and strategy.position_size < 0, "Short Entry", "Blueprint: Short entry at {{close}}")
+alertcondition(beTriggered, "Breakeven", "Blueprint: Stop moved to breakeven")
+alertcondition(partialTaken, "Partial Profit", "Blueprint: 50% partial taken at T2")
