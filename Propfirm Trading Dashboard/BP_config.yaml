@@ -246,7 +246,7 @@ valuation:
 
 seasonality:
   lookback_years: 15
-  bias_lookahead_bars: 20
+  bias_lookahead_bars: 30  # Phase 28 frame-verified: Bernd verbatim "I just project 30 days in the future for me that's enough" (Practical Application 03.04.2024 frame_001496 shows label (5,30,FALSE,FALSE)); Pine Script Seasonality_OTC.txt default _future=30
 
 api:
   host: "0.0.0.0"

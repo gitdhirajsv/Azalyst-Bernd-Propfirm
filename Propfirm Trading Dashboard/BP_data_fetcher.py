@@ -464,6 +464,15 @@ def get_cftc_code(symbol: str) -> str:
         'USDJPY=X': '097741',  # = 6J (inverted)
         'USDCAD=X': '090741',  # = 6C (inverted)
         'USDCHF=X': '092741',  # = 6S (inverted)
+        # Phase 28 COT #8: bare Yahoo forex tickers (Yahoo default form, no USD suffix).
+        # Previously fell through to '' and got neutral COT silently.
+        'EUR=X': '099741',  # = 6E (EUR/USD)
+        'GBP=X': '096742',  # = 6B (GBP/USD)
+        'JPY=X': '097741',  # = 6J (USD/JPY inverted)
+        'AUD=X': '232741',  # = 6A (AUD/USD)
+        'CAD=X': '090741',  # = 6C (USD/CAD inverted)
+        'CHF=X': '092741',  # = 6S (USD/CHF inverted)
+        'NZD=X': '112741',  # = 6N (NZD/USD)
         # Forex crosses -- no direct COT, fall through to default
         # (rules engine derives bias from each leg's COT separately)
 

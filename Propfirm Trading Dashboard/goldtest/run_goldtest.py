@@ -99,7 +99,7 @@ ASSET_CLASS_BY_SYMBOL = {
 VALUATION_REFS = {
     "forex":             ["DX-Y.NYB"],
     "equity_indices":    ["DX-Y.NYB", "ZB=F", "GC=F"],   # Phase 21: ZN removed
-    "equities":          ["ZB=F", "GC=F", "SPY"],           # DeepSeek Gap 2: SPY added for relative-strength Valuation
+    "equities":          ["ZB=F"],                            # Phase 28 frame-verified: Bernd unchecks GC and DXY for individual stocks (OTC 2025 Lesson 3 frame_001253)
     "commodities":       ["DX-Y.NYB", "GC=F", "ZB=F"],
     "soft_commodities":  ["DX-Y.NYB", "GC=F", "ZB=F"],
     "precious_metals":   ["DX-Y.NYB", "GC=F", "ZB=F"],

@@ -289,13 +289,17 @@ class RulesEngine:
         logger.info(f"[{symbol}] Best zone: {best_zone['zone_type']} at {best_zone['proximal']:.2f}, score={best_zone['composite_score']:.1f}")
 
         # == Consensus Bias Check ==
+        # Phase 28 A1 fix: wire constituent bias into consensus so the Phase 23/24
+        # cycle override path can fire in the live scanner (was dead code because
+        # goldtest harness built the dict separately).
         biases = {
             'location': ht_bias['location'],
             'trend': ht_bias['trend'],
             'cot': fund_bias['cot'],
             'cot_strength': fund_bias.get('cot_strength', 'normal'),
             'valuation': fund_bias['valuation'],
-            'seasonality': fund_bias['seasonality']
+            'seasonality': fund_bias['seasonality'],
+            'constituent': fund_bias.get('constituent', 'neutral'),
         }
 
         # Phase 23: pass at_zone + zone_composite for T4 soft-veto support.
@@ -1316,9 +1320,15 @@ class RulesEngine:
                 # Phase 16: Bitcoin only has ~4 years of history.
                 # 03_funded.txt lines 451, 864-865: "We can only do four years."
                 # Use a temporary Seasonality instance with 4yr-only lookback.
+                # Phase 28 A3 fix: seasonal_df is always daily OHLCV (per
+                # BP_data_fetcher.fetch_seasonality_reference). The Pine Script
+                # Seasonality_OTC binning is timeframe-aware — daily charts use
+                # the 252-bin TDOY pattern. Previously we passed timeframe='weekly'
+                # which routed to the 52-bin weekly branch and silently degraded
+                # NG / BTC / soft commodities / energies seasonality reads.
                 if symbol in BTC_SYMBOLS:
                     _seas_engine = Seasonality(multi_lookbacks=(4,))
-                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='weekly')
+                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='daily')
                 # Phase 25 (DeepSeek P3): enforce NG=F 10y+5y-only restriction in code.
                 # Cheatsheet + corpus state NG seasonality should use 10y + 5y lookbacks
                 # only (15y data is unreliable for natural gas due to shale-era regime
@@ -1326,12 +1336,12 @@ class RulesEngine:
                 # would compute 15y too and let it vote in the 2-of-3 majority.
                 elif symbol in NAT_GAS_SYMBOLS:
                     _seas_engine = Seasonality(multi_lookbacks=(5, 10))
-                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='weekly')
+                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='daily')
                 else:
                     # Standard: 5y/10y/15y — 2-of-3 must agree (Phase 9)
-                    multi = self.seasonality.calculate_multi(seasonal_df, timeframe='weekly')
+                    multi = self.seasonality.calculate_multi(seasonal_df, timeframe='daily')
                 if multi:
-                    current_bin = self.seasonality.get_current_bin(price_df, 'weekly')
+                    current_bin = self.seasonality.get_current_bin(price_df, 'daily')
                     seas_bias = self.seasonality.get_bias_multi(multi, current_bin)
             except Exception as e:
                 logger.warning(f"Seasonality calculation failed: {e}")
