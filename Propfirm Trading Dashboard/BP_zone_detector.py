@@ -361,15 +361,18 @@ class ZoneDetector:
             departure_score = 0.0
 
         # Q2: Base Duration
+        # Phase 41 S4-01: OTC M2L6 canonical cheat sheet states "Approx. 1-5 candles."
+        # The old upper limit of 6 was too permissive. 6+ candles = score 0 (fails quality bar).
+        # base_max_candles config also updated to 5 in BP_config.yaml.
         base_candles = zone['base_end'] - zone['base_start'] + 1
         if base_candles <= 2:
             base_dur_score = 10.0
         elif base_candles <= 4:
             base_dur_score = 7.0
-        elif base_candles <= 6:
-            base_dur_score = 4.0
+        elif base_candles <= 5:
+            base_dur_score = 4.0  # 5 candles = marginal but acceptable
         else:
-            base_dur_score = 0.0
+            base_dur_score = 0.0  # 6+ candles = fails Q2
 
         # Q3: Freshness -- proper Blueprint gradient (OTC 2025 lesson 6):
         #   never tested        = 10

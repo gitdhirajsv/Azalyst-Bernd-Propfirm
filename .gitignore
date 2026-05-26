@@ -39,11 +39,28 @@ Propfirm Trading Dashboard/*.lock
 
 # --- Test / audit byproducts ---
 _audit/
+_audit_phase*/
 _phase8_rebuild/phase1_rule_ledger/raw/
 _corpus/
 Propfirm Trading Dashboard/goldtest/results/
 Propfirm Trading Dashboard/goldtest/snapshots/
 Propfirm Trading Dashboard/goldtest/__pycache__/
+Propfirm Trading Dashboard/goldtest/gold_results_phase*.json
+Propfirm Trading Dashboard/goldtest/gold_results.json
+
+# --- Phase audit / before-after artifacts (regenerated per phase) ---
+BEFORE_AFTER*.md
+PHASE_*_FINAL_REPORT.md
+PHASE_*_COMPLETE.md
+PHASE_*_FINAL_SUMMARY.md
+AUTONOMOUS_RUN_LOG.md
+
+# --- Backtest / walk-forward outputs (regenerated on every run) ---
+Propfirm Trading Dashboard/backtest_10yr_*.csv
+Propfirm Trading Dashboard/backtest_10yr_*.json
+Propfirm Trading Dashboard/wf_*.csv
+Propfirm Trading Dashboard/wf_*.json
+Propfirm Trading Dashboard/full_history_cot_*.csv
 
 # --- Claude / agent caches ---
 .claude/

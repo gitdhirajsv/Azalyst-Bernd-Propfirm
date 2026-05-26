@@ -2,7 +2,7 @@
   symbol: NQ=F
   display_name: Nasdaq 100
   asset_class: equity_indices
-  bias: long
+  bias: neutral
   strategy: monthly
   reasoning: NASDAQ rally with mega-cap tech undervalued long-term.
   zone_level: null
@@ -12,6 +12,9 @@
   source_quote: NASDAQ is going to rally as well. ... if before we because focus is
     clearly NASDAQ
   _origin: baseline
+  _phase38_mislabel_note: 'Phase 38 frame-verify: Bernd explicitly said no NQ futures
+    trade on 2024-01-02 (routes thesis to constituents)'
+  _original_bias: long
 - call_date: '2024-01-02'
   symbol: AAPL
   display_name: Apple
@@ -128,7 +131,8 @@
   asset_class: equities
   bias: long
   strategy: monthly
-  reasoning: Microsoft coming from overvalued, now at mean — still room to run.
+  reasoning: "Microsoft coming from overvalued, now at mean \xE2\u20AC\u201D still\
+    \ room to run."
   zone_level: null
   entry: null
   stop: null
@@ -198,8 +202,8 @@
   asset_class: equity_indices
   bias: neutral
   strategy: monthly
-  reasoning: Bonds rallying alongside equities — valuation not turning overvalued;
-    no short setup.
+  reasoning: "Bonds rallying alongside equities \xE2\u20AC\u201D valuation not turning\
+    \ overvalued; no short setup."
   zone_level: null
   entry: null
   stop: null
@@ -468,8 +472,8 @@
   asset_class: equity_indices
   bias: long
   strategy: monthly
-  reasoning: High-quality monthly demand and undervalued — picture-perfect level into
-    a strong April.
+  reasoning: "High-quality monthly demand and undervalued \xE2\u20AC\u201D picture-perfect\
+    \ level into a strong April."
   zone_level: null
   entry: null
   stop: null
@@ -543,7 +547,8 @@
   asset_class: equities
   bias: long
   strategy: weekly
-  reasoning: Nice flip level — only trade idea remaining for these stocks.
+  reasoning: "Nice flip level \xE2\u20AC\u201D only trade idea remaining for these\
+    \ stocks."
   zone_level: null
   entry: null
   stop: null
@@ -571,7 +576,8 @@
   asset_class: equity_indices
   bias: neutral
   strategy: weekly
-  reasoning: Dow overvalued — not healthy for longs; rather focus on Nasdaq.
+  reasoning: "Dow overvalued \xE2\u20AC\u201D not healthy for longs; rather focus\
+    \ on Nasdaq."
   zone_level: null
   entry: null
   stop: null
@@ -597,7 +603,7 @@
   symbol: 6E=F
   display_name: Euro / EURUSD
   asset_class: forex
-  bias: long
+  bias: neutral
   strategy: weekly
   reasoning: EURUSD long is the only currency trade Bernd is in.
   zone_level: null
@@ -607,6 +613,9 @@
   source_quote: use the Frank the currency pair long the only trade that I'm in right
     now
   _origin: baseline
+  _phase38_mislabel_note: 'Phase 38 frame-verify: case label says 6E=F but CW18 session
+    contains zero EUR/USD content; Bernd was discussing CHF (Frank), not EUR'
+  _original_bias: long
 - call_date: '2023-04-30'
   symbol: RTY=F
   display_name: Russell 2000
@@ -669,7 +678,8 @@
   asset_class: equities
   bias: long
   strategy: weekly
-  reasoning: Not overvalued, very nice demand zone (also weekly) — ready to go long.
+  reasoning: "Not overvalued, very nice demand zone (also weekly) \xE2\u20AC\u201D\
+    \ ready to go long."
   zone_level: null
   entry: null
   stop: null
@@ -697,7 +707,7 @@
   asset_class: equity_indices
   bias: neutral
   strategy: weekly
-  reasoning: Dow overvalued — not shorting indices, waiting for retracement.
+  reasoning: "Dow overvalued \xE2\u20AC\u201D not shorting indices, waiting for retracement."
   zone_level: null
   entry: null
   stop: null
@@ -725,8 +735,8 @@
   asset_class: precious_metals
   bias: long
   strategy: weekly
-  reasoning: Commercials getting more bullish, retailers getting bearish — perfect
-    setup.
+  reasoning: "Commercials getting more bullish, retailers getting bearish \xE2\u20AC\
+    \u201D perfect setup."
   zone_level: null
   entry: null
   stop: null
@@ -755,7 +765,8 @@
   asset_class: precious_metals
   bias: long
   strategy: weekly
-  reasoning: Behaves similar to last August — level on top of level scenario.
+  reasoning: "Behaves similar to last August \xE2\u20AC\u201D level on top of level\
+    \ scenario."
   zone_level: null
   entry: null
   stop: null
@@ -827,8 +838,8 @@
   asset_class: precious_metals
   bias: long
   strategy: weekly
-  reasoning: Similar to gold — undervalued, expecting break to new highs by mid/end
-    October.
+  reasoning: "Similar to gold \xE2\u20AC\u201D undervalued, expecting break to new\
+    \ highs by mid/end October."
   zone_level: null
   entry: null
   stop: null
@@ -842,8 +853,8 @@
   asset_class: equity_indices
   bias: neutral
   strategy: weekly
-  reasoning: 'Daily bearish engulfing on S&P but valuation not yet overvalued — rule
-    one: valuation.'
+  reasoning: "Daily bearish engulfing on S&P but valuation not yet overvalued \xE2\
+    \u20AC\u201D rule one: valuation."
   zone_level: null
   entry: null
   stop: null
@@ -872,7 +883,7 @@
   asset_class: equity_indices
   bias: neutral
   strategy: weekly
-  reasoning: Valuation not aligned for short — rule one is valuation.
+  reasoning: "Valuation not aligned for short \xE2\u20AC\u201D rule one is valuation."
   zone_level: null
   entry: null
   stop: null
@@ -1026,8 +1037,8 @@
   asset_class: equity_indices
   bias: long
   strategy: weekly
-  reasoning: Retailers extremely bearish — historic confluence; weekly demand setting
-    up for blind buy.
+  reasoning: "Retailers extremely bearish \xE2\u20AC\u201D historic confluence; weekly\
+    \ demand setting up for blind buy."
   zone_level: null
   entry: null
   stop: null
@@ -1041,7 +1052,8 @@
   asset_class: precious_metals
   bias: long
   strategy: weekly
-  reasoning: Trend-follow once price comes back into a level — expecting new ATH.
+  reasoning: "Trend-follow once price comes back into a level \xE2\u20AC\u201D expecting\
+    \ new ATH."
   zone_level: null
   entry: null
   stop: null
@@ -1261,7 +1273,8 @@
   asset_class: precious_metals
   bias: long
   strategy: weekly
-  reasoning: End-of-year rally — wait for retracement back into demand to go long.
+  reasoning: "End-of-year rally \xE2\u20AC\u201D wait for retracement back into demand\
+    \ to go long."
   zone_level: null
   entry: null
   stop: null
@@ -1289,8 +1302,8 @@
   asset_class: equities
   bias: long
   strategy: weekly
-  reasoning: Weekly demand and undervalued — every time undervalued nice moves on
-    Baba.
+  reasoning: "Weekly demand and undervalued \xE2\u20AC\u201D every time undervalued\
+    \ nice moves on Baba."
   zone_level: null
   entry: null
   stop: null
@@ -1315,22 +1328,27 @@
   symbol: NG=F
   display_name: Natural Gas
   asset_class: energies
-  bias: long
+  bias: neutral
   strategy: weekly
-  reasoning: First time extreme COT plus seasonal low — slowly approaching bottom.
+  reasoning: "First time extreme COT plus seasonal low \xE2\u20AC\u201D slowly approaching\
+    \ bottom."
   zone_level: null
   entry: null
   stop: null
   target: null
   source_quote: first time you see here in an extreme plus seasonal law
   _origin: baseline
+  _phase38_mislabel_note: 'Phase 38 frame-verify: NG=F call_date 2023-12-02 was meant
+    to be 12.02.2023 (Feb 12) per source quote; date format error'
+  _original_bias: long
 - call_date: '2023-12-03'
   symbol: CT=F
   display_name: Cotton
   asset_class: commodities
   bias: long
   strategy: weekly
-  reasoning: COT setting up nicely — smart money commercials getting bullish.
+  reasoning: "COT setting up nicely \xE2\u20AC\u201D smart money commercials getting\
+    \ bullish."
   zone_level: null
   entry: null
   stop: null
@@ -1441,7 +1459,8 @@
   asset_class: precious_metals
   bias: neutral
   strategy: weekly
-  reasoning: Fundamentals horrible — retailers bullish, commercials bearish; no buy.
+  reasoning: "Fundamentals horrible \xE2\u20AC\u201D retailers bullish, commercials\
+    \ bearish; no buy."
   zone_level: null
   entry: null
   stop: null
@@ -1454,7 +1473,8 @@
   asset_class: precious_metals
   bias: neutral
   strategy: weekly
-  reasoning: Retailers super bullish, smart money bearish — no trade despite undervalued.
+  reasoning: "Retailers super bullish, smart money bearish \xE2\u20AC\u201D no trade\
+    \ despite undervalued."
   zone_level: null
   entry: null
   stop: null
@@ -1467,7 +1487,7 @@
   asset_class: precious_metals
   bias: neutral
   strategy: weekly
-  reasoning: Same retailer-bullish problem as gold — no trade.
+  reasoning: "Same retailer-bullish problem as gold \xE2\u20AC\u201D no trade."
   zone_level: null
   entry: null
   stop: null
@@ -1481,7 +1501,8 @@
   asset_class: commodities
   bias: short
   strategy: weekly
-  reasoning: Cotton may come down — bearish trade idea in agricultural markets.
+  reasoning: "Cotton may come down \xE2\u20AC\u201D bearish trade idea in agricultural\
+    \ markets."
   zone_level: null
   entry: null
   stop: null
@@ -1494,7 +1515,7 @@
   asset_class: equities
   bias: long
   strategy: daily
-  reasoning: Beginning-of-January trade idea — Apple is the long pick.
+  reasoning: "Beginning-of-January trade idea \xE2\u20AC\u201D Apple is the long pick."
   zone_level: null
   entry: null
   stop: null
@@ -1579,8 +1600,8 @@
   asset_class: forex
   bias: short
   strategy: weekly
-  reasoning: Reacting from weekly demand; retailers bullish, getting undervalued —
-    expecting downside.
+  reasoning: "Reacting from weekly demand; retailers bullish, getting undervalued\
+    \ \xE2\u20AC\u201D expecting downside."
   zone_level: null
   entry: null
   stop: null
@@ -1671,7 +1692,7 @@
   symbol: 6E=F
   display_name: Euro FX Custom Continuous Contract
   asset_class: forex
-  bias: long
+  bias: neutral
   strategy: weekly
   reasoning: in my books we can now look to take a short on the lower time frame and
     I would here just take the first level that comes to mind here or that we see
@@ -1684,6 +1705,9 @@
     now decline and so whenever
   _phase8_id: FT-2023-04-11-c004
   _origin: phase8
+  _phase38_mislabel_note: 'Phase 38 frame-verify: Case is a CONDITIONAL future call
+    (when non-comms reach bearish extreme then buy), not an active entry'
+  _original_bias: long
 - call_date: '2023-03-14'
   symbol: ES=F
   display_name: S&P 500 Custom Continuous Contract
@@ -1721,7 +1745,7 @@
   symbol: NQ=F
   display_name: Nasdaq E-mini Futures
   asset_class: equity_indices
-  bias: short
+  bias: neutral
   strategy: weekly
   reasoning: quite came into this and for last week we also had a shorting opportunity
     on the S&P and price quite came into this and for last week we also had a shorting
@@ -1734,6 +1758,9 @@
     be we should really be
   _phase8_id: FT-2023-05-16-c001
   _origin: phase8
+  _phase38_mislabel_note: 'Phase 38 frame-verify: Session was co-analyst not Bernd;
+    price-action supply zone override of fundamentals does not match Bernd practice'
+  _original_bias: short
 - call_date: '2023-05-16'
   symbol: NQ=F
   display_name: Nasdaq 100
@@ -1772,7 +1799,7 @@
   symbol: ZC=F
   display_name: Corn Custom Continuous Contract
   asset_class: commodities
-  bias: short
+  bias: neutral
   strategy: weekly
   reasoning: So palladium our dear friend palladium while we did stop out I cannot
     I will not come and say okay you know even if it's few ticks yet we got stopped
@@ -1785,11 +1812,14 @@
     or even corn we did not
   _phase8_id: FT-2024-01-18-c002
   _origin: phase8
+  _phase38_mislabel_note: 'Phase 38 frame-verify: ZC=F session was co-analyst, transcript
+    says "corn we did not" (trade was NOT taken)'
+  _original_bias: short
 - call_date: '2024-01-18'
   symbol: ZC=F
   display_name: Corn
   asset_class: commodities
-  bias: short
+  bias: neutral
   strategy: weekly
   reasoning: okay it one more minutes moving into the agricultural which used to be
     my favorites I mean there's still but I now trade I'm getting trade ideas on other
@@ -1802,11 +1832,14 @@
     how respectful was this
   _phase8_id: FT-2024-01-18-c003
   _origin: phase8
+  _phase38_mislabel_note: 'Phase 38 frame-verify: Duplicate of case 125, same co-analyst
+    session'
+  _original_bias: short
 - call_date: '2023-04-18'
   symbol: GC=F
   display_name: Gold Custom Continuous Contract
   asset_class: precious_metals
-  bias: long
+  bias: neutral
   strategy: weekly
   reasoning: Well let's talk about precious metals first before we move into equity
     indices and then we talk about stocks we've got lots to cover still so precious
@@ -1820,11 +1853,14 @@
     of rules here to buy maybe if you get a major majo...
   _phase8_id: FT-2023-04-18-c001
   _origin: phase8
+  _phase38_mislabel_note: 'Phase 38 frame-verify: Bernd said "inside month supply,
+    cannot buy, staying on sidelines" for GC'
+  _original_bias: long
 - call_date: '2023-04-18'
   symbol: SI=F
   display_name: Silver Futures
   asset_class: precious_metals
-  bias: long
+  bias: neutral
   strategy: weekly
   reasoning: Well let's talk about precious metals first before we move into equity
     indices and then we talk about stocks we've got lots to cover still so precious
@@ -1838,6 +1874,9 @@
     I would approach this but again just talking you th...
   _phase8_id: FT-2023-04-18-c002
   _origin: phase8
+  _phase38_mislabel_note: 'Phase 38 frame-verify: Same as 127, Bernd on sidelines
+    for SI'
+  _original_bias: long
 - call_date: '2023-04-18'
   symbol: PA=F
   display_name: Palladium

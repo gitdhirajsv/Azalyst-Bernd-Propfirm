@@ -410,7 +410,7 @@ def valuation_score(asset_roc, reference_rocs):
 | **Stocks / Equity Indices** | **ZB** (Long Bond) + **DXY** only | 10 | **ZN removed (Phase 21 correction)**. Valuation is PRIMARY/LEADING for stocks. SPY RS proxy (Phase 26) for individual stocks: underperformed SPY >10% over 52w = undervalued; outperformed >15% = overvalued. |
 | **Commodities** | DXY + Gold (GC) + Bonds (ZB) | 10 | All three references used |
 | **Precious Metals (Gold/Silver)** | DXY + ZB (Bonds) + GC (Gold) | 10 | Silver: Bonds ticker = @VD not @US |
-| **Platinum** | DXY + Gold (GC) only | 10 | No Bonds reference for Platinum |
+| **Platinum** | ZB (Bonds) + Gold (GC) + DXY | 10 | Phase 41 chunk 3 correction: CW35 Aug 2023 and FT Signals Mar 2023 frames confirm @PL and @PA both use @US+@GC+$DXY (3 refs). Earlier "no Bonds" statement was incorrect. |
 | **Energies** | DXY + ZB (Bonds) + GC (Gold) | 10 | Standard commodity triple reference |
 | **Natural Gas (NG=F)** | **EXCLUDED — do not use Valuation** | N/A | Phase 16/25 correction. Weather/supply shocks make DXY-relative Valuation uninformative for NG. Valuation vote is omitted from NG=F bias consensus entirely. |
 | **Crypto** | DXY only | 10 | Same as Forex |
@@ -514,12 +514,14 @@ def calculate_valuation(asset_class, asset_close_data, reference_data, symbol=No
         score = valuation_score(asset_roc, [zn_roc, zb_roc, dxy_roc])
     
     elif asset_class == "platinum":
-        # Platinum exception: DXY + Gold only (no Bonds)
+        # Phase 41 chunk 3 correction: Platinum uses ZB + GC + DXY (same as other PMs).
+        # CW35 Aug 2023 + FT Signals Mar 2023 frames confirm 3-ref config for @PL and @PA.
         period = 10
         asset_roc = rate_of_change(asset_close_data, period)
+        zb_roc  = rate_of_change(reference_data["ZB"],  period)  # 30yr T-Bond
         dxy_roc = rate_of_change(reference_data["DXY"], period)
-        gc_roc = rate_of_change(reference_data["GC"], period)
-        score = valuation_score(asset_roc, [dxy_roc, gc_roc])
+        gc_roc  = rate_of_change(reference_data["GC"],  period)
+        score = valuation_score(asset_roc, [zb_roc, gc_roc, dxy_roc])
     
     elif asset_class == "precious_metals":
         # Silver bonds ticker = @VD, not @US

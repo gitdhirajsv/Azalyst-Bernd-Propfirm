@@ -445,6 +445,7 @@ def get_cftc_code(symbol: str) -> str:
         'ZC=F':  '002602',  # Corn
         'ZW=F':  '001602',  # Wheat
         'ZS=F':  '005602',  # Soybeans
+        'ZL=F':  '007601',  # Soybean Oil
         'CT=F':  '033661',  # Cotton
         'KC=F':  '083731',  # Coffee
         'SB=F':  '080732',  # Sugar

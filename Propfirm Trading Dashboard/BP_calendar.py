@@ -660,7 +660,11 @@ class EconomicCalendar:
         # and the system would allow trades during NFP/FOMC. Log a loud warning
         # so the operator knows to refresh `_HIGH_IMPACT_*` and `_US_FEDERAL_HOLIDAYS_*`.
         try:
-            last_event_year = max((e.start.year for e in self._events), default=2026)
+            # Phase 37 fix: CalendarEvent has `timestamp` attribute, not `start`.
+            # The previous `e.start.year` always raised AttributeError which was
+            # silently swallowed by the surrounding try/except, making the stale
+            # event warning completely inert.
+            last_event_year = max((e.timestamp.year for e in self._events), default=2026)
             current_year = datetime.utcnow().year
             if current_year > last_event_year:
                 logger.error(

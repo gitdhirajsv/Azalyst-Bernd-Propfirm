@@ -183,7 +183,7 @@ STRATEGY_TIMEFRAMES = {
 VALUATION_REFS = {
     "forex":            ["DX-Y.NYB"],
     "equity_indices":   ["DX-Y.NYB", "ZB=F", "GC=F"],   # Phase 21: ZN removed, GC added per default
-    "equities":         ["ZB=F"],                            # Phase 28 frame-verified: Bernd unchecks GC and DXY for individual stocks on screen (OTC 2025 Lesson 3 frame_001253)
+    "equities":         ["ZB=F", "GC=F"],                  # Phase 36 multi-agent consensus: Ch173 (Practical App Valuation) + Phase 32 Valuation rulebook + Phase 32 per-asset all agree stocks use Bonds + Gold, DXY OFF. Earlier frame_001240 Read may have been mid-demonstration state before Bernd flipped Show toggles.
     "commodities":      ["DX-Y.NYB", "GC=F", "ZB=F"],
     "soft_commodities": ["DX-Y.NYB", "GC=F", "ZB=F"],
     "precious_metals":  ["DX-Y.NYB", "GC=F", "ZB=F"],
@@ -192,7 +192,18 @@ VALUATION_REFS = {
     "crypto":           ["DX-Y.NYB"],
 }
 VALUATION_REFS_PER_SYMBOL = {
-    "PL=F": ["DX-Y.NYB", "GC=F"],   # Platinum: DXY + Gold only (no Bonds)
+    # Phase 41 chunk 3 P1 fix: Platinum and Palladium use @US+@GC+$DXY (3 refs),
+    # NOT DXY+Gold only. Evidence: CW35 Aug 2023 frames 001942/001959/001881 all
+    # show CampusValuationTool_V2("@US","@GC","$DXY") active for @PL Platinum;
+    # FT Signals Mar 07 2023 frames 000993/001025 show same 3-ref config for @PA
+    # Palladium. CLAUDE.md "Platinum = DXY + Gold only (no Bonds)" was incorrect.
+    "PL=F": ["ZB=F", "GC=F", "DX-Y.NYB"],   # Platinum: bonds + gold + DXY
+    "PA=F": ["ZB=F", "GC=F", "DX-Y.NYB"],   # Palladium: bonds + gold + DXY
+    # Phase 41 REVERT: Crude Oil was set to Gold-only in Phase 33 based on one
+    # frame reading. Phase 41 chunk 2 audit found 2 independent frames (L19 Jan
+    # 2024 FT Signals + L28 Zone Qualifiers module) both showing CL=F Valuation
+    # with @US + @GC + $DXY active -- standard commodity refs. Revert CL+BZ
+    # to commodities default (which is DXY+GC+ZB, applied via the class default).
 }
 
 # Phase 15 — Equity index constituent stocks for Valuation analysis.

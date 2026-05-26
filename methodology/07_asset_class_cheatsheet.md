@@ -49,7 +49,7 @@ This file provides the **EXACT settings** to use for each asset class. Different
 | COT Group | **Commercials ① PRIMARY** (non-contrarian). Retailers are confirming odds-enhancer ③ only — NOT primary. Phase 17 correction. |
 | COT Method | Trade WITH Commercials (≥80 = bullish, ≤20 = bearish). |
 | COT Lookback | **26 weeks** (+ 156-week historic extreme line). Phase 14 correction from 52w. |
-| Valuation ROC | 10 |
+| Valuation ROC | **13** (Phase 41 chunk 5: CW45 frame_000644 + CW38 frames confirm ROC=13 for Gold) |
 | Valuation References | DXY + Bonds (ZB) + Gold (GC) |
 | Seasonality Lookbacks | 5yr, 10yr, 15yr |
 | 156-week extreme | YES — strongest COT signal for commodities |
@@ -66,7 +66,7 @@ This file provides the **EXACT settings** to use for each asset class. Different
 | COT Group | **Commercials ① PRIMARY** (non-contrarian). Retailers confirming only. Phase 17 correction. |
 | COT Method | Trade WITH Commercials. |
 | COT Lookback | **26 weeks** (+ 156-week extreme). Phase 14 correction from 52w. |
-| Valuation ROC | 10 |
+| Valuation ROC | **30** (Phase 41 chunk 5: CW11 frame_000841 shows ROC=30 for Silver) |
 | Valuation References | DXY + **@VD** (Bonds — use @VD ticker, NOT @US) + GC (Gold) |
 | Seasonality Lookbacks | 5yr, 10yr, 15yr |
 
@@ -110,10 +110,11 @@ This file provides the **EXACT settings** to use for each asset class. Different
 | COT Lookback | **52 weeks** (+ 156-week extreme line) |
 | 156-week Extreme | **YES** — strongest signal for energies |
 | Valuation ROC | 10 |
-| Valuation References | DXY + Bonds (ZB) + Gold (GC) |
+| Valuation References | DXY + Bonds (ZB) + Gold (GC). Phase 41 chunks 1+2+3 all confirmed standard 3-ref config for CL. Phase 33's earlier "Gold only" was wrong and was reverted. |
+| ZigZag % (Daily) | **5%** (Phase 41 chunk 1: frame_004397 status bar shows `ZigZag % (High,Low,5,white,3)` on @CL daily). Override of global 3% default. |
 | Seasonality Lookbacks | 5yr, 10yr, 15yr |
 
-### Natural Gas (NG) — Special Settings ⚠️ PHASE 12/25 CORRECTIONS
+### Natural Gas (NG) — Special Settings ⚠️ PHASE 12/25/33 CORRECTIONS
 
 | Setting | Value |
 |---------|-------|
@@ -121,7 +122,7 @@ This file provides the **EXACT settings** to use for each asset class. Different
 | LTF | Daily |
 | **COT Group** | **Retailers ① (CONTRARIAN)** — NOT Commercials. Phase 12 correction. Historical retail extremes signal reversals. Extreme retail SHORT = bullish; extreme retail LONG = bearish. |
 | **COT Method** | **CONTRARIAN** — fade retailers, opposite of all other commodities |
-| COT Lookback | 26 weeks (retail positioning cycle shorter than commercial hedging) |
+| COT Lookback | **260 weeks (5-year extremes)** — Phase 33 correction from 26w. Bernd verbatim Ch015: "maybe if we change the indicator to a five year extreme" — historical retailer positioning over 5 years is the canonical NG signal. Confirmed by COT and per-asset Phase 32 rulebooks. |
 | **Valuation** | **EXCLUDED** — weather/supply shocks make DXY-relative reading uninformative for NG. Phase 16/25 correction. Do NOT use Valuation for natural gas. |
 | **ZigZag % (Weekly)** | **15%** (override from default 6%) — NG is extremely volatile; standard ZigZag generates too many false pivots |
 | **Seasonality Lookbacks** | **10yr + 5yr only** (NOT 15yr) — 15-year NG seasonality data is unreliable; both 10yr and 5yr must agree |
@@ -149,7 +150,7 @@ This file provides the **EXACT settings** to use for each asset class. Different
 | **COT Method** | **Trade WITH Commercials** (planting/harvest cycle dominates commercial hedging) |
 | **COT Lookback** | **52 weeks** (full planting/harvest cycle) |
 | **COT Weighting** | COT > Seasonality > Valuation (COT is dominant for ags) |
-| Valuation ROC | 10 |
+| Valuation ROC | **30** (Phase 41 chunk 5: CW07 Corn frame_001082 + CW05 Soybeans frame_000809 both confirm ROC=30 in CampusValuationTool_V2 label for agricultural commodities) |
 | Valuation References | DXY + Bonds (ZB) + Gold (GC) |
 | Seasonality Lookbacks | 5yr, 10yr, 15yr |
 
@@ -326,11 +327,11 @@ For inverted pairs (6J, 6C, 6S), you must **flip the bias** when translating fro
 | LTF | Daily | Daily | Daily | Daily | Daily | Daily (or 4H) |
 | COT Group | Non-Commercials | **Commercials ① (non-contrarian)** | Commercials | **Retailers ① CONTRARIAN** | **Commercials** | Non-Commercials |
 | COT Method | Divergence | With Commercials | With Commercials | **Fade retailers** | With Commercials | Divergence |
-| COT Lookback | 26 weeks | **26 weeks** (Ph14) | 52 weeks | 26 weeks | 52 weeks | 26 weeks |
+| COT Lookback | 26 weeks | **26 weeks** (Ph14) | 52 weeks | **260 weeks / 5yr** (Ph33) | 52 weeks | 26 weeks |
 | 156-wk Extreme | No | **YES** | **YES** | No | No | No |
-| Valuation ROC | 10 | 10 | 10 | **EXCLUDED** (Ph16) | 10 | 10 |
-| Valuation Refs | DXY | DXY + **ZB** + GC | DXY + ZB + GC | **N/A** | DXY + ZB + GC | **ZB** + DXY (no ZN — Ph21) |
-| ZigZag % | 3% (daily) | 3% (daily) | 3% (daily) | **15% (weekly)** | 3% (daily) | 3% (daily) |
+| Valuation ROC | 10 | **GC=13, SI=30, PL=10, PA=10** (Ph41) | 10 | **EXCLUDED** (Ph16) | **30** (Ph41 ags) | DXY+ZB+GC standard ROC=10 |
+| Valuation Refs | DXY | DXY + **ZB** + GC | **DXY + ZB + GC** (Ph33 GC-only revert in Ph41) | **N/A** | DXY + ZB + GC | DXY + ZB + GC |
+| ZigZag % | 3% (daily) | 3% (daily) | **5% (daily, Ph41)** | **15% (weekly)** | 3% (daily) | 3% (daily) |
 | Seasonality | 5/10/15yr | 5/10/15yr | 5/10/15yr | **10yr+5yr only** | 5/10/15yr | 5/10/15yr |
-| Platinum note | — | DXY+GC only (no ZB) | — | — | — | — |
-| Consensus | Bernd hierarchy | Bernd hierarchy | Bernd hierarchy | COT contrarian primary | COT dominant | Phase 26/27 cycle overrides |
+| Platinum/Palladium | — | **DXY+GC+ZB (Ph41 correction)** | — | — | — | — |
+| Consensus | Bernd hierarchy + forex zone-arrival (Ph39) | Bernd hierarchy + COT-is-king | Bernd hierarchy + zone-arrival (Ph39) | COT contrarian primary + zone-arrival (Ph39) | COT dominant + zone-arrival (Ph39) | Phase 26/27 cycle overrides + cycle-dominance + zone-arrival via cycle paths (Ph38) |

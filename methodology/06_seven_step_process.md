@@ -185,13 +185,16 @@ Check **ALL THREE** fundamental indicators to build the consensus.
 
 ### 2. Valuation
 
-- Use the correct Rate of Change (ROC) period per asset class:
-  - **Forex**: ROC 10, reference DXY
-  - **Commodities**: ROC 10, reference DXY + Bonds (ZB) + Gold (GC)
-  - **Equities / Equity Indices**: ROC 10, reference **ZB (Long Bond) + DXY only** (Phase 21 correction — ZN removed). SPY RS proxy for individual stocks (Phase 26): underperformed SPY >10% over 52w = undervalued (bullish); outperformed >15% = overvalued (bearish). **Dual-ROC = chart overlay practice**: run two indicator instances at different lengths (daily: 10+13; weekly: 13+30) and require both to agree direction; it is NOT a parameter override.
+- Use the correct Rate of Change (ROC) period per asset class (frame-verified Phase 41):
+  - **Forex**: ROC 10, reference DXY only
+  - **General Commodities**: ROC 10, reference DXY + Bonds (ZB) + Gold (GC)
+  - **Agricultural commodities (ZC / ZW / ZS)**: ROC **30** (Phase 41 chunk 5: CW07 Corn + CW05 Soybeans confirm ROC=30 in label), references DXY + ZB + GC
+  - **Equities / Equity Indices**: ROC 10 with DXY + ZB + GC. **Dual-ROC chart overlay** for stock-level analysis: run two indicator instances at different lengths (daily: 10+13; weekly: 13+30) and require both to agree direction; this is a chart practice not a parameter override.
   - **Natural Gas (NG=F)**: **EXCLUDED** — do not use Valuation. Phase 16/25 correction.
-  - **Platinum**: ROC 10, reference DXY + Gold (GC) only — no Bonds
-  - **Silver**: ROC 10, reference DXY + ZB (@VD ticker) + GC
+  - **Gold (GC=F)**: ROC **13** (Phase 41 chunk 5: CW45 frame_000644), references DXY + ZB + GC
+  - **Silver (SI=F)**: ROC **30** (Phase 41 chunk 5: CW11 frame_000841), references DXY + ZB (@VD ticker) + GC
+  - **Platinum (PL=F) and Palladium (PA=F)**: ROC 10, references **DXY + Gold (GC) + Bonds (ZB)** — all three active. Phase 41 chunk 3 correction (5 frames across 2 sessions confirmed all 3 refs on CampusValuationTool_V2). The earlier "DXY + Gold only" claim was incorrect.
+  - **Crude Oil (CL=F)**: ROC 10, references DXY + GC + ZB (standard 3 refs; Phase 33's earlier "Gold only" reverted in Phase 41 after 4 independent frames confirmed all 3 active). Daily ZigZag = **5%** override (Phase 41 chunk 1: frame_004397 status bar).
 - Use the **4-state model**: STRONG BULLISH (≤-75) / MILD BULLISH (0 to -75) / MILD BEARISH (0 to +75) / STRONG BEARISH (≥+75)
 - For equities, valuation is the **PRIMARY/LEADING** fundamental indicator AND a **HARD PREREQUISITE GATE**
 

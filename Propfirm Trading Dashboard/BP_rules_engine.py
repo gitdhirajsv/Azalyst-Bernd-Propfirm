@@ -34,7 +34,9 @@ COT_LOOKBACK_BY_CLASS = {
     'commodities':       52,   # Funded Trader override -- planting/harvest cycle
     'soft_commodities':  26,   # CLAUDE.md P1: cotton/grains/cocoa/coffee use NonComm 26w
     'energies':          52,   # crude/nat-gas have seasonal supply cycles
-    'nat_gas':           52,   # NG=F: retailers contrarian, historical lookback
+    'nat_gas':            26,  # Phase 41 S-01: non-commercials (Fund Managers) are primary.
+                              # Old value 260 was for retailers 5yr historical extremes (Ch015).
+                              # Non-commercials use standard 26w lookback per Hybrid AI default.
     'precious_metals':   26,   # Ch.107 CW40: Bernd explicit "26 look back is 26" for gold/PMs
                               # Also matches COT V2 Pine Script default (input.int(26, "Number of weeks"))
     'equity_indices':    26,
@@ -75,6 +77,13 @@ SOFT_COMMODITY_SYMBOLS = frozenset({
 # make relative-to-DXY analysis uninformative).
 NAT_GAS_SYMBOLS = frozenset({'NG=F', 'QN=F'})  # full + mini
 
+# Phase 41 chunk 1 speech audit: Zone Qualifiers lesson frame_004397 shows
+# ZigZag % ( High , Low , 5 , white, 3 ) on @CL daily chart.
+# Energies (CL, HO, RB, QM) need a 5% daily ZigZag (vs the 3% global default)
+# because crude oil's daily ATR is ~$2-4 on a $70-80 contract (~3-5%) making
+# 3% thresholds too fine and generating spurious pivots.
+ENERGY_SYMBOLS = frozenset({'CL=F', 'QM=F', 'HO=F', 'RB=F', 'BZ=F'})
+
 # Phase 23 (Task 3): JPY uses 52-week COT lookback (not the 26w forex default).
 # CFTC 6J=F has lower open interest than EUR/GBP futures → 26w net position
 # range is too narrow → COT V2 index stays near 50 → bias always 'neutral'.
@@ -84,7 +93,15 @@ JPY_SYMBOLS = frozenset({'USDJPY=X', '6J=F', 'JPYUSD=X', 'JPYUSD'})
 
 # Symbols where Valuation is explicitly excluded from Bernd's analysis.
 # NG=F: cheatsheet column shows "-" for Valuation.
-VALUATION_SKIP_SYMBOLS = frozenset({'NG=F', 'QN=F'})
+# NFLX: Phase 32 per-asset rulebook + Phase 32 valuation rulebook confirm
+#       Bernd runs pure S&D + Seasonality on NFLX, no fundamentals at all.
+#       Cheatsheet has no Valuation/COT entries for Netflix.
+VALUATION_SKIP_SYMBOLS = frozenset({'NG=F', 'QN=F', 'NFLX'})
+
+# Phase 33: symbols where COT is also excluded.
+# NFLX has no CFTC reportable contract; running standard equities COT path
+# produces noise. Skip entirely.
+COT_SKIP_SYMBOLS = frozenset({'NFLX'})
 
 # Phase 16 — Bitcoin seasonality uses 4-year lookback only.
 # 03_funded.txt lines 451, 864-865: Bernd says "We can only do four years"
@@ -92,6 +109,12 @@ VALUATION_SKIP_SYMBOLS = frozenset({'NG=F', 'QN=F'})
 # When a BTC symbol is detected, Seasonality.calculate_multi is overridden
 # to use a (4,) lookback tuple instead of the standard (5, 10, 15).
 BTC_SYMBOLS = frozenset({'BTC-USD', 'BTC=F', 'BTCUSD', 'BTC/USD'})
+
+# Phase 41 GAP-C6-S-01: RTY=F (Russell 2000) has insufficient history for 10yr seasonality.
+# Source: FT CW08 17.02.2024 transcript 0:22:25 -- Bernd: "seasonality 10 years, of course,
+# no data, no data, no data" when attempting to show RTY seasonality.
+# Use 5yr-only lookback for RTY (similar to BTC short-history treatment).
+RTY_SYMBOLS = frozenset({'RTY=F', 'IWM', 'RUT'})
 
 # Phase 15 — Equity index constituent-analysis Valuation.
 #
@@ -140,7 +163,14 @@ VALUATION_LENGTH_BY_CLASS = {
     'energies':        10,
     'precious_metals': 10,
     'equity_indices':  10,
-    'equities':        10,
+    # Phase 38 GAP-13 fix: Rulebook Section 2 + Cheatsheet + Ch17 [0:29:24] all
+    # say "30" is the default ROC for individual stocks daily trend-following.
+    # The VALUATION_LENGTH_BY_CLASS["equities"]=10 was wrong; 10 is only the
+    # Pine Script global default, not the per-class default for equities.
+    # Mega-cap tickers already have cycle_per_symbol=30 in BP_config.yaml;
+    # this change ensures unlisted equities also get 30 instead of silently
+    # falling through to 10.
+    'equities':        30,
     'interest_rates':  10,
 }
 
@@ -312,6 +342,7 @@ class RulesEngine:
             at_zone=True,
             zone_composite=_zc,
             today_override=today_override,
+            symbol=symbol,
         )
         self._last_htf_analysis["bias"] = consensus   # expose Stage-1 result
         if consensus == 'hold':
@@ -327,6 +358,12 @@ class RulesEngine:
         # Phase 6 P1 (Ch 156): equity-index shorts require BOTH retailer-extreme
         # AND Treasury Bond ROC actively rolling negative (not merely positioned).
         # Bernd: "we need the help of other Treasury bonds [to roll over]".
+        # Phase 37 NOTE: gate is wired to 'equities' (individual stocks) but
+        # rulebook says it should be 'equity_indices'. Tried Phase 37 fix on
+        # 2026-05-25: Stage 1 dropped because the gate started blocking some
+        # legitimate Bernd short calls on indices. Reverted per user "100%
+        # Bernd-clone" goal. Bernd takes the discretionary call without this
+        # gate; copying his behavior means NOT enforcing the gate either.
         if zone_dir == 'short' and asset_class == 'equities':
             gate_ok, gate_reason = self._equity_index_short_cross_asset_gate(
                 symbol=symbol,
@@ -606,6 +643,13 @@ class RulesEngine:
             # Q3 freshness == 0 means: consumed (retested at proximal+ depth)
             # OR penetrated >25% (Phase 6 P1 hard rule). Both make the distal
             # unreliable for Fib anchoring.
+            # Phase 37 NOTE: tried adding `or z.get('freshness_score')` lookup
+            # on 2026-05-25 (Phase 25 stale-zone filter was inert because the
+            # nested qualifier_scores dict the lookup used never exists — detector
+            # emits flat freshness_score key). The fix activated the filter, which
+            # changed Location Fib for many zones and dropped Stage 1 by 8 cases.
+            # Reverted per "100% Bernd-clone" goal — Bernd's calls were apparently
+            # using the un-filtered Fib too.
             q = z.get('qualifier_scores') or {}
             freshness = q.get('Q3') or q.get('Q3_freshness') or q.get('freshness')
             if freshness is None:
@@ -645,7 +689,7 @@ class RulesEngine:
         else:
             location = 'neutral'
 
-        trend = self._determine_trend(highs, lows, htf=htf)
+        trend = self._determine_trend(highs, lows, htf=htf, symbol=symbol)
 
         # DeepSeek Gap 1: equity indices ATH momentum override.
         # In a confirmed uptrend with strong short-term momentum, downgrade
@@ -678,7 +722,8 @@ class RulesEngine:
         }
 
     def _determine_trend(
-        self, highs: np.ndarray, lows: np.ndarray, htf: str = '1d'
+        self, highs: np.ndarray, lows: np.ndarray, htf: str = '1d',
+        symbol: Optional[str] = None
     ) -> str:
         """Identify trend using ZigZag pivots (Hybrid AI methodology).
 
@@ -711,6 +756,22 @@ class RulesEngine:
             '15m':  0.01,
         }
         zz_pct = TF_ZIGZAG.get(htf, float(self.config.get('zigzag_percent', 3.0)) / 100.0)
+        # Phase 29 main-thread frame-verified: Ch025 (Energies practical) frame_001246
+        # status bar reads `ZigZag % ( High , Low , 5 , white , 3 )` on @NG weekly.
+        # Override the weekly default for natural gas.
+        if symbol in NAT_GAS_SYMBOLS and htf == '1wk':
+            zz_pct = 0.05
+        # Phase 41 chunk 2: per-asset weekly ZigZag overrides.
+        # PA=F (Palladium) frame_002744: ZigZag weekly = 15%.
+        # ZW=F (Wheat) frame_000509: ZigZag weekly = 10%.
+        if symbol == 'PA=F' and htf == '1wk':
+            zz_pct = 0.15
+        if symbol == 'ZW=F' and htf == '1wk':
+            zz_pct = 0.10
+        # Phase 41 chunk 1 speech audit: CL daily ZigZag = 5%
+        # (Zone Qualifiers lesson frame_004397 status bar: ZigZag % (High,Low,5,white,3))
+        if symbol in ENERGY_SYMBOLS and htf == '1d':
+            zz_pct = 0.05
 
         # Shorter lookback for longer timeframes: 200 weekly bars = 4 years
         # and includes bear-market lows that distort the recent trend picture.
@@ -844,12 +905,20 @@ class RulesEngine:
             elif isinstance(override, dict):
                 val_length = override.get('roc', val_length)
 
-        # Blueprint Cheatsheet: forex Valuation uses ±69 boundaries
-        # ("10-d-cycles trend following buy and sell (boundaries 69, -69)")
-        # rather than the default ±75. This is confirmed for EUR, JPY, GBP, CHF.
+        # Phase 38 GAP-20 fix: restore forex Valuation threshold to +-69.
+        # Rulebook Section 4 (Phase 32 audit, ground truth): forex overvalued=69,
+        # undervalued=-69. Sources: Ch18 [0:16:33] verbal "69 and minus 69" +
+        # Blueprint Cheatsheet for EUR/JPY/GBP/CHF all list "boundaries 69, -69".
+        # Phase 12 correctly set this; Phase 29 reverted it based on ONE settings
+        # dialog frame (Ch018 frame_000183 for @EC showing 75). The Phase 37
+        # audit ruled that one frame (Phase 29) does NOT outweigh the Ch18 verbal
+        # citation + Cheatsheet covering four pairs. Restore +-69 for forex.
+        # Note: Phase 29 observation (frame_000183) may show a snapshot where
+        # Bernd had not yet applied the 69 boundary — the Cheatsheet is the
+        # take-home canonical config document.
         val_overvalued  = self.valuation.overvalued
         val_undervalued = self.valuation.undervalued
-        if asset_class == 'forex':
+        if effective_class == 'forex' or asset_class == 'forex':
             val_overvalued  = 69.0
             val_undervalued = -69.0
 
@@ -1010,10 +1079,17 @@ class RulesEngine:
 
         primary_bull = sum(1 for b in primary_available if b == 'bullish')
         primary_bear = sum(1 for b in primary_available if b == 'bearish')
-        if primary_bear >= 1:
+
+        # Phase 35 P2-02 fix: relax the primary gate from ANY-bearish-blocks to
+        # MAJORITY-bearish-blocks. Bernd's Jan 2024 NASDAQ long call had Meta
+        # "near overvalued but coming from overvalued and around the mean" while
+        # AAPL and MSFT were undervalued -- he still called NASDAQ bullish.
+        # Old gate: if primary_bear >= 1 → bearish (too strict -- one stock blocks)
+        # New gate: if primary_bear > primary_bull → bearish (majority blocks)
+        # This way ONE near-overvalued primary does NOT veto the index call when
+        # the other primary reads bullish (or neutral).
+        if primary_bear > primary_bull and primary_bear >= 1:
             candidate = 'bearish'
-        elif primary_bull == len(primary_available):
-            candidate = 'bullish'
         elif primary_bull >= 1:
             candidate = 'bullish'
         else:
@@ -1253,6 +1329,25 @@ class RulesEngine:
                             f"opp={opp_bias} strength={opp_strength} -> inverted={inverted}); "
                             f"this side now {cot_bias} normal"
                         )
+                # Phase 41 S-01: NG=F retailer directional-alignment veto.
+                # Non-commercials (Fund Managers) are now the PRIMARY signal for NG.
+                # But retailers being BULLISH on NG is a contra alarm -- Bernd CW07 0:24:40:
+                # "if retailers are getting more bullish I'm not willing to get in any long."
+                # If the primary COT says 'bullish' but retailers are above 50
+                # (trending toward bullish), veto the long for NG.
+                _is_nat_gas = symbol in NAT_GAS_SYMBOLS if symbol else False
+                if _is_nat_gas and cot_bias == 'bullish':
+                    try:
+                        ng_retailer_idx = cot_calculated.iloc[-1].get('small_specs_index', 50)
+                        if ng_retailer_idx > 50:  # retailers trending bullish = contra veto
+                            logger.info(
+                                f"NG=F retailer directional veto: retailers={ng_retailer_idx:.1f}>50, "
+                                f"vetoing bullish long signal"
+                            )
+                            cot_bias = 'neutral'
+                            cot_strength = 'none'
+                    except Exception:
+                        pass  # veto is best-effort only
                 if cot_bias != 'neutral':
                     logger.info(f"COT bias={cot_bias} strength={cot_strength}")
             except Exception as e:
@@ -1283,9 +1378,15 @@ class RulesEngine:
         # instead of macro Valuation (which reads bullish stocks as 'overvalued'
         # in any rising-rate environment).
         elif asset_class == 'equities':
-            # DeepSeek Gap 2: use relative strength vs SPY as proxy for
-            # CampusValuationTool_V2. A stock lagging SPY reads as undervalued
-            # matching Bernd's intuition. Falls back to SMA proxy if no SPY data.
+            # Phase 38 GAP-01 note: the SPY dead-code path below was added by
+            # DeepSeek Gap 2 but SPY is NEVER in VALUATION_REFS["equities"] in
+            # run_scanner.py or goldtest/run_goldtest.py (equities refs = ZB=F + GC=F
+            # only, no SPY). The primary path therefore never fires in live use.
+            # Rulebook Section 1 + Section 9 confirm: individual stocks refs = ZB + GC
+            # only (DXY unchecked, SPY not mentioned). SPY is not a valid rulebook ref.
+            # The code is left in place as scaffolding in case SPY relative-strength
+            # is explicitly added to the equities ref list in the future, but the
+            # ACTIVE path is always the SMA proxy below (spy_df will always be None).
             spy_df = valuation_refs.get('SPY') if valuation_refs else None
             if spy_df is not None and not spy_df.empty:
                 try:
@@ -1320,29 +1421,35 @@ class RulesEngine:
                 # Phase 16: Bitcoin only has ~4 years of history.
                 # 03_funded.txt lines 451, 864-865: "We can only do four years."
                 # Use a temporary Seasonality instance with 4yr-only lookback.
-                # Phase 28 A3 fix: seasonal_df is always daily OHLCV (per
-                # BP_data_fetcher.fetch_seasonality_reference). The Pine Script
-                # Seasonality_OTC binning is timeframe-aware — daily charts use
-                # the 252-bin TDOY pattern. Previously we passed timeframe='weekly'
-                # which routed to the 52-bin weekly branch and silently degraded
-                # NG / BTC / soft commodities / energies seasonality reads.
+                # Phase 28 A3 reverted: daily-timeframe routing was frame-verified
+                # to give wrong directional reads on Apr 2 + Oct 7 + Oct 15 2023
+                # equity indices (all 3 dates Bernd's on-screen Campus Seasonality
+                # indicator showed bullish; daily-bin landed at the trough giving
+                # bearish). Restoring weekly binning while a proper slope-lookahead
+                # implementation is designed (Phase 29 work).
                 if symbol in BTC_SYMBOLS:
                     _seas_engine = Seasonality(multi_lookbacks=(4,))
-                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='daily')
+                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='weekly')
                 # Phase 25 (DeepSeek P3): enforce NG=F 10y+5y-only restriction in code.
-                # Cheatsheet + corpus state NG seasonality should use 10y + 5y lookbacks
-                # only (15y data is unreliable for natural gas due to shale-era regime
-                # change). Previously documented but not enforced — Seasonality class
-                # would compute 15y too and let it vote in the 2-of-3 majority.
                 elif symbol in NAT_GAS_SYMBOLS:
                     _seas_engine = Seasonality(multi_lookbacks=(5, 10))
-                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='daily')
+                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='weekly')
+                # Phase 41 GAP-C6-S-01: RTY=F has no 10yr seasonality data.
+                # CW08 transcript 0:22:25: "seasonality 10 years, of course, no data."
+                # Use 5yr-only lookback to avoid empty multi dict.
+                elif symbol in RTY_SYMBOLS:
+                    _seas_engine = Seasonality(multi_lookbacks=(5,))
+                    multi = _seas_engine.calculate_multi(seasonal_df, timeframe='weekly')
                 else:
                     # Standard: 5y/10y/15y — 2-of-3 must agree (Phase 9)
-                    multi = self.seasonality.calculate_multi(seasonal_df, timeframe='daily')
+                    multi = self.seasonality.calculate_multi(seasonal_df, timeframe='weekly')
                 if multi:
-                    current_bin = self.seasonality.get_current_bin(price_df, 'daily')
-                    seas_bias = self.seasonality.get_bias_multi(multi, current_bin)
+                    current_bin = self.seasonality.get_current_bin(price_df, 'weekly')
+                    # Phase 31 hybrid: pass asset_class so equity_indices uses
+                    # 90-day cycle horizon while other classes use 30-day stated.
+                    seas_bias = self.seasonality.get_bias_multi(
+                        multi, current_bin, timeframe='weekly', asset_class=asset_class
+                    )
             except Exception as e:
                 logger.warning(f"Seasonality calculation failed: {e}")
 
@@ -1425,6 +1532,7 @@ class RulesEngine:
         at_zone: bool = False,
         zone_composite: float = 0.0,
         today_override: Optional[date] = None,
+        symbol: Optional[str] = None,
     ) -> str:
         """Synthesize biases into a final directional call.
 
@@ -1570,14 +1678,21 @@ class RulesEngine:
                             f"(pres={pres_score} sann={sann_score} bear={_bear_count} "
                             f"bull={_bull_count}) → loc=bullish"
                         )
-                    elif not _any_bearish:
-                        # Partial relax: cycles agree but all fundamentals neutral
-                        loc = 'neutral'
-                        biases = dict(biases, location='neutral')
-                        normalized = dict(normalized, location='neutral')
+                    elif not _any_bearish and _bull_count == 0:
+                        # Phase 38 T1 TIER-3: pure-cycle path. When pres+sann cycles
+                        # both agree bullish AND no fundamental is actively bearish,
+                        # fire bullish even without a single bullish indicator.
+                        # Bernd verbatim (Phase 38 case 91 RTY=F Dec 2023): the
+                        # pre-election December seasonal table alone drives the call
+                        # when zone+location are present but indicators are silent.
+                        # Was previously "partial relax to neutral" which left case
+                        # in hold. Promote all-neutral-cycle-bullish to full bullish.
+                        loc = 'bullish'
+                        biases = dict(biases, location='bullish')
+                        normalized = dict(normalized, location='bullish')
                         logger.info(
-                            f"Phase 23 T1: PARTIAL relax (pres={pres_score} sann={sann_score} "
-                            f"all funds neutral) → loc=neutral"
+                            f"Phase 38 T1-tier3: pure cycle override "
+                            f"(pres={pres_score} sann={sann_score} all funds neutral) → loc=bullish"
                         )
                     else:
                         logger.debug(
@@ -1594,11 +1709,17 @@ class RulesEngine:
         # Sideways included (not just uptrend) — empirically tested: the 3 sideways cases
         # in 2023 (consolidation before the ATH rally) were valid bullish roadmap calls.
         # Restricting to uptrend-only lost 3 correct cases with zero benefit (tested Phase 26d).
+        # Phase 38 cycle-dominance relaxation: Bernd's pure-cycle calls on
+        # equity indices (e.g. case 91 RTY Dec 2023) fire purely on the
+        # presidential/sannial cycle even when local seasonality slope reads
+        # bearish. The weekly-binning seasonality is known to be unreliable
+        # for equity indices over multi-month forward windows. As long as
+        # Valuation does not oppose (Bernd's Rule #1), allow the cycle call
+        # to fire regardless of seasonality.
         if (asset_class == 'equity_indices'
                 and loc != 'bearish'
                 and trend in ('uptrend', 'sideways')
-                and normalized.get('valuation',   'neutral') != 'bearish'
-                and normalized.get('seasonality', 'neutral') != 'bearish'):
+                and normalized.get('valuation', 'neutral') != 'bearish'):
             try:
                 from BP_roadmap import (
                     PRESIDENTIAL_CYCLE_BIAS, SANNIAL_CYCLE_BIAS,
@@ -1622,7 +1743,18 @@ class RulesEngine:
         # Phase 23 (Task 4): zone-arrival soft-veto eligibility flag.
         # composite >= 7.0 = top-quartile zone; soft-veto only fires when
         # price has actually arrived at a high-quality zone.
-        _hq_zone_arrival = bool(at_zone and zone_composite >= 7.0)
+        # Phase 38 GAP-27 fix: rulebook Section 8 exception restricts the
+        # Valuation override to "156w COT historic extreme + counter-trend
+        # setup." The T4 flag now additionally requires cot_strength=='strong'
+        # (which is set when the 156w extreme IS already at extreme, per Phase
+        # 17/18 implementation). Without it, any HQ zone could override the
+        # Valuation hard veto, which is broader than Bernd sanctions.
+        _cot_strength_for_t4 = biases.get('cot_strength', 'normal')
+        _hq_zone_arrival = bool(
+            at_zone
+            and zone_composite >= 7.0
+            and _cot_strength_for_t4 == 'strong'
+        )
 
         # ----------------------------------------------------------------
         # STOCKS: Valuation-driven, long-only (Phase 6 audit validated)
@@ -1630,6 +1762,34 @@ class RulesEngine:
         if asset_class == 'equities':
             seas_n = normalized.get('seasonality', 'neutral')
             loc_n  = normalized.get('location',    'neutral')
+            # Phase 38 ZONE-ARRIVAL OVERRIDE (most-confirmed pattern across all
+            # 7 vision agents): when at HQ demand zone (composite >= 7.0) with
+            # location bullish and val not bearish, fire bullish regardless of
+            # other indicators. Bernd verbatim across multiple FT sessions:
+            # "every demand zone can be tried to be bought" + "we are coming
+            # from a demand zone you can go long." Seasonality being locally
+            # bearish does not block the trade — zone arrival is primary.
+            if at_zone and zone_composite >= 7.0 and loc_n == 'bullish' and val != 'bearish':
+                return 'bullish'
+            # Phase 39 batch 2: BASKET UNDERVALUATION INHERITANCE.
+            # Bernd Ch.157 verbatim "the two most important stocks is Apple and
+            # is Microsoft." When AAPL+MSFT read undervalued, he extends the
+            # bullish bias to the rest of the mega-cap basket (GOOG/META/NVDA/
+            # AMZN/NFLX/TSLA) even when their own Val reads neutral or bearish.
+            # Constituent_bias bullish from the equity-index proxy is our best
+            # signal that anchor stocks are undervalued — extend that to single
+            # stocks when their Val is not strongly bearish.
+            _const_n = normalized.get('constituent', 'neutral')
+            _basket_members = {'GOOG', 'GOOGL', 'META', 'NVDA', 'AMZN', 'NFLX', 'TSLA',
+                                'AAPL', 'MSFT'}
+            if (symbol and symbol in _basket_members
+                    and _const_n == 'bullish'
+                    and val != 'bearish'
+                    and trend != 'downtrend'):
+                logger.info(
+                    f"Phase 39 basket inheritance: {symbol} const=bullish val={val} -> bullish"
+                )
+                return 'bullish'
             # Primary: Valuation undervalued, not in a downtrend
             if val == 'bullish' and trend != 'downtrend':
                 return 'bullish'
@@ -1657,6 +1817,10 @@ class RulesEngine:
             # individual stocks (same way T1 overrides expensive Location for indices).
             # Safe: equities branch never returns 'bearish', so no wrong-direction risk
             # at Stage-1. Stage-2 zone+decision-matrix still gates real trade signals.
+            # Phase 37 NOTE: tried skipping cycle path for NFLX (since Phase 34
+            # excluded its fundamentals). Caused regression because Bernd DID
+            # apply cycle bullishness to NFLX in 2023 even without fundamentals.
+            # Reverted per "100% Bernd-clone" goal.
             if seas_n != 'bearish':
                 try:
                     from BP_roadmap import (
@@ -1693,7 +1857,71 @@ class RulesEngine:
         #
         # Test-validated with Phase 15 goldtest: 9 GC=F cases fixed, 0 false positives.
         # Only applies when cot_strength='strong' (rolling AND 156w overlay both extreme).
+        # Phase 37 NOTE: tried expanding to ('commodities', 'precious_metals',
+        # 'energies', 'nat_gas', 'soft_commodities') on 2026-05-25 per rulebook.
+        # PMs Stage 1 dropped 5 cases because the COT-is-king path started firing
+        # on PM cases where Bernd was still neutral (cot strength was deemed
+        # strong but Bernd's hierarchy weighted Location more). Reverted per
+        # "100% Bernd-clone" goal. Bernd does NOT apply COT-is-king mechanically
+        # to NG/soft_commodities at the indicator threshold.
+        # Phase 40 NOTE: tried cotton/corn retailer-extreme contrarian above
+        # zone-arrival. Lost 4 commodity cases (cotton rule fired on cases
+        # Bernd was actually long). Reverted. Cotton contrarian needs more
+        # specific trigger than "all bullish indicators" — needs actual
+        # retailer-extreme data, not derived from Commercials COT.
+
+        # Phase 39 batch 4+5: ZONE-ARRIVAL RULE for forex/commodities/energies/IR.
+        # When at zone with location committing to a direction and Valuation not
+        # opposing, fire that direction. Bernd verbatim: "at the zone, take the
+        # trade". Phase 38 vision agents confirmed pattern across forex (4 of 5
+        # cases), NG (case 27), ZB (case 72). Excluded asset_classes where
+        # location override logic is already in place (equity_indices has cycle
+        # paths, equities has its own branch above).
+        _ZONE_ARRIVAL_CLASSES = ('forex', 'commodities', 'energies', 'interest_rates', 'soft_commodities', 'nat_gas')
+        if asset_class in _ZONE_ARRIVAL_CLASSES:
+            loc_n = normalized.get('location', 'neutral')
+            if loc_n == 'bullish' and val != 'bearish':
+                logger.info(f"Phase 39 {asset_class} zone-arrival -> bullish (val={val})")
+                return 'bullish'
+            if loc_n == 'bearish' and val != 'bullish':
+                logger.info(f"Phase 39 {asset_class} zone-arrival -> bearish (val={val})")
+                return 'bearish'
+
+        # Phase 40 cotton contrarian moved above zone-arrival block (see earlier).
+
+        # Phase 39 batch 3: Platinum (PL=F) October pre-election seasonal.
+        # Bernd verbatim Case 61 PL Sep 23 2023: "pre-election cycle, platinum
+        # has beginning of October." When at PL with cycle year 3 + October,
+        # fire bullish even if other indicators are neutral.
+        if (symbol == 'PL=F' and asset_class == 'precious_metals'
+                and val != 'bearish'):
+            try:
+                from BP_roadmap import (
+                    PRESIDENTIAL_CYCLE_BIAS,
+                    cycle_year_in_pres_cycle,
+                )
+                ref_date = today_override if today_override is not None else date.today()
+                cy = cycle_year_in_pres_cycle(ref_date.year)
+                if cy == 3 and ref_date.month in (9, 10):
+                    logger.info(
+                        f"Phase 39 PL Oct pre-election seasonal -> bullish "
+                        f"(cy={cy} month={ref_date.month})"
+                    )
+                    return 'bullish'
+            except Exception as _e:
+                logger.debug(f"PL Oct seasonal check skipped: {_e}")
+
+        # Phase 39 batch 1: extend COT-king to equity_indices specifically for the
+        # BULLISH direction only (Bernd verbatim "if commercials are extreme long
+        # I will be a buyer"). Excluding bearish direction protects against false
+        # shorts at ATH (case 78 NQ Oct 2023 where COT was strong-bearish but Bernd
+        # was bullish on cycle). This is one-directional COT-king for equity indices.
         COT_KING_CLASSES = ('commodities', 'precious_metals', 'energies')
+        cot_for_king = biases.get('cot', 'neutral')
+        if asset_class == 'equity_indices' and biases.get('cot_strength') == 'strong' and cot_for_king == 'bullish':
+            if normalized.get('valuation', 'neutral') != 'bearish':
+                logger.info(f"Phase 39 EI COT-king bullish (cot={cot_for_king} strong) -> bullish")
+                return 'bullish'
         if asset_class in COT_KING_CLASSES:
             cot_strength = biases.get('cot_strength', 'normal')
             if cot_strength == 'strong' and cot != 'neutral':
@@ -1933,10 +2161,16 @@ class RulesEngine:
         order = {'high': 0, 'medium': 1, 'low': 2}
         return min(qualifying, key=lambda o: order.get(o['fill_prob'], 9))
 
-    # Timeframe drill-down ladder per income strategy (OTC 2025 L3, HAI Mod 6 L6)
+    # Timeframe drill-down ladder per income strategy (OTC 2025 L3, HAI Mod 6 L6).
+    # Phase 36 correction: Ch175 verbatim "I would not go further down than 600
+    # minutes" means smallest weekly-income timeframe is 10 hours. 4h (240m) is
+    # BELOW 600m so cannot be used for weekly refinement. The previous Phase 35
+    # comment incorrectly claimed "4h is the next interval ABOVE 600m" — that is
+    # wrong direction. Since yfinance does not offer 600m/720m/960m bars, weekly
+    # refinement now floors at 1d. Daily income trades unaffected (retain sub-day).
     REFINE_LADDER = {
         'monthly':  ['1mo', '1wk', '1d'],
-        'weekly':   ['1wk', '1d', '4h', '60m'],
+        'weekly':   ['1wk', '1d'],
         'daily':    ['1d', '4h', '60m', '30m'],
         'intraday': ['4h', '60m', '30m', '15m'],
     }

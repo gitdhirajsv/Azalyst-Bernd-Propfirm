@@ -1,0 +1,230 @@
+# Phase 35 goldtest expansion
+# Source: D:\Azalyst Bernd Skorupinski\_audit_phase35\ft_outlooks_2024_plus.yaml
+# Trade calls TC-01 through TC-15 extracted from chapters 153-186
+# Date: 2026-05-25
+
+# TC-01: Gold long -- Ch154, 2024-03-02
+- call_date: '2024-03-02'
+  symbol: GC=F
+  display_name: Gold
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Retailers getting more bearish (contrarian bullish). Seasonality starting to bottom. Weekly demand zone present.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: wait for another tip we have here the weekly
+  _origin: phase35
+
+# TC-02: Swiss Franc short (expressed as 6S=F) -- Ch154, 2024-03-02
+- call_date: '2024-03-02'
+  symbol: 6S=F
+  display_name: Swiss Franc Futures
+  asset_class: forex
+  bias: short
+  strategy: weekly
+  reasoning: USD/CHF supply zone on weekly. Overvalued. Retailers bearish = wait for supply.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are overvalued retailers are bearish that would be the short ladies and gentleman
+  _origin: phase35
+
+# TC-03: Nasdaq long -- Ch157, 2024-01-06
+- call_date: '2024-01-06'
+  symbol: NQ=F
+  display_name: Nasdaq 100
+  asset_class: equity_indices
+  bias: long
+  strategy: weekly
+  reasoning: Daily demand zone available. Apple undervalued, Microsoft ok, NVIDIA long-term undervalued, Amazon undervalued. Seasonal bullish. Election cycle year 0 early January in year-3 afterglow.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Nasdaq and Apple it is for next week
+  _origin: phase35
+
+# TC-04: Apple long -- Ch157, 2024-01-06
+- call_date: '2024-01-06'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Daily demand zone present. Valuation undervalued. Seasonal forecast bullish.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: Bernd explicitly places this trade in prop trading accounts
+  _origin: phase35
+
+# TC-05: Corn long -- Ch159, 2024-02-10
+- call_date: '2024-02-10'
+  symbol: ZC=F
+  display_name: Corn
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Commercials bullish (approaching extreme). Seasonality neutral (not bearish). Valuation undervalued vs DXY. Weekly supply zone but looking for daily demand below.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: CUT bullish, very bullish, and seasonality neutral... valuation bullish, well undervalued
+  _origin: phase35
+
+# TC-06: Corn long -- Ch165, 2024-01-20
+- call_date: '2024-01-20'
+  symbol: ZC=F
+  display_name: Corn
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Commercials getting more bullish. Weekly and daily demand zone structure confirmed.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: corn new trade idea I think it is also just killer amazing
+  _origin: phase35
+
+# TC-07: Soybeans long -- Ch165, 2024-01-20
+- call_date: '2024-01-20'
+  symbol: ZS=F
+  display_name: Soybeans
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Strong smart money (Commercials) bullish. Getting bearish (near extreme). Seasonality up. Stars aligning.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: stars aligned, really hope we get into a good level
+  _origin: phase35
+
+# TC-08: Palladium long -- Ch165, 2024-01-20
+- call_date: '2024-01-20'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Triggered already. In weekly demand zone. Seasonality bullish for quite a long time.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: palladium has been triggered and you have that trade idea on the news feed as well
+  _origin: phase35
+
+# TC-09: Corn long -- Ch166, 2024-02-25
+- call_date: '2024-02-25'
+  symbol: ZC=F
+  display_name: Corn
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Fundamentals same as soybeans. Daily demand zone arriving. Commercials bullish.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: corn has the same fundamental set up ladies and gentlemen
+  _origin: phase35
+
+# TC-10: Soybeans long -- Ch166, 2024-02-25
+- call_date: '2024-02-25'
+  symbol: ZS=F
+  display_name: Soybeans
+  asset_class: commodities
+  bias: long
+  strategy: weekly
+  reasoning: Picture perfect daily demand zone. Fundamentally and technically aligned. Commercials approaching extreme.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: soybeans corn both are now fundamentally in technical history
+  _origin: phase35
+
+# TC-11: Palladium long -- Ch162, 2024-01-13
+- call_date: '2024-01-13'
+  symbol: PA=F
+  display_name: Palladium
+  asset_class: precious_metals
+  bias: long
+  strategy: weekly
+  reasoning: Commercials getting more bullish. Still undervalued. Seasonality up for a long time. Weekly demand zone.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: commercials are getting more bullish we are still undervalued seasonalities up for quite a long time
+  _origin: phase35
+
+# TC-12: Apple long -- Ch160, 2024-03-10
+- call_date: '2024-03-10'
+  symbol: AAPL
+  display_name: Apple
+  asset_class: equities
+  bias: long
+  strategy: weekly
+  reasoning: Apple undervalued. Weekly zone hit. Constituents support NASDAQ thesis.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: apple is undervalued
+  _origin: phase35
+
+# TC-13: Dow Jones short -- Ch163, 2024-02-17
+# NOTE: counter to T1 presidential cycle override -- confirms year-0 has mixed months
+- call_date: '2024-02-17'
+  symbol: YM=F
+  display_name: Dow Jones
+  asset_class: equity_indices
+  bias: short
+  strategy: weekly
+  reasoning: Coming from overvaluation. Seasonal forecast shows drop (election year 0 Feb reversal). Weekly supply zone. Retail traders getting more bearish on Dow.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are coming from over valuation... that is already great on the Dow
+  _origin: phase35
+
+# TC-14: Russell 2000 short (low confidence -- watching) -- Ch156, 2024-03-03
+- call_date: '2024-03-03'
+  symbol: RTY=F
+  display_name: Russell 2000
+  asset_class: equity_indices
+  bias: short
+  strategy: weekly
+  reasoning: Zone level on top of level supply. Treasury bonds not cooperating yet but watching. Low confidence -- waiting for price to rally before triggering.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: it is again on the Russell the weekly zones level on top of level it is nice
+  _origin: phase35
+
+# TC-15: Crude oil short -- Ch158, 2024-03-09
+- call_date: '2024-03-09'
+  symbol: CL=F
+  display_name: Crude Oil
+  asset_class: energies
+  bias: short
+  strategy: weekly
+  reasoning: Overvalued vs DXY. Retailers getting super bullish (contrarian = bearish for price). Weekly supply zone.
+  zone_level: null
+  entry: null
+  stop: null
+  target: null
+  source_quote: we are overvalued retailers are bullish then we can short this as well crude oil
+  _origin: phase35

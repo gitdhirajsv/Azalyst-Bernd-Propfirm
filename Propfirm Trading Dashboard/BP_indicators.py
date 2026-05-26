@@ -340,12 +340,18 @@ class COTIndex:
             primary, ext = comm_idx, comm_ext
             contrarian = False
         elif asset_class == 'nat_gas':
-            # Blueprint Cheatsheet: Natural Gas uses Retailers ① (CONTRARIAN).
-            # "Historical retailer extremes (5year or historical)."
-            # Same mechanics as Precious Metals — when retailers pile into longs
-            # it signals exhaustion → short; extreme shorts → long.
-            primary, ext = sspec_idx, sspec_ext
-            contrarian = True
+            # Phase 41 S-01 (chunk2 speech): LESSON 2 PART 3 ENERGIES frames + FT Signals Apr23
+            # both show "Fund Managers" (non-commercials/lspec) as the DISPLAYED primary COT panel
+            # for NG=F. The retailer panel is a SECONDARY contra signal -- Bernd says
+            # "retailers buying is troublesome" (contra alarm) while reading Fund Managers as the
+            # directional primary. CW07 (chunk6 speech) transcript 0:24:40 confirms retailers are a
+            # VETO signal: "if retailers are getting more bullish I'm not willing to get in any long."
+            # Architecture: non-commercials (lspec) are PRIMARY; retailer extreme = directional veto.
+            # Using lspec (non-commercials) as primary, non-contrarian (like forex).
+            # The retailer veto is handled in BP_rules_engine._analyze_fundamentals via the
+            # cross_category_signal / directional-alignment veto logic.
+            primary, ext = lspec_idx, lspec_ext
+            contrarian = False
         else:
             primary, ext = comm_idx, comm_ext
             contrarian = False
@@ -953,13 +959,58 @@ class Seasonality:
 
         return result
 
-    def get_bias(self, seasonal_df: pd.DataFrame, current_bin: int) -> str:
-        """Determine seasonality bias for upcoming period (single lookback)."""
+    # Phase 31 hybrid: per-asset-class lookahead in DAYS forward.
+    # equity_indices uses ~3-month cycle horizon (Bernd's monthly roadmap).
+    # Everything else uses Bernd's stated 30-day forward read.
+    LOOKAHEAD_DAYS_BY_CLASS = {
+        # equity_indices uses the long cycle horizon because Bernd's monthly
+        # roadmap calls span quarters. Baseline 30 weekly bins ~ 210 days.
+        # Empirically 180 days recovers most of baseline's accidental matches.
+        'equity_indices': 180,
+        'equities': 30,
+        'commodities': 30,
+        'precious_metals': 30,
+        'energies': 30,
+        'nat_gas': 30,
+        'soft_commodities': 30,
+        'forex': 30,
+        'crypto': 30,
+        'interest_rates': 30,
+    }
+
+    def get_bias(self, seasonal_df: pd.DataFrame, current_bin: int,
+                 timeframe: str = 'weekly', asset_class: Optional[str] = None) -> str:
+        """Determine seasonality bias for upcoming period (single lookback).
+
+        Phase 31 hybrid: lookahead is in DAYS forward (Bernd verbatim "I just
+        project 30 days in the future for me that's enough") with per-asset-
+        class overrides for equity indices which Bernd reads on monthly-
+        roadmap horizon (~3 months). Days are converted to bins based on
+        the binning timeframe:
+          daily  : 1 bin per day  -> lookahead_bins = days
+          weekly : 1 bin per week -> lookahead_bins = ceil(days/7)
+          monthly: 1 bin per month-> lookahead_bins = ceil(days/30)
+
+        Falls back to self.bias_lookahead_bars (raw bin count) when no
+        asset_class is provided, preserving prior callers.
+        """
         if seasonal_df.empty:
             return 'neutral'
 
-        # Look at the slope over next N bins
-        end_bin = min(current_bin + self.bias_lookahead_bars, len(seasonal_df) - 1)
+        if asset_class:
+            lookahead_days = self.LOOKAHEAD_DAYS_BY_CLASS.get(asset_class, self.bias_lookahead_bars)
+            if timeframe == 'weekly':
+                lookahead_bins = max(2, int(round(lookahead_days / 7)))
+            elif timeframe == 'monthly':
+                lookahead_bins = max(1, int(round(lookahead_days / 30)))
+            else:  # daily
+                lookahead_bins = lookahead_days
+        else:
+            # Legacy path: treat bias_lookahead_bars as raw bin count
+            lookahead_bins = self.bias_lookahead_bars
+
+        # Look at the slope over next N bins (forward projection).
+        end_bin = min(current_bin + lookahead_bins, len(seasonal_df) - 1)
         start_val = seasonal_df.loc[seasonal_df['bin'] == current_bin % len(seasonal_df), 'seasonal_value']
         end_val = seasonal_df.loc[seasonal_df['bin'] == end_bin % len(seasonal_df), 'seasonal_value']
 
@@ -1016,6 +1067,8 @@ class Seasonality:
         seasonal_by_lookback: Dict[int, pd.DataFrame],
         current_bin: int,
         return_strength: bool = False,
+        timeframe: str = 'weekly',
+        asset_class: Optional[str] = None,
     ):
         """Bias from multi-lookback (HAI Mod 3 L3 — True Seasonality):
 
@@ -1030,7 +1083,7 @@ class Seasonality:
         if not seasonal_by_lookback:
             return ('neutral', 'none') if return_strength else 'neutral'
 
-        votes = [self.get_bias(seas, current_bin) for seas in seasonal_by_lookback.values()]
+        votes = [self.get_bias(seas, current_bin, timeframe=timeframe, asset_class=asset_class) for seas in seasonal_by_lookback.values()]
         if not votes:
             return ('neutral', 'none') if return_strength else 'neutral'
 

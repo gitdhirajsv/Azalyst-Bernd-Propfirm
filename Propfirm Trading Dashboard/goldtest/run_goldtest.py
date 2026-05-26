@@ -99,7 +99,7 @@ ASSET_CLASS_BY_SYMBOL = {
 VALUATION_REFS = {
     "forex":             ["DX-Y.NYB"],
     "equity_indices":    ["DX-Y.NYB", "ZB=F", "GC=F"],   # Phase 21: ZN removed
-    "equities":          ["ZB=F"],                            # Phase 28 frame-verified: Bernd unchecks GC and DXY for individual stocks (OTC 2025 Lesson 3 frame_001253)
+    "equities":          ["ZB=F", "GC=F"],                  # Phase 36 multi-agent consensus: Ch173 + Phase 32 rulebooks agree stocks use Bonds + Gold, DXY OFF.
     "commodities":       ["DX-Y.NYB", "GC=F", "ZB=F"],
     "soft_commodities":  ["DX-Y.NYB", "GC=F", "ZB=F"],
     "precious_metals":   ["DX-Y.NYB", "GC=F", "ZB=F"],
@@ -107,7 +107,15 @@ VALUATION_REFS = {
     "interest_rates":    ["^TNX"],
     "crypto":            ["DX-Y.NYB"],
 }
-VALUATION_REFS_PER_SYMBOL = {"PL=F": ["DX-Y.NYB", "GC=F"]}
+VALUATION_REFS_PER_SYMBOL = {
+    # Phase 41 chunk 3 P1 fix: Platinum and Palladium use 3 refs (@US+@GC+$DXY).
+    # CW35 Aug 2023 + FT Signals Mar 2023 frames confirm both @PL and @PA use
+    # bonds + gold + DXY -- not DXY+Gold only as previously documented.
+    "PL=F": ["ZB=F", "GC=F", "DX-Y.NYB"],   # Platinum: bonds + gold + DXY
+    "PA=F": ["ZB=F", "GC=F", "DX-Y.NYB"],   # Palladium: bonds + gold + DXY
+    # Phase 41 REVERT: Phase 33 Crude-Oil-Gold-only reverted; chunk 2 frames show
+    # standard commodity refs (DXY+GC+ZB).
+}
 
 # Phase 15: Equity index constituent stocks — must stay in sync with
 # EQUITY_INDEX_CONSTITUENT_STOCKS in run_scanner.py and
@@ -475,6 +483,7 @@ def run_case(case: Dict, config: Dict) -> Dict:
                     at_zone=_at_zone,
                     zone_composite=_zone_composite,
                     today_override=_today_override,
+                    symbol=symbol,
                 )
                 # Map 'hold' -> 'neutral' / 'bullish' -> 'long' / 'bearish' -> 'short'
                 bias_only = {
