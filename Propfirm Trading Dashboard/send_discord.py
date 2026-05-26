@@ -376,35 +376,74 @@ def diff(scan: Dict, prev_state: Dict) -> Tuple[List[Dict], List[Dict]]:
 # Build the full message
 # ───────────────────────────────────────────────────────────────────────
 
-def build_message(scan: Dict, new_signals: List[Dict], closed_trades: List[Dict]) -> str:
-    blocks: List[str] = [header_block(scan.get("scan_time"))]
+def _wrap(body: str) -> str:
+    """Wrap a plain body in a fenced code block for Discord monospace rendering."""
+    return f"```\n{body.strip()}\n```"
 
-    # Account + Trading Objectives
+
+def build_status_message(scan: Dict, closed_trades: List[Dict]) -> str:
+    """Portfolio status: header + account + stats + CLOSED + OPEN + TRACK RECORD.
+
+    This is the 'what's happening with my running trades' message. Always
+    sent first so the user sees open-position state even when new signals
+    would otherwise push it out via truncation.
+    """
+    blocks: List[str] = [header_block(scan.get("scan_time"))]
     blocks.append(account_block(scan.get("account") or {}))
     blocks.append(stats_block(
         scan.get("account") or {},
         scan.get("positions") or [],
         scan.get("trade_history") or [],
     ))
-
-    if new_signals:
-        blocks.append(new_signals_block(new_signals))
-
     if closed_trades:
         blocks.append(closed_block(closed_trades))
-
     blocks.append(open_positions_block(scan.get("positions") or []))
     blocks.append(track_record_block(scan.get("trade_history") or []))
     blocks.append(footer_block(scan))
 
     body = SECTION_SEP.join(b for b in blocks if b).strip()
-
-    # Truncate if necessary so the wrapped code block stays under Discord's limit
     if len(body) > DISCORD_MSG_LIMIT:
         body = body[:DISCORD_MSG_LIMIT - 30] + "\n... (truncated)"
+    return _wrap(body)
 
-    # Wrap in a fenced code block so Discord renders it monospace
-    return f"```\n{body}\n```"
+
+def build_signals_message(scan: Dict, new_signals: List[Dict]) -> str:
+    """New-signals-only message. Sent as a separate follow-up so it gets
+    its own @ping and never crowds out the portfolio status block above."""
+    ts_line = header_block(scan.get("scan_time")).splitlines()[1]
+    blocks = [f"AZALYST PROPFIRM SCANNER  —  NEW SIGNALS\n{ts_line}"]
+    blocks.append(new_signals_block(new_signals))
+    body = SECTION_SEP.join(b for b in blocks if b).strip()
+    if len(body) > DISCORD_MSG_LIMIT:
+        body = body[:DISCORD_MSG_LIMIT - 30] + "\n... (truncated -- see dashboard for full list)"
+    return _wrap(body)
+
+
+def build_message(scan: Dict, new_signals: List[Dict], closed_trades: List[Dict]) -> str:
+    """Legacy single-message builder (kept for --dry-run preview).
+
+    Live sends use build_status_message + build_signals_message instead so
+    open-position state never gets truncated when there are many new signals.
+    """
+    blocks: List[str] = [header_block(scan.get("scan_time"))]
+    blocks.append(account_block(scan.get("account") or {}))
+    blocks.append(stats_block(
+        scan.get("account") or {},
+        scan.get("positions") or [],
+        scan.get("trade_history") or [],
+    ))
+    if closed_trades:
+        blocks.append(closed_block(closed_trades))
+    blocks.append(open_positions_block(scan.get("positions") or []))
+    blocks.append(track_record_block(scan.get("trade_history") or []))
+    if new_signals:
+        blocks.append(new_signals_block(new_signals))
+    blocks.append(footer_block(scan))
+
+    body = SECTION_SEP.join(b for b in blocks if b).strip()
+    if len(body) > DISCORD_MSG_LIMIT:
+        body = body[:DISCORD_MSG_LIMIT - 30] + "\n... (truncated)"
+    return _wrap(body)
 
 
 # ───────────────────────────────────────────────────────────────────────
@@ -488,7 +527,8 @@ def main() -> int:
         print("[discord] No new signals or closed trades since last message; skipping.")
         return 0
 
-    msg = build_message(scan, new_signals, closed_trades)
+    status_msg = build_status_message(scan, closed_trades)
+    signals_msg = build_signals_message(scan, new_signals) if new_signals else None
 
     if args.dry_run:
         # Reconfigure stdout to UTF-8 so the box-drawing chars render on
@@ -497,7 +537,10 @@ def main() -> int:
             sys.stdout.reconfigure(encoding="utf-8")
         except (AttributeError, ValueError):
             pass
-        print(msg)
+        print(status_msg)
+        if signals_msg:
+            print("\n--- FOLLOW-UP MESSAGE ---\n")
+            print(signals_msg)
         return 0
 
     if not args.webhook_url:
@@ -505,18 +548,28 @@ def main() -> int:
               file=sys.stderr)
         return 0  # not an error -- some users may opt out of Discord
 
-    # Per user preference: only @-ping when there are new signals to copy
-    # to Fundingpips. Hourly status / closed-trade / breach updates go
-    # silently so the channel doesn't spam phone notifications.
-    ping_user_id = args.user_id if new_signals else None
-    ok = post_to_discord(args.webhook_url, msg, user_id=ping_user_id)
-    if not ok:
-        print("[discord] All attempts failed.", file=sys.stderr)
+    # Send portfolio status first (silent -- no @ping for hourly updates).
+    # This block ALWAYS includes the open-positions table so the user sees
+    # running-trade state even when there are many new signals queued below.
+    ok_status = post_to_discord(args.webhook_url, status_msg, user_id=None)
+    if not ok_status:
+        print("[discord] Status message failed.", file=sys.stderr)
         return 1
 
+    # New signals come as a separate follow-up message with @ping so the
+    # user gets a phone notification only for actionable trades.
+    ok_signals = True
+    if signals_msg:
+        ping_user_id = args.user_id
+        ok_signals = post_to_discord(args.webhook_url, signals_msg, user_id=ping_user_id)
+        if not ok_signals:
+            print("[discord] Signals follow-up failed.", file=sys.stderr)
+            return 1
+
     save_state(scan)
-    print(f"[discord] Sent ({len(msg)} chars). new_signals={len(new_signals)}  "
-          f"closed={len(closed_trades)}  breached={breached}")
+    sent_chars = len(status_msg) + (len(signals_msg) if signals_msg else 0)
+    print(f"[discord] Sent {1 if not signals_msg else 2} msg(s), {sent_chars} chars total. "
+          f"new_signals={len(new_signals)}  closed={len(closed_trades)}  breached={breached}")
     return 0
 
 
