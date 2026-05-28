@@ -1,11 +1,11 @@
-name: Scan markets (hourly)
+name: Scan markets (every 4h)
 
-# Runs the Azalyst Propfirm scanner every hour from a GitHub Actions runner.
+# Runs the Azalyst Propfirm scanner every 4 hours from a GitHub Actions runner.
 # The scanner produces paper signals for a simulated Fundingpips $100k
 # challenge account (5% daily / 10% total loss caps enforced in
 # BP_paper_trader.py). After scanning, it posts a Discord summary and
 # commits the updated state files (paper_trader_state, scan_results,
-# scan_history, discord_state) back to main so the next hourly run picks
+# scan_history, discord_state) back to main so the next run picks
 # up where this one left off.
 #
 # Required repository secrets (Settings -> Secrets and variables -> Actions):
@@ -14,7 +14,7 @@ name: Scan markets (hourly)
 
 on:
   schedule:
-    - cron: '0 * * * *'            # every hour at minute :00 UTC
+    - cron: '17 */4 * * *'         # every 4 hours, at :17 (top-of-hour :00 is the most dropped minute on GitHub cron)
   workflow_dispatch:               # manual trigger from the Actions tab
 
 # Only one scan at a time -- avoids two runs racing on the commit-back step.
