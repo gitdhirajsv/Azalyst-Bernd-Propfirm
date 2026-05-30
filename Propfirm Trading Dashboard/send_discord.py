@@ -231,12 +231,30 @@ def new_signals_block(new_signals: List[Dict]) -> str:
         risk_r = abs(float(entry) - float(stop)) if entry and stop else 0
         rr_t2 = abs((targets[1] - entry) / risk_r) if len(targets) > 1 and risk_r else 0
         composite = s.get("composite_score") or s.get("composite") or 0
+        lot_size = s.get("lot_size")
+        units = s.get("units")
+        risk_actual = float(s.get("risk_usd_actual", risk_amt) or risk_amt)
+        spec_verified = s.get("spec_verified", True)
         out.append(f"  {sym:14s}  {dir_:5s}")
         out.append(f"    Entry          : {fmt_price(entry, 12)}")
         out.append(f"    Stop Loss      : {fmt_price(stop, 12)}")
         for i, t in enumerate(targets[:3], 1):
             out.append(f"    Target {i} ({i}R)   : {fmt_price(t, 12)}")
-        out.append(f"    Risk           : {fmt_money(risk_amt)}")
+        # The number to type into FundingPips. Shown prominently.
+        if lot_size:
+            out.append(f"    >> LOT SIZE    : {lot_size:>12,.2f} lots")
+            if units:
+                out.append(f"       (units)     : {units:>12,.0f}")
+            out.append(f"    Risk (actual)  : {fmt_money(risk_actual)}")
+            if not spec_verified:
+                out.append(f"    [!] CONFIRM contract size on the FundingPips")
+                out.append(f"        order ticket before entering this size.")
+        else:
+            out.append(f"    Risk           : {fmt_money(risk_amt)}")
+            out.append(f"    [!] LOT SIZE UNAVAILABLE -- do not size off this alert")
+            note = s.get("sizing_note")
+            if note:
+                out.append(f"        {note[:48]}")
         out.append(f"    R:R (to T2)    : 1:{rr_t2:>5.2f}")
         if composite:
             out.append(f"    Composite      : {float(composite):>5.2f} / 10")

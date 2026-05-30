@@ -36,6 +36,38 @@ risk:
   max_open_positions: 3
 
 # ============================================================
+# INSTRUMENT SPECS -- used to turn a $ risk into a MatchTrader LOT SIZE
+# ============================================================
+# The alert must tell you the exact volume to type into FundingPips. That
+# conversion needs each instrument's contract size:
+#
+#   lots = risk_usd / (stop_distance * usd_value_per_point_per_lot)
+#
+# FOREX is broker-INDEPENDENT: 1 lot = 100,000 base units and the per-point
+# USD value is derived from the live rate, so those specs are `verified: true`.
+#
+# Everything else (metals, indices, energies, crypto) has a broker-specific
+# contract size. The values below are the COMMON MatchTrader defaults but are
+# flagged `verified: false` -- the alert prints a "CONFIRM on ticket" note for
+# them. To verify: open the order ticket on FundingPips, read the contract
+# size for that symbol, set it here, and flip `verified: true`.
+# ------------------------------------------------------------
+instrument_specs:
+  defaults_by_class:
+    forex:           { contract_size: 100000, min_lot: 0.01, lot_step: 0.01, verified: true }
+    precious_metals: { contract_size: 100,    min_lot: 0.01, lot_step: 0.01, verified: false }  # gold: 100 oz/lot
+    energies:        { contract_size: 1000,   min_lot: 0.01, lot_step: 0.01, verified: false }  # oil: ~1000 bbl/lot
+    equity_indices:  { contract_size: 1, point_value_per_lot: 1, min_lot: 0.1, lot_step: 0.1, verified: false }
+    commodities:     { contract_size: 1, point_value_per_lot: 1, min_lot: 0.01, lot_step: 0.01, verified: false }
+    crypto:          { contract_size: 1, min_lot: 0.01, lot_step: 0.01, verified: false }
+    equities:        { contract_size: 1, min_lot: 1, lot_step: 1, verified: true }
+    interest_rates:  { contract_size: 1, point_value_per_lot: 1, min_lot: 0.1, lot_step: 0.1, verified: false }
+  # Per-symbol overrides keyed by the broker `name` from the watchlist.
+  overrides:
+    "XAGUSD (Silver)":   { contract_size: 5000, verified: false }   # silver: ~5000 oz/lot
+    "XCUUSD (Copper)":   { contract_size: 1000, verified: false }
+
+# ============================================================
 # STRATEGY -- which income-strategy timeframe(s) to scan
 # ============================================================
 # - active_strategy:   global default when a watchlist entry has no

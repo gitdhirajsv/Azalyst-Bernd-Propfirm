@@ -57,6 +57,7 @@ _load_secrets_from_bat()
 from BP_data_fetcher import DataFetcher, get_cftc_code
 from BP_rules_engine import RulesEngine
 from BP_paper_trader import PaperTrader
+from BP_position_sizer import compute_lots, build_usd_quote_table
 
 # ---------------------------------------------------------------------------
 # ANSI colour helpers (Windows 10+ supports ANSI in cmd/powershell)
@@ -229,8 +230,52 @@ DASHBOARD_FILE      = SCRIPT_DIR / "dashboard.html"
 # Helper: load / save paper trader state for persistence
 # ===================================================================
 
+def _position_to_dict(pos) -> Dict:
+    """Serialise a Position for JSON state (enum -> value, datetime -> iso)."""
+    d = asdict(pos)
+    d["direction"] = pos.direction.value if hasattr(pos.direction, "value") else pos.direction
+    d["status"]    = pos.status.value if hasattr(pos.status, "value") else pos.status
+    d["entry_time"] = pos.entry_time.isoformat() if hasattr(pos.entry_time, "isoformat") else pos.entry_time
+    d["close_time"] = pos.close_time.isoformat() if getattr(pos, "close_time", None) and hasattr(pos.close_time, "isoformat") else None
+    return d
+
+
+def _position_from_dict(d: Dict):
+    """Reconstruct a Position from its serialised dict."""
+    from BP_paper_trader import Position, TradeDirection, TradeStatus
+    def _dt(v):
+        try:
+            return datetime.fromisoformat(v) if v else None
+        except (TypeError, ValueError):
+            return None
+    fields = {
+        "id": d.get("id"), "symbol": d.get("symbol"),
+        "direction": TradeDirection(d.get("direction", "long")),
+        "entry_price": d.get("entry_price", 0.0), "stop_price": d.get("stop_price", 0.0),
+        "current_stop": d.get("current_stop", d.get("stop_price", 0.0)),
+        "targets": d.get("targets", []) or [],
+        "position_size": d.get("position_size", 1.0), "risk_amount": d.get("risk_amount", 0.0),
+        "entry_time": _dt(d.get("entry_time")) or datetime.now(),
+        "status": TradeStatus(d.get("status", "active")),
+        "realized_pnl": d.get("realized_pnl", 0.0),
+        "partial_taken": d.get("partial_taken", False),
+        "partial_qty": d.get("partial_qty", 0.0), "partial_price": d.get("partial_price", 0.0),
+        "breakeven_triggered": d.get("breakeven_triggered", False),
+        "trail_stop_level": d.get("trail_stop_level"),
+        "zone_id": d.get("zone_id"), "close_time": _dt(d.get("close_time")),
+        "close_price": d.get("close_price"),
+        "trade_r_multiple": d.get("trade_r_multiple", 0.0), "notes": d.get("notes", ""),
+    }
+    return Position(**fields)
+
+
 def load_paper_trader_state(trader: PaperTrader) -> None:
-    """Restore paper trader state from disk if a save file exists."""
+    """Restore paper trader state from disk if a save file exists.
+
+    Open positions and trade history are restored too, so trades persist
+    across scan runs and can be priced forward each cycle (instead of being
+    discarded and re-opened every run, which left the track record empty).
+    """
     if not PAPER_STATE_FILE.exists():
         logger.info("No previous paper trader state found -- starting fresh.")
         return
@@ -249,17 +294,34 @@ def load_paper_trader_state(trader: PaperTrader) -> None:
         trader.daily_pnl         = state.get("daily_pnl", 0.0)
         trader.daily_trades      = state.get("daily_trades", 0)
         trader.zone_memory       = state.get("zone_memory", {})
+        trader.today_starting_equity = state.get("today_starting_equity", trader.balance)
+        trader.current_date      = state.get("current_date", trader.current_date)
+        trader.account_blown     = state.get("account_blown", False)
+
+        # Restore open positions + closed trade history
+        for pd in state.get("open_positions", []) or []:
+            try:
+                pos = _position_from_dict(pd)
+                trader.positions[pos.id] = pos
+            except Exception as exc:
+                logger.warning(f"Skipping unreadable open position: {exc}")
+        for pd in state.get("trade_history", []) or []:
+            try:
+                trader.trade_history.append(_position_from_dict(pd))
+            except Exception as exc:
+                logger.warning(f"Skipping unreadable history record: {exc}")
 
         logger.info(
             f"Restored paper trader state: balance=${trader.balance:,.2f}, "
-            f"trades={trader.total_trades}, PnL=${trader.closed_pnl_total:,.2f}"
+            f"trades={trader.total_trades}, open={len(trader.positions)}, "
+            f"PnL=${trader.closed_pnl_total:,.2f}"
         )
     except Exception as exc:
         logger.warning(f"Could not load paper trader state: {exc}")
 
 
 def save_paper_trader_state(trader: PaperTrader) -> None:
-    """Persist paper trader state to disk."""
+    """Persist paper trader state to disk, including open positions and history."""
     state = {
         "balance":          trader.balance,
         "initial_balance":  trader.initial_balance,
@@ -271,12 +333,20 @@ def save_paper_trader_state(trader: PaperTrader) -> None:
         "max_drawdown_pct": trader.max_drawdown_pct,
         "daily_pnl":        trader.daily_pnl,
         "daily_trades":     trader.daily_trades,
+        "today_starting_equity": trader.today_starting_equity,
+        "current_date":     trader.current_date,
+        "account_blown":    trader.account_blown,
         "zone_memory":      trader.zone_memory,
+        "open_positions":   [_position_to_dict(p) for p in trader.positions.values()],
+        "trade_history":    [_position_to_dict(p) for p in trader.trade_history[-200:]],
         "saved_at":         datetime.now().isoformat(),
     }
     with open(PAPER_STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(state, f, indent=2)
-    logger.info(f"Paper trader state saved to {PAPER_STATE_FILE}")
+    logger.info(
+        f"Paper trader state saved to {PAPER_STATE_FILE} "
+        f"(open={len(trader.positions)}, history={len(trader.trade_history)})"
+    )
 
 
 # ===================================================================
@@ -604,6 +674,10 @@ def scan_all_markets(
 
     # Restore persisted paper trader state
     load_paper_trader_state(trader)
+    # Positions carried over from prior runs -- these get priced forward this
+    # scan. Positions opened during THIS scan are excluded from the update so
+    # they aren't closed against the same bar they were entered on.
+    restored_position_ids = set(trader.positions.keys())
 
     # Reset daily stats if new day
     today = datetime.now().strftime("%Y-%m-%d")
@@ -661,16 +735,9 @@ def scan_all_markets(
             if signal:
                 signals.append(signal)
                 print(f"  {GREEN}SIGNAL: {signal['direction'].upper()}{RESET}")
-
-                # Auto paper-trade the signal
-                pos_id = trader.submit_signal(signal)
-                if pos_id:
-                    auto_traded += 1
-                    signal["paper_trade_id"] = pos_id
-                    print(f"           {MAGENTA}-> Paper trade opened: {pos_id}{RESET}")
-                else:
-                    signal["paper_trade_id"] = None
-                    print(f"           {YELLOW}-> Signal valid but paper trade rejected (limits){RESET}")
+                # NOTE: paper trades are submitted AFTER the loop, once each
+                # signal has been sized (position_size in USD-per-point) so the
+                # paper trader's PnL comes out in real dollars for every class.
             else:
                 print(f"  {DIM}no signal{RESET}")
 
@@ -715,10 +782,135 @@ def scan_all_markets(
                     f"— consider these as the index thesis trade"
                 )
 
+    # ----------------------------------------------------------------
+    # Price carried-over positions forward against the latest bar so they
+    # progress (breakeven, targets, stop, trailing) and close when hit.
+    # This is what builds the track record -- before this, open positions
+    # were discarded each run and nothing ever closed.
+    # ----------------------------------------------------------------
+    current_prices: Dict[str, Dict[str, float]] = {}
+    for _sym, _tfs in ohlcv_cache.items():
+        _bars = _tfs.get(ltf) or _tfs.get(htf)
+        if _bars:
+            _last = _bars[-1]
+            try:
+                current_prices[_sym] = {
+                    "high":  float(_last.get("high", _last.get("close", 0))),
+                    "low":   float(_last.get("low",  _last.get("close", 0))),
+                    "close": float(_last.get("close", 0)),
+                    "bid":   float(_last.get("close", 0)),
+                    "ask":   float(_last.get("close", 0)),
+                }
+            except (TypeError, ValueError):
+                continue
+
+    closed_events: List[Dict] = []
+    if restored_position_ids:
+        # Temporarily set aside positions opened this scan, update only the
+        # carried-over ones, then put the new ones back.
+        _new_only = {pid: trader.positions.pop(pid)
+                     for pid in list(trader.positions)
+                     if pid not in restored_position_ids}
+        try:
+            closed_events = trader.update_positions(current_prices)
+        finally:
+            trader.positions.update(_new_only)
+        for ev in closed_events:
+            print(f"  {MAGENTA}[CLOSED]{RESET} {ev['symbol']} {ev['direction']} "
+                  f"PnL=${ev['realized_pnl']:,.2f} ({ev['r_multiple']:+.2f}R)")
+
+    # ----------------------------------------------------------------
+    # Position sizing -- convert each signal's $ risk into a MatchTrader
+    # LOT SIZE the trader can enter directly on FundingPips. Forex is sized
+    # from live rates (broker-independent); other classes use config specs.
+    # ----------------------------------------------------------------
+    specs_cfg   = config.get("instrument_specs", {}) or {}
+    specs_class = specs_cfg.get("defaults_by_class", {}) or {}
+    specs_over  = specs_cfg.get("overrides", {}) or {}
+
+    # Build {currency -> USD value of one unit} from scanned FX last prices.
+    _fx_prices: Dict[str, float] = {}
+    for _si in watchlist:
+        if _si.get("asset_class") != "forex":
+            continue
+        _bars = (ohlcv_cache.get(_si["symbol"], {}) or {})
+        _b = _bars.get(ltf) or _bars.get(htf)
+        if _b:
+            try:
+                _fx_prices[_si["name"]] = float(_b[-1].get("close", 0))
+            except (TypeError, ValueError):
+                pass
+    usd_quote_table = build_usd_quote_table(_fx_prices)
+
+    risk_pct = float(config.get("risk", {}).get("risk_per_trade_pct", 1.0)) / 100.0
+    for s in signals:
+        ac    = s.get("asset_class", "")
+        sname = s.get("display_name") or s.get("symbol", "")
+        spec  = dict(specs_class.get(ac, {}))
+        spec.update(specs_over.get(sname, {}))
+        # Risk budget for this trade, off the live (prop-firm) balance.
+        risk_usd = trader.balance * risk_pct
+        try:
+            sz = compute_lots(
+                asset_class=ac, symbol_name=sname,
+                entry=float(s["entry_price"]), stop=float(s["stop_price"]),
+                risk_usd=risk_usd, spec=spec, usd_per_quote_ccy=usd_quote_table,
+            )
+            s["lot_size"]        = sz.lots
+            s["units"]           = sz.units
+            s["risk_usd_target"] = round(risk_usd, 2)
+            s["risk_usd_actual"] = sz.risk_usd_actual
+            s["contract_size"]   = sz.contract_size
+            s["spec_verified"]   = sz.verified
+            s["sizing_note"]     = sz.note
+            # position_size for the paper trader is USD-per-1.0-price-move for
+            # the WHOLE position. Then realized_pnl = price_move * position_size
+            # comes out in real USD for every asset class, and risk_amount lines
+            # up with the prop-firm dollar limits.
+            usd_per_point = sz.lots * sz.usd_per_point_per_lot
+            s["position_size"] = round(usd_per_point, 6)
+            s["risk_amount"]   = sz.risk_usd_actual
+        except Exception as exc:
+            s["lot_size"] = None
+            s["sizing_note"] = f"sizing error: {exc}"
+            logger.warning(f"[{sname}] sizing failed: {exc}")
+
+    # ----------------------------------------------------------------
+    # Submit sized signals to the paper trader (after sizing, so PnL is USD).
+    # ----------------------------------------------------------------
+    for s in signals:
+        if not s.get("lot_size"):
+            s["paper_trade_id"] = None
+            continue
+        pos_id = trader.submit_signal(s)
+        if pos_id:
+            auto_traded += 1
+            s["paper_trade_id"] = pos_id
+            print(f"  {MAGENTA}-> Paper trade opened: {s.get('display_name')} "
+                  f"{s.get('lot_size')} lots ({pos_id}){RESET}")
+        else:
+            s["paper_trade_id"] = None
+            print(f"  {YELLOW}-> {s.get('display_name')}: paper trade rejected "
+                  f"(limits / max positions){RESET}")
+
     # Build the results payload
     account_summary = trader.get_account_summary()
     open_positions  = trader.get_open_positions()
     trade_history   = trader.get_trade_history(limit=100)
+
+    # Stamp live price, unrealized USD PnL, and open R-multiple onto open
+    # positions so the alert shows running-trade progress.
+    for op in open_positions:
+        px = current_prices.get(op.get("symbol"), {})
+        now = px.get("close")
+        if now:
+            entry = float(op.get("entry_price", 0))
+            size  = float(op.get("position_size", 0))   # USD per 1.0 move
+            stopd = abs(entry - float(op.get("stop_price", entry)))
+            move  = (now - entry) if op.get("direction") == "long" else (entry - now)
+            op["current_price"]   = round(now, 6)
+            op["unrealized_pnl"]  = round(move * size, 2)
+            op["r_multiple_open"] = round(move / stopd, 2) if stopd > 0 else 0.0
 
     results = {
         "scan_time":           scan_start.isoformat(),
