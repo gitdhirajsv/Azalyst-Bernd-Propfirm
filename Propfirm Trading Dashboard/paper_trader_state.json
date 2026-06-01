@@ -1,7 +1,7 @@
 {
   "balance": 100000.0,
   "initial_balance": 100000.0,
-  "closed_pnl_total": 0.0,
+  "closed_pnl_total": 999.6480254999998,
   "total_trades": 1,
   "winning_trades": 0,
   "losing_trades": 1,
@@ -22,6 +22,34 @@
       "direction": "long",
       "entry_price": 182.479996,
       "stop_price": 171.731092,
+      "current_stop": 193.2289,
+      "targets": [
+        193.228899,
+        203.977803,
+        214.726707
+      ],
+      "position_size": 46.5,
+      "risk_amount": 999.65,
+      "entry_time": "2026-06-01T14:18:45.216542",
+      "status": "active",
+      "realized_pnl": 999.6480254999998,
+      "partial_taken": true,
+      "partial_qty": 46.5,
+      "partial_price": 203.977803,
+      "breakeven_triggered": true,
+      "trail_stop_level": 193.2289,
+      "zone_id": "f5cce99360",
+      "close_time": null,
+      "close_price": null,
+      "trade_r_multiple": 0.0,
+      "notes": ""
+    },
+    {
+      "id": "49ee78cb-a6c",
+      "symbol": "CRM",
+      "direction": "long",
+      "entry_price": 182.479996,
+      "stop_price": 171.731092,
       "current_stop": 171.731092,
       "targets": [
         193.228899,
@@ -30,7 +58,7 @@
       ],
       "position_size": 93.0,
       "risk_amount": 999.65,
-      "entry_time": "2026-06-01T14:18:45.216542",
+      "entry_time": "2026-06-01T21:16:41.251612",
       "status": "active",
       "realized_pnl": 0.0,
       "partial_taken": false,
@@ -39,6 +67,34 @@
       "breakeven_triggered": false,
       "trail_stop_level": null,
       "zone_id": "f5cce99360",
+      "close_time": null,
+      "close_price": null,
+      "trade_r_multiple": 0.0,
+      "notes": ""
+    },
+    {
+      "id": "ba25352a-45f",
+      "symbol": "ADBE",
+      "direction": "long",
+      "entry_price": 244.759995,
+      "stop_price": 238.387001,
+      "current_stop": 238.387001,
+      "targets": [
+        251.132988,
+        257.505982,
+        263.878976
+      ],
+      "position_size": 156.0,
+      "risk_amount": 994.19,
+      "entry_time": "2026-06-01T21:16:41.251738",
+      "status": "active",
+      "realized_pnl": 0.0,
+      "partial_taken": false,
+      "partial_qty": 0.0,
+      "partial_price": 0.0,
+      "breakeven_triggered": false,
+      "trail_stop_level": null,
+      "zone_id": "2d0acf5d61",
       "close_time": null,
       "close_price": null,
       "trade_r_multiple": 0.0,
@@ -75,5 +131,5 @@
       "notes": ""
     }
   ],
-  "saved_at": "2026-06-01T14:18:45.217320"
+  "saved_at": "2026-06-01T21:16:41.252651"
 }
