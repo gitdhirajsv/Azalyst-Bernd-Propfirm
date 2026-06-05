@@ -1,5 +1,9 @@
 {
-  "signal_ids_seen": [],
-  "open_position_ids_seen": [],
-  "last_sent_at": "2026-06-03T20:39:23.177996+00:00"
+  "signal_ids_seen": [
+    "7bc64252-c87"
+  ],
+  "open_position_ids_seen": [
+    "7bc64252-c87"
+  ],
+  "last_sent_at": "2026-06-05T18:41:29.004293+00:00"
 }

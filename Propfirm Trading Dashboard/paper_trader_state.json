@@ -17,7 +17,36 @@
     "2d0acf5d61": true,
     "f5cce99360": true
   },
-  "open_positions": [],
+  "open_positions": [
+    {
+      "id": "7bc64252-c87",
+      "symbol": "EURCAD=X",
+      "direction": "short",
+      "entry_price": 1.60802,
+      "stop_price": 1.618993,
+      "current_stop": 1.618993,
+      "targets": [
+        1.597047,
+        1.586075,
+        1.575102
+      ],
+      "position_size": 98240.980338,
+      "risk_amount": 1078.0,
+      "entry_time": "2026-06-05T18:41:26.994642",
+      "status": "active",
+      "realized_pnl": 0.0,
+      "partial_taken": false,
+      "partial_qty": 0.0,
+      "partial_price": 0.0,
+      "breakeven_triggered": false,
+      "trail_stop_level": null,
+      "zone_id": "51f5f2eba4",
+      "close_time": null,
+      "close_price": null,
+      "trade_r_multiple": 0.0,
+      "notes": ""
+    }
+  ],
   "trade_history": [
     {
       "id": "a9b9a038-b04",
@@ -160,5 +189,5 @@
       "notes": ""
     }
   ],
-  "saved_at": "2026-06-05T16:10:16.650729"
+  "saved_at": "2026-06-05T18:41:26.995802"
 }
