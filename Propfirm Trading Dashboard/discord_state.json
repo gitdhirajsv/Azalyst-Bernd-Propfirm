@@ -1,11 +1,5 @@
 {
-  "signal_ids_seen": [
-    "EURCAD=X"
-  ],
-  "open_position_ids_seen": [
-    "7bc64252-c87",
-    "adf3d47e-28e",
-    "e0e562e1-74b"
-  ],
-  "last_sent_at": "2026-06-06T10:52:31.849343+00:00"
+  "signal_ids_seen": [],
+  "open_position_ids_seen": [],
+  "last_sent_at": "2026-06-12T12:33:51.932783+00:00"
 }
