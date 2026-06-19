@@ -248,6 +248,77 @@ watchlist:
   - { symbol: "BA",    name: "BA (Boeing)",         asset_class: "equities" }
   - { symbol: "CAT",   name: "CAT (Caterpillar)",   asset_class: "equities" }
 
+  # ── PHARMA / BIOTECH ───────────────────────────────────────────
+  - { symbol: "PFE",   name: "PFE (Pfizer)",        asset_class: "equities" }
+  - { symbol: "MRK",   name: "MRK (Merck)",         asset_class: "equities" }
+  - { symbol: "ABBV",  name: "ABBV (AbbVie)",       asset_class: "equities" }
+  - { symbol: "GILD",  name: "GILD (Gilead)",       asset_class: "equities" }
+  - { symbol: "BIIB",  name: "BIIB (Biogen)",       asset_class: "equities" }
+  - { symbol: "REGN",  name: "REGN (Regeneron)",    asset_class: "equities" }
+  - { symbol: "MRNA",  name: "MRNA (Moderna)",      asset_class: "equities" }
+
+  # ── DEFENSE / AEROSPACE ────────────────────────────────────────
+  - { symbol: "LMT",   name: "LMT (Lockheed)",      asset_class: "equities" }
+  - { symbol: "RTX",   name: "RTX (Raytheon)",      asset_class: "equities" }
+  - { symbol: "NOC",   name: "NOC (Northrop)",       asset_class: "equities" }
+  - { symbol: "GE",    name: "GE (GE Aerospace)",   asset_class: "equities" }
+  - { symbol: "HON",   name: "HON (Honeywell)",     asset_class: "equities" }
+
+  # ── CONSUMER BRANDS (high TV idea engagement) ──────────────────
+  - { symbol: "KO",    name: "KO (Coca-Cola)",      asset_class: "equities" }
+  - { symbol: "PEP",   name: "PEP (PepsiCo)",       asset_class: "equities" }
+  - { symbol: "MCD",   name: "MCD (McDonald's)",    asset_class: "equities" }
+  - { symbol: "SBUX",  name: "SBUX (Starbucks)",    asset_class: "equities" }
+  - { symbol: "NKE",   name: "NKE (Nike)",          asset_class: "equities" }
+  - { symbol: "LULU",  name: "LULU (Lululemon)",    asset_class: "equities" }
+
+  # ── MORE FINANCIALS ────────────────────────────────────────────
+  - { symbol: "WFC",   name: "WFC (Wells Fargo)",   asset_class: "equities" }
+  - { symbol: "C",     name: "C (Citigroup)",       asset_class: "equities" }
+  - { symbol: "AXP",   name: "AXP (Amex)",          asset_class: "equities" }
+  - { symbol: "BLK",   name: "BLK (BlackRock)",     asset_class: "equities" }
+  - { symbol: "SCHW",  name: "SCHW (Schwab)",       asset_class: "equities" }
+  - { symbol: "SPGI",  name: "SPGI (S&P Global)",   asset_class: "equities" }
+
+  # ── ENERGY STOCKS ──────────────────────────────────────────────
+  - { symbol: "SLB",   name: "SLB (Schlumberger)",  asset_class: "equities" }
+  - { symbol: "OXY",   name: "OXY (Occidental)",    asset_class: "equities" }
+  - { symbol: "EOG",   name: "EOG (EOG Resources)", asset_class: "equities" }
+  - { symbol: "DVN",   name: "DVN (Devon Energy)",  asset_class: "equities" }
+
+  # ── TELECOM ────────────────────────────────────────────────────
+  - { symbol: "T",     name: "T (AT&T)",             asset_class: "equities" }
+  - { symbol: "VZ",    name: "VZ (Verizon)",         asset_class: "equities" }
+  - { symbol: "TMUS",  name: "TMUS (T-Mobile)",      asset_class: "equities" }
+
+  # ── GROWTH / FINTECH / DISRUPTORS (high TradingView traction) ──
+  - { symbol: "SHOP",  name: "SHOP (Shopify)",       asset_class: "equities" }
+  - { symbol: "PYPL",  name: "PYPL (PayPal)",        asset_class: "equities" }
+  - { symbol: "COIN",  name: "COIN (Coinbase)",      asset_class: "equities" }
+  - { symbol: "CRWD",  name: "CRWD (Crowdstrike)",   asset_class: "equities" }
+  - { symbol: "PLTR",  name: "PLTR (Palantir)",      asset_class: "equities" }
+  - { symbol: "UBER",  name: "UBER (Uber)",          asset_class: "equities" }
+  - { symbol: "ABNB",  name: "ABNB (Airbnb)",        asset_class: "equities" }
+  - { symbol: "SOFI",  name: "SOFI (SoFi)",          asset_class: "equities" }
+  - { symbol: "HOOD",  name: "HOOD (Robinhood)",     asset_class: "equities" }
+  - { symbol: "ARM",   name: "ARM (ARM Holdings)",   asset_class: "equities" }
+  - { symbol: "SMCI",  name: "SMCI (SuperMicro)",    asset_class: "equities" }
+
+  # ── INTERNATIONAL / GLOBAL ADRs ────────────────────────────────
+  - { symbol: "ASML",  name: "ASML (ASML)",          asset_class: "equities" }
+  - { symbol: "NVO",   name: "NVO (Novo Nordisk)",   asset_class: "equities" }
+  - { symbol: "BABA",  name: "BABA (Alibaba)",       asset_class: "equities" }
+  - { symbol: "JD",    name: "JD (JD.com)",          asset_class: "equities" }
+  - { symbol: "PDD",   name: "PDD (Pinduoduo)",      asset_class: "equities" }
+
+  # ── MORE AGRICULTURAL FUTURES ──────────────────────────────────
+  - { symbol: "ZM=F",  name: "SOYMEAL (Soybean Meal)",  asset_class: "commodities" }
+  - { symbol: "OJ=F",  name: "OJ (Orange Juice)",        asset_class: "soft_commodities" }
+  - { symbol: "LE=F",  name: "CATTLE (Live Cattle)",     asset_class: "commodities" }
+  - { symbol: "HE=F",  name: "HOGS (Lean Hogs)",         asset_class: "commodities" }
+  - { symbol: "GF=F",  name: "FEEDCATTLE (Feeder Cattle)", asset_class: "commodities" }
+  - { symbol: "LBS=F", name: "LUMBER (Random Length Lumber)", asset_class: "commodities" }
+
 zone_detection:
   leg_in_min_candles: 3
   base_max_candles: 5  # Phase 41 S4-01: OTC M2L6 canonical cheat sheet says "Approx. 1-5 candles"
