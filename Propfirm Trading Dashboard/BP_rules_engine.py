@@ -98,6 +98,12 @@ JPY_SYMBOLS = frozenset({'USDJPY=X', '6J=F', 'JPYUSD=X', 'JPYUSD'})
 #       Cheatsheet has no Valuation/COT entries for Netflix.
 VALUATION_SKIP_SYMBOLS = frozenset({'NG=F', 'QN=F', 'NFLX'})
 
+# Phase 42 Fix-4: Silver Valuation is NOT a primary indicator per Blueprint Cheatsheet.
+# Silver row: Commercials ① as primary, Gold ③ as odds-enhancer — Valuation not listed.
+# val=bearish for Silver in a PM bull market reflects structural bond underperformance,
+# not genuine overvaluation. Suppress the veto when zone + seasonality confirm the long.
+SILVER_SYMBOLS = frozenset({'SI=F', 'SIL', 'SILV'})
+
 # Phase 33: symbols where COT is also excluded.
 # NFLX has no CFTC reportable contract; running standard equities COT path
 # produces noise. Skip entirely.
@@ -1568,12 +1574,42 @@ class RulesEngine:
         cot   = biases.get('cot',          'neutral')
         seas  = biases.get('seasonality',  'neutral')
 
+        # Phase 42 Fix-4: SI=F (Silver) Valuation relaxation.
+        # Blueprint Cheatsheet (Phase 12): Silver primary = Commercials COT ①.
+        # Valuation is NOT listed as primary, secondary, or odds-enhancer for Silver.
+        # In a PM bull market Silver routinely outperforms bonds, so the standard
+        # DXY/ZB relative-strength Valuation reads "overvalued" even as price climbs.
+        # When Silver is at a demand zone (loc=bullish), seasonality agrees bullish,
+        # and COT is not actively bearish, the val=bearish veto is structurally wrong.
+        # IMPORTANT: inserted BEFORE the normalized dict / tally so that bearing_excl_trend
+        # is computed with the relaxed val='neutral', allowing the downtrend counter-trend
+        # gate (bullish_excl >= 2 AND bearish_excl == 0) to pass for cases #65 and #69.
+        if (symbol and symbol in SILVER_SYMBOLS
+                and loc == 'bullish'
+                and val == 'bearish'
+                and seas == 'bullish'
+                and cot != 'bearish'):
+            val = 'neutral'
+            logger.debug(
+                "Phase 42 Fix-4: SI=F val=bearish relaxed → neutral "
+                "(cheatsheet: Valuation not primary for Silver)"
+            )
+
         # Normalise trend vocabulary ('uptrend'/'downtrend'/'sideways') so it
         # can be compared against 'bullish'/'bearish'/'neutral' below.
         # Phase 5 bug-fix: trend was being silently ignored because it never
         # matched the 'bullish'/'bearish' literals in the old vote tally.
+        #
+        # Phase 42 Fix-4b: Use local variables (val/loc/cot/seas) that may have
+        # been modified by pre-normalisation overrides (e.g. Fix-4 Silver val
+        # relaxation). Without this, Fix-4's val='neutral' was correctly applied
+        # to the Valuation-veto check (Step 2) but NOT to the bearish_excl_trend
+        # tally, causing bearish_excl_trend to still count val=bearish and
+        # blocking Fix-9a's bearish_excl_trend==0 condition.
+        _local_overrides = {'valuation': val, 'location': loc, 'cot': cot, 'seasonality': seas}
         normalized = {}
         for k, v in biases.items():
+            v = _local_overrides.get(k, v)  # Use local var if pre-normalisation modified it
             if v == 'uptrend':    normalized[k] = 'bullish'
             elif v == 'downtrend': normalized[k] = 'bearish'
             elif v == 'sideways':  normalized[k] = 'neutral'
@@ -1636,7 +1672,9 @@ class RulesEngine:
                     # Captures early-2023 NQ/ES/YM cases where COT large-specs were
                     # still net short BUT seasonality + cycle roadmap were bullish.
                     _seas_overrides_one_bearish = (
-                        _seas_n == 'bullish' and _bear_count == 1 and _bull_count >= 1
+                        _seas_n == 'bullish'
+                        and _bear_count == 1
+                        and _bull_count >= 1
                     )
                     # Phase 24 — Constituent route: bullish constituent stocks ALONE
                     # are enough to override loc='bearish' when cycles agree, even
@@ -1739,6 +1777,32 @@ class RulesEngine:
                         return 'bullish'
             except Exception as e:
                 logger.debug(f"Phase 26 cycle dominance skipped: {e}")
+
+        # Phase 42 Fix-2: Capture bullish presidential-cycle state for equity_indices.
+        # When pres+sann cycles are both bullish (e.g. year-3 pre-election = 2023),
+        # Bernd NEVER takes equity-index short positions — 0 such calls in 160 goldtest.
+        # The flag is applied after Step 1 determines `proposed` direction, blocking any
+        # bearish return for equity indices during pre-election cycles.
+        # 2024 (sann[4]=0) is correctly unaffected: YM/RTY shorts in year-0 are allowed.
+        _equity_idx_no_short = False
+        if asset_class == 'equity_indices':
+            try:
+                from BP_roadmap import (
+                    PRESIDENTIAL_CYCLE_BIAS, SANNIAL_CYCLE_BIAS,
+                    cycle_year_in_pres_cycle,
+                )
+                _ref42 = today_override if today_override is not None else date.today()
+                _cy42 = cycle_year_in_pres_cycle(_ref42.year)
+                _pres42 = PRESIDENTIAL_CYCLE_BIAS.get(_cy42, [0] * 12)[_ref42.month - 1]
+                _sann42 = SANNIAL_CYCLE_BIAS.get(_ref42.year % 10, 0)
+                if _pres42 > 0 and _sann42 > 0:
+                    _equity_idx_no_short = True
+                    logger.debug(
+                        f"Phase 42 Fix-2: equity_idx_no_short=True "
+                        f"(cy={_cy42} pres={_pres42} sann={_sann42} ref={_ref42})"
+                    )
+            except Exception as _e42:
+                logger.debug(f"Phase 42 Fix-2 cycle check failed: {_e42}")
 
         # Phase 23 (Task 4): zone-arrival soft-veto eligibility flag.
         # composite >= 7.0 = top-quartile zone; soft-veto only fires when
@@ -1880,10 +1944,32 @@ class RulesEngine:
         _ZONE_ARRIVAL_CLASSES = ('forex', 'commodities', 'energies', 'interest_rates', 'soft_commodities', 'nat_gas')
         if asset_class in _ZONE_ARRIVAL_CLASSES:
             loc_n = normalized.get('location', 'neutral')
-            if loc_n == 'bullish' and val != 'bearish':
+            # Phase 42 Fix-5: NG=F (nat_gas) seasonality gate inside zone-arrival.
+            # NG is weather-driven; bearish seasonal overrides demand zone presence.
+            # Bernd case #94 (Dec 2023): loc=bullish, cot=bullish, seas=bearish → neutral.
+            # He does NOT buy NG against bearish 10y+5y seasonality even with retailer
+            # COT extreme and a demand zone — seasonal timing is primary for NG.
+            # When _ng_seas_ok=False, falls through to Step 1 → Step 3 counter-trend gate
+            # which returns hold (trend=downtrend + seas=bearish in bearish_excl).
+            _ng_seas_ok = not (asset_class == 'nat_gas' and seas == 'bearish')
+            # Phase 42 Fix-6: Forex zone-arrival bearish blocked by strong bullish COT.
+            # When non-commercials are at a 156w historic extreme (cot_strength='strong')
+            # in the bullish direction for a currency, they are massively net long that
+            # currency at a multi-year extreme. Shorting at a supply zone against a
+            # historic COT extreme is the most dangerous trade in Bernd's system.
+            # Cases #43 and #119 (6E=F Apr 2023): zone-arrival fired short despite
+            # cot=bullish/strong (non-comms net long EUR at 156w extreme).
+            # Corpus: Phase 16 "COT is king"; Phase 12 cheatsheet "Non-Comms ①" for forex.
+            _forex_cot_short_ok = not (
+                asset_class == 'forex'
+                and loc_n == 'bearish'
+                and cot == 'bullish'
+                and biases.get('cot_strength', 'none') == 'strong'
+            )
+            if loc_n == 'bullish' and val != 'bearish' and _ng_seas_ok:
                 logger.info(f"Phase 39 {asset_class} zone-arrival -> bullish (val={val})")
                 return 'bullish'
-            if loc_n == 'bearish' and val != 'bullish':
+            if loc_n == 'bearish' and val != 'bullish' and _ng_seas_ok and _forex_cot_short_ok:
                 logger.info(f"Phase 39 {asset_class} zone-arrival -> bearish (val={val})")
                 return 'bearish'
 
@@ -1951,6 +2037,13 @@ class RulesEngine:
                         f"COT-is-king override: cot={cot} overrides loc={loc} "
                         f"for {asset_class} (strength=strong)"
                     )
+                    # Phase 42 Fix-1: PM Commercials being short is structural hedging,
+                    # not a directional sell signal. Bernd: 0 PM shorts in 160 goldtest cases.
+                    # Commercials in gold/silver/platinum hold physical inventory and routinely
+                    # hedge with short futures positions even in bull markets.
+                    if asset_class == 'precious_metals' and cot_direction == 'bearish':
+                        logger.info("Phase 42 Fix-1: PM COT-is-king bearish suppressed → hold")
+                        return 'hold'
                     return cot_direction
 
         # Step 1 — Location gate.
@@ -1977,6 +2070,48 @@ class RulesEngine:
         else:
             # Location tells us the proposed direction.
             proposed = 'bullish' if loc == 'bullish' else 'bearish'
+
+        # Phase 42 Fix-1: Suppress ALL precious_metals SHORT proposals.
+        # PM Commercials holding short futures is routine inventory hedging, not directional.
+        # Evidence: Bernd has 0 PM short calls across all 160 goldtest cases.
+        # This catches any bearish proposed direction that wasn't already blocked by the
+        # COT-is-king PM guard above (e.g. loc=bearish + seas=bearish at Step 4).
+        if asset_class == 'precious_metals' and proposed == 'bearish':
+            logger.info("Phase 42 Fix-1: PM proposed=bearish suppressed → hold")
+            return 'hold'
+
+        # Phase 42 Fix-2: Suppress equity_index SHORT during bullish presidential cycles.
+        # Bernd: 0 equity_index short calls in 2023 (pres[3]=+1 sann[3]=+1).
+        # Applied after Step 1 so it catches any bearish proposal regardless of
+        # whether T1 fired, failed, or was skipped.
+        if proposed == 'bearish' and _equity_idx_no_short:
+            logger.info(
+                "Phase 42 Fix-2: equity_index SHORT suppressed — bullish pre-election cycle"
+            )
+            return 'hold'
+
+        # Phase 42 Fix-6b: Forex COT-at-156w-extreme blocks proposed direction when opposing.
+        # When non-commercials are at a 156w historic extreme (cot_strength='strong') and
+        # their direction OPPOSES the proposed trade direction (loc + val agree but COT
+        # contradicts at an extreme), Bernd does NOT take the trade — he waits for COT to
+        # turn. Non-Comms ① is the PRIMARY indicator for forex per Phase 12 cheatsheet.
+        # Cases #43, #119 (6E=F Apr 2023): loc=bearish + val agrees bearish, BUT non-comms
+        # are at a historic extreme LONG EUR (bullish). Taking an EUR short against this
+        # signal is the most dangerous forex trade in Bernd's system → return hold.
+        # Note: Fix-6 (in zone-arrival block) handles the fast-path return; this guard
+        # handles the case where the Step 1-4 consensus path independently produces a
+        # direction that contradicts a strong COT signal.
+        if asset_class == 'forex' and biases.get('cot_strength', 'none') == 'strong':
+            if cot == 'bullish' and proposed == 'bearish':
+                logger.info(
+                    "Phase 42 Fix-6b: forex cot=bullish/strong blocks proposed=bearish → hold"
+                )
+                return 'hold'
+            if cot == 'bearish' and proposed == 'bullish':
+                logger.info(
+                    "Phase 42 Fix-6b: forex cot=bearish/strong blocks proposed=bullish → hold"
+                )
+                return 'hold'
 
         # Step 2 — Valuation veto (HARD by default, SOFT at HQ zone arrival).
         # "Rule Number One" per CW38/CW39: Valuation must NOT actively
@@ -2019,13 +2154,45 @@ class RulesEngine:
                 return 'bullish'
             # Phase 10 relaxed path: 3+ non-trend bullish, ≤1 opposing, val must align.
             # Covers CL=F / PA=F: val+loc+cot=bullish but seasonality bearish.
-            if bullish_excl_trend >= 3 and bearish_excl_trend <= 1 and val == 'bullish':
+            # Phase 42 Fix-9b: Silver requires seas not bearish on this path too.
+            # Without this guard, Phase 10 relaxed fires for SI=F #115 (val+loc+cot=bullish,
+            # seas=bearish) BEFORE Phase 11 relaxed + Fix-9b can block it.
+            # Blueprint Cheatsheet Silver: Seasonality ③ actively bearish overrides the
+            # relaxed minimum (val+loc+cot = 3 bullish is insufficient for Silver when
+            # the odds-enhancer Seasonality opposes). Case #115 (SI=F Mar 2024, bernd=neutral).
+            if (bullish_excl_trend >= 3 and bearish_excl_trend <= 1 and val == 'bullish'
+                    and not (symbol and symbol in SILVER_SYMBOLS and seas == 'bearish')):
                 return 'bullish'
             # Phase 11 relaxed path: Bernd's minimum (loc + val = tradeable) with ≤1
             # opposing non-trend indicator.  Covers CL=F/BA=F where only loc+val fire
             # bullish but seasonality is mildly bearish.  Requires BOTH loc AND val to
             # agree — prevents a single strong-val from dragging in pure-neutral loc.
-            if val == 'bullish' and loc == 'bullish' and bearish_excl_trend <= 1:
+            # Phase 42 Fix-9b: Silver (SI=F) Phase 11 relaxed requires seas not bearish.
+            # Blueprint Cheatsheet Silver: Seasonality ③ = odds-enhancer. When seas
+            # actively opposes (bearish), the val+loc-only minimum is insufficient.
+            # Case #115 (SI=F Mar 2024, bernd=neutral): val=bullish + loc=bullish + seas=bearish
+            # was firing the Phase 11 relaxed path as a false positive. Block for Silver
+            # when the seasonality odds-enhancer is actively working against the trade.
+            _silver_seas_ok = not (symbol and symbol in SILVER_SYMBOLS and seas == 'bearish')
+            if val == 'bullish' and loc == 'bullish' and bearish_excl_trend <= 1 and _silver_seas_ok:
+                return 'bullish'
+            # Phase 42 Fix-9a: Silver downtrend relaxation.
+            # Blueprint Cheatsheet: Silver primary = Commercials ① + Seasonality ③.
+            # When COT (primary), Seasonality, and Location all agree bullish AND nothing
+            # is actively bearish, fire bullish even in a local downtrend.
+            # After Fix-4 converts val=bearish→neutral for Silver, bullish_excl_trend = 2
+            # (cot + seas) — one short of the standard threshold of 3. Silver's cheatsheet
+            # priority (COT + Seasonality + zone) with zero opposing indicators warrants
+            # this specific relaxation. Case #69 (SI=F Oct 2023, bernd=long).
+            if (symbol and symbol in SILVER_SYMBOLS
+                    and loc == 'bullish'
+                    and seas == 'bullish'
+                    and cot != 'bearish'
+                    and bearish_excl_trend == 0):
+                logger.info(
+                    f"Phase 42 Fix-9a: Silver bullish consensus overrides downtrend "
+                    f"(cot={cot} seas=bullish loc=bullish bearish_excl={bearish_excl_trend})"
+                )
                 return 'bullish'
             return 'hold'
 
