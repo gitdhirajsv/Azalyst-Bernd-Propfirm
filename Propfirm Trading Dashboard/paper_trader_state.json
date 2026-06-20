@@ -80,7 +80,7 @@
       "direction": "short",
       "entry_price": 0.59301,
       "stop_price": 0.613243,
-      "current_stop": 0.613243,
+      "current_stop": 0.59301,
       "targets": [
         0.572777,
         0.552543,
@@ -94,7 +94,7 @@
       "partial_taken": false,
       "partial_qty": 0.0,
       "partial_price": 0.0,
-      "breakeven_triggered": false,
+      "breakeven_triggered": true,
       "trail_stop_level": null,
       "zone_id": "e23511ef5d",
       "close_time": null,
@@ -189,5 +189,5 @@
       "notes": ""
     }
   ],
-  "saved_at": "2026-06-20T17:55:21.324226"
+  "saved_at": "2026-06-20T21:51:37.231061"
 }
