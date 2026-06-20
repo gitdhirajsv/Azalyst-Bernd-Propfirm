@@ -1163,54 +1163,15 @@ def main():
         else:
             server_thread = _start_server_in_background(SCRIPT_DIR, port=8765)
 
-    # ---- Multi-strategy: build list of strategies to run ----
-    # --all-strategies runs each strategy listed in default_strategies
-    # sequentially and merges all signals into one scan_results.json.
-    # This lets GitHub and local produce weekly + daily signals in one pass.
-    _run_all = "--all-strategies" in sys.argv
-    _strategies_to_run = (
-        config.get("default_strategies", ["weekly", "daily"])
-        if _run_all
-        else [config.get("active_strategy", "weekly")]
-    )
-    if _run_all:
-        print(f"  {CYAN}Multi-strategy mode: running {_strategies_to_run}{RESET}")
-        print()
-
-    # ---- Run scan(s) ----
-    _all_signals: List[Dict] = []
-    _final_results = None
-    for _strat in _strategies_to_run:
-        config["active_strategy"] = _strat
-        if _run_all:
-            print(f"{BOLD}{CYAN}{'=' * 60}{RESET}")
-            print(f"{BOLD}{CYAN}  Strategy pass: {_strat.upper()}{RESET}")
-            print(f"{BOLD}{CYAN}{'=' * 60}{RESET}")
-        try:
-            _r = scan_all_markets(config, watchlist)
-        except Exception as exc:
-            logger.error(f"Fatal scan error ({_strat}): {traceback.format_exc()}")
-            print(f"\n{RED}FATAL ERROR ({_strat}): {exc}{RESET}")
-            if not _run_all:
-                if server_thread is not None:
-                    server_thread.shutdown()
-                sys.exit(1)
-            continue
-        _all_signals.extend(_r.get("signals", []))
-        _final_results = _r
-
-    if _final_results is None:
-        print(f"\n{RED}No scan completed successfully.{RESET}")
+    # ---- Run scan ----
+    try:
+        results = scan_all_markets(config, watchlist)
+    except Exception as exc:
+        logger.error(f"Fatal scan error: {traceback.format_exc()}")
+        print(f"\n{RED}FATAL ERROR: {exc}{RESET}")
         if server_thread is not None:
             server_thread.shutdown()
         sys.exit(1)
-
-    # Merge signals from all strategy passes into the final result dict
-    _final_results["signals"] = _all_signals
-    _final_results["signals_found"] = len(_all_signals)
-    if _run_all:
-        _final_results["strategies_run"] = _strategies_to_run
-    results = _final_results
 
     # ---- Save results ----
     save_results(results)
