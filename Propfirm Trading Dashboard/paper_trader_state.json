@@ -7,10 +7,10 @@
   "losing_trades": 1,
   "peak_balance": 100000.0,
   "max_drawdown_pct": 0.0016324829606164711,
-  "daily_pnl": -998.9954949786675,
-  "daily_trades": 1,
-  "today_starting_equity": 100000.0,
-  "current_date": "2026-06-22",
+  "daily_pnl": 0.0,
+  "daily_trades": 0,
+  "today_starting_equity": 99998.36751703938,
+  "current_date": "2026-06-23",
   "account_blown": false,
   "zone_memory": {
     "c4ea13fa7b": true
@@ -71,6 +71,34 @@
       "close_price": null,
       "trade_r_multiple": 0.0,
       "notes": ""
+    },
+    {
+      "id": "af7c57a4-9fb",
+      "symbol": "AUDUSD=X",
+      "direction": "short",
+      "entry_price": 0.716885,
+      "stop_price": 0.730691,
+      "current_stop": 0.716885,
+      "targets": [
+        0.703079,
+        0.689272,
+        0.675466
+      ],
+      "position_size": 72000.0,
+      "risk_amount": 994.03,
+      "entry_time": "2026-06-22T22:29:26.334273",
+      "status": "active",
+      "realized_pnl": 0.0,
+      "partial_taken": false,
+      "partial_qty": 0.0,
+      "partial_price": 0.0,
+      "breakeven_triggered": true,
+      "trail_stop_level": null,
+      "zone_id": "6ef4bc7b55",
+      "close_time": null,
+      "close_price": null,
+      "trade_r_multiple": 0.0,
+      "notes": ""
     }
   ],
   "trade_history": [
@@ -103,5 +131,5 @@
       "notes": ""
     }
   ],
-  "saved_at": "2026-06-22T20:39:49.424310"
+  "saved_at": "2026-06-22T23:18:47.905204"
 }
