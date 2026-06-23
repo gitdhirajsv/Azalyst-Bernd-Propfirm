@@ -220,48 +220,54 @@ def stats_block(account: Dict, positions: List[Dict], history: List[Dict]) -> st
     ])
 
 
+def _render_signal_item(s: Dict) -> str:
+    """Render a single signal entry as plain text lines (no section header)."""
+    sym  = s.get("display_name") or s.get("symbol", "?")
+    dir_ = s.get("direction", "?").upper()
+    entry = s.get("entry_price")
+    stop  = s.get("stop_price")
+    targets = s.get("targets", []) or []
+    risk_amt = float(s.get("risk_amount", 0))
+    risk_r = abs(float(entry) - float(stop)) if entry and stop else 0
+    rr_t2 = abs((targets[1] - entry) / risk_r) if len(targets) > 1 and risk_r else 0
+    composite = s.get("composite_score") or s.get("composite") or 0
+    lot_size = s.get("lot_size")
+    units = s.get("units")
+    risk_actual = float(s.get("risk_usd_actual", risk_amt) or risk_amt)
+    spec_verified = s.get("spec_verified", True)
+    out = []
+    out.append(f"  {sym:14s}  {dir_:5s}")
+    out.append(f"    Entry          : {fmt_price(entry, 12)}")
+    out.append(f"    Stop Loss      : {fmt_price(stop, 12)}")
+    for i, t in enumerate(targets[:3], 1):
+        out.append(f"    Target {i} ({i}R)   : {fmt_price(t, 12)}")
+    if lot_size:
+        out.append(f"    >> LOT SIZE    : {lot_size:>12,.2f} lots")
+        if units:
+            out.append(f"       (units)     : {units:>12,.0f}")
+        out.append(f"    Risk (actual)  : {fmt_money(risk_actual)}")
+        if not spec_verified:
+            out.append(f"    [!] CONFIRM contract size on the FundingPips")
+            out.append(f"        order ticket before entering this size.")
+    else:
+        out.append(f"    Risk           : {fmt_money(risk_amt)}")
+        out.append(f"    [!] LOT SIZE UNAVAILABLE -- do not size off this alert")
+        note = s.get("sizing_note")
+        if note:
+            out.append(f"        {note[:48]}")
+    out.append(f"    R:R (to T2)    : 1:{rr_t2:>5.2f}")
+    if composite:
+        out.append(f"    Composite      : {float(composite):>5.2f} / 10")
+    return "\n".join(out)
+
+
 def new_signals_block(new_signals: List[Dict]) -> str:
     """One block per signal. Show entry/SL/TP1/T2/T3 + risk + R:R + bias."""
     if not new_signals:
         return ""
     out = ["NEW SIGNALS THIS SCAN", ""]
     for s in new_signals:
-        sym  = s.get("display_name") or s.get("symbol", "?")
-        dir_ = s.get("direction", "?").upper()
-        entry = s.get("entry_price")
-        stop  = s.get("stop_price")
-        targets = s.get("targets", []) or []
-        risk_amt = float(s.get("risk_amount", 0))
-        risk_r = abs(float(entry) - float(stop)) if entry and stop else 0
-        rr_t2 = abs((targets[1] - entry) / risk_r) if len(targets) > 1 and risk_r else 0
-        composite = s.get("composite_score") or s.get("composite") or 0
-        lot_size = s.get("lot_size")
-        units = s.get("units")
-        risk_actual = float(s.get("risk_usd_actual", risk_amt) or risk_amt)
-        spec_verified = s.get("spec_verified", True)
-        out.append(f"  {sym:14s}  {dir_:5s}")
-        out.append(f"    Entry          : {fmt_price(entry, 12)}")
-        out.append(f"    Stop Loss      : {fmt_price(stop, 12)}")
-        for i, t in enumerate(targets[:3], 1):
-            out.append(f"    Target {i} ({i}R)   : {fmt_price(t, 12)}")
-        # The number to type into FundingPips. Shown prominently.
-        if lot_size:
-            out.append(f"    >> LOT SIZE    : {lot_size:>12,.2f} lots")
-            if units:
-                out.append(f"       (units)     : {units:>12,.0f}")
-            out.append(f"    Risk (actual)  : {fmt_money(risk_actual)}")
-            if not spec_verified:
-                out.append(f"    [!] CONFIRM contract size on the FundingPips")
-                out.append(f"        order ticket before entering this size.")
-        else:
-            out.append(f"    Risk           : {fmt_money(risk_amt)}")
-            out.append(f"    [!] LOT SIZE UNAVAILABLE -- do not size off this alert")
-            note = s.get("sizing_note")
-            if note:
-                out.append(f"        {note[:48]}")
-        out.append(f"    R:R (to T2)    : 1:{rr_t2:>5.2f}")
-        if composite:
-            out.append(f"    Composite      : {float(composite):>5.2f} / 10")
+        out.append(_render_signal_item(s))
         out.append("")
     return "\n".join(out).rstrip()
 
@@ -441,6 +447,51 @@ def build_signals_message(scan: Dict, new_signals: List[Dict]) -> str:
     return _wrap(body)
 
 
+def build_signals_messages(scan: Dict, new_signals: List[Dict]) -> List[str]:
+    """Build one or more Discord code-block messages for new signals.
+
+    Splits across multiple messages (each <= DISCORD_MSG_LIMIT chars) so the
+    full list is always shown rather than truncated.  The @ping goes on the
+    first message only; subsequent parts are sent silently.
+    """
+    if not new_signals:
+        return []
+
+    ts_line = header_block(scan.get("scan_time")).splitlines()[1]
+    chunk_hdr = f"AZALYST PROPFIRM SCANNER  —  NEW SIGNALS\n{ts_line}"
+
+    rendered = [_render_signal_item(s) for s in new_signals]
+    n_total = len(rendered)
+    messages: List[str] = []
+    batch: List[str] = []
+
+    def _probe(cur_batch: List[str], part_idx: int, more: bool) -> str:
+        signals_section = "NEW SIGNALS THIS SCAN\n\n" + "\n\n".join(cur_batch)
+        part_tag = (f"\n{LINE}\n(part {part_idx})" if (messages or more or part_idx > 1) else "")
+        cont_tag = f"\n{LINE}\n(continued in next message…)" if more else ""
+        return f"{chunk_hdr}\n{LINE}\n{signals_section}{part_tag}{cont_tag}".strip()
+
+    for idx, sig_text in enumerate(rendered):
+        test_batch = batch + [sig_text]
+        is_last = (idx == n_total - 1)
+        body = _probe(test_batch, len(messages) + 1, not is_last)
+
+        if len(body) > DISCORD_MSG_LIMIT and batch:
+            # Batch is full — flush it, start new batch with the overflow signal
+            messages.append(_wrap(_probe(batch, len(messages) + 1, True)))
+            batch = [sig_text]
+        else:
+            batch = test_batch
+
+    if batch:
+        body = _probe(batch, len(messages) + 1, False)
+        if len(body) > DISCORD_MSG_LIMIT:   # single-signal overflow edge case
+            body = body[:DISCORD_MSG_LIMIT - 30] + "\n... (truncated)"
+        messages.append(_wrap(body))
+
+    return messages
+
+
 def build_message(scan: Dict, new_signals: List[Dict], closed_trades: List[Dict]) -> str:
     """Legacy single-message builder (kept for --dry-run preview).
 
@@ -550,7 +601,7 @@ def main() -> int:
         return 0
 
     status_msg = build_status_message(scan, closed_trades)
-    signals_msg = build_signals_message(scan, new_signals) if new_signals else None
+    signals_msgs = build_signals_messages(scan, new_signals)
 
     if args.dry_run:
         # Reconfigure stdout to UTF-8 so the box-drawing chars render on
@@ -560,9 +611,10 @@ def main() -> int:
         except (AttributeError, ValueError):
             pass
         print(status_msg)
-        if signals_msg:
-            print("\n--- FOLLOW-UP MESSAGE ---\n")
-            print(signals_msg)
+        for i, smsg in enumerate(signals_msgs):
+            label = f"SIGNALS MESSAGE {i+1}/{len(signals_msgs)}"
+            print(f"\n--- {label} ---\n")
+            print(smsg)
         return 0
 
     if not args.webhook_url:
@@ -578,19 +630,22 @@ def main() -> int:
         print("[discord] Status message failed.", file=sys.stderr)
         return 1
 
-    # New signals come as a separate follow-up message with @ping so the
-    # user gets a phone notification only for actionable trades.
-    ok_signals = True
-    if signals_msg:
-        ping_user_id = args.user_id
-        ok_signals = post_to_discord(args.webhook_url, signals_msg, user_id=ping_user_id)
-        if not ok_signals:
+    # New signals come as follow-up messages (@ping on first only).
+    # build_signals_messages() splits automatically so the full list is shown
+    # even when there are many signals — no truncation.
+    for i, smsg in enumerate(signals_msgs):
+        ping_user_id = args.user_id if i == 0 else None
+        ok = post_to_discord(args.webhook_url, smsg, user_id=ping_user_id)
+        if not ok:
             print("[discord] Signals follow-up failed.", file=sys.stderr)
             return 1
+        if i < len(signals_msgs) - 1:
+            time.sleep(1)   # brief pause to avoid Discord rate-limit between parts
 
     save_state(scan)
-    sent_chars = len(status_msg) + (len(signals_msg) if signals_msg else 0)
-    print(f"[discord] Sent {1 if not signals_msg else 2} msg(s), {sent_chars} chars total. "
+    sent_chars = len(status_msg) + sum(len(m) for m in signals_msgs)
+    n_msgs = 1 + len(signals_msgs)
+    print(f"[discord] Sent {n_msgs} msg(s), {sent_chars} chars total. "
           f"new_signals={len(new_signals)}  closed={len(closed_trades)}  breached={breached}")
     return 0
 
