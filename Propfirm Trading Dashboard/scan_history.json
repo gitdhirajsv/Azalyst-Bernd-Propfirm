@@ -6420,5 +6420,30 @@
         "composite": 9.6
       }
     ]
+  },
+  {
+    "scan_time": "2026-06-28T14:14:44.798822",
+    "strategy": "weekly",
+    "watchlist_scanned": 167,
+    "signals_found": 2,
+    "auto_traded": 0,
+    "account_balance": 110483.98,
+    "closed_pnl": 10483.98,
+    "win_rate": 1.0,
+    "total_trades": 3,
+    "signals_summary": [
+      {
+        "symbol": "EURCHF=X",
+        "direction": "long",
+        "entry": 0.93315,
+        "composite": 5.75
+      },
+      {
+        "symbol": "DIS",
+        "direction": "long",
+        "entry": 96.5,
+        "composite": 9.6
+      }
+    ]
   }
 ]
